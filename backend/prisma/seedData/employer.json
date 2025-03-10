@@ -4,6 +4,7 @@
       "employerFirstName": "Alice",
       "employerLastName": "Johnson",
       "companyId": "1",
+      "position": "Manager",
       "timestamp": "2025-03-09T12:00:00.000Z"
    },
    {
@@ -11,6 +12,7 @@
       "employerFirstName": "Bob",
       "employerLastName": "Williams",
       "companyId": "2",
+      "position": "Chief Officer",
       "timestamp": "2025-03-09T12:00:00.000Z"
    }
 ]

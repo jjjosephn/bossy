@@ -3,6 +3,7 @@
       "reviewId": "1",
       "reviewText": "Great place to work!",
       "rating": 5,
+      "term": "3",
       "userId": "1",
       "companyId": "1",
       "timestamp": "2025-03-09T12:00:00.000Z"
@@ -11,6 +12,7 @@
       "reviewId": "2",
       "reviewText": "The company environment is excellent!",
       "rating": 4,
+      "term": "< 1",
       "userId": "2",
       "employerId": "1",
       "timestamp": "2025-03-09T12:00:00.000Z"
@@ -19,7 +21,7 @@
       "reviewId": "3",
       "reviewText": "Tech Corp has a lot of opportunities for growth, but the work-life balance could be better.",
       "rating": 3,
-      "userId": "3",
+      "term": "5+",
       "companyId": "1",
       "timestamp": "2025-03-09T12:00:00.000Z"
    },
@@ -27,6 +29,7 @@
       "reviewId": "4",
       "reviewText": "Creative Media is a great company with creative freedom, but sometimes deadlines are tight.",
       "rating": 4,
+      "term": "2",
       "userId": "4",
       "companyId": "2",
       "timestamp": "2025-03-09T12:00:00.000Z"
@@ -35,6 +38,7 @@
       "reviewId": "5",
       "reviewText": "Alice Johnson is a supportive manager, but there's room for improvement in communication.",
       "rating": 3,
+      "term": "5+",
       "userId": "3",
       "employerId": "1",
       "timestamp": "2025-03-09T12:00:00.000Z"
@@ -43,7 +47,7 @@
       "reviewId": "6",
       "reviewText": "Bob Williams is a fantastic leader who values feedback, but the team could use more resources.",
       "rating": 4,
-      "userId": "2",
+      "term": "1",
       "employerId": "2",
       "timestamp": "2025-03-09T12:00:00.000Z"
    }

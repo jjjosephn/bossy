@@ -41,6 +41,7 @@ model Employer {
   employerId        String   @id @default(uuid())
   employerFirstName String
   employerLastName  String
+  position           String
   companyId         String
   timestamp         DateTime @default(now())
 
@@ -52,11 +53,13 @@ model Review {
   reviewId   String    @id @default(uuid())
   reviewText String
   rating     Int
-  userId     String
+  term       String
+  userId     String?
   employerId String?
   companyId  String?
   timestamp  DateTime  @default(now())
-  User       User      @relation(fields: [userId], references: [userId])
+
+  User       User?     @relation(fields: [userId], references: [userId])
   Employer   Employer? @relation(fields: [employerId], references: [employerId])
   Company    Company?  @relation(fields: [companyId], references: [companyId])
 }
