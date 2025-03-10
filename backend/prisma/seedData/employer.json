@@ -1,0 +1,16 @@
+[
+   {
+      "employerId": "1",
+      "employerFirstName": "Alice",
+      "employerLastName": "Johnson",
+      "companyId": "1",
+      "timestamp": "2025-03-09T12:00:00.000Z"
+   },
+   {
+      "employerId": "2",
+      "employerFirstName": "Bob",
+      "employerLastName": "Williams",
+      "companyId": "2",
+      "timestamp": "2025-03-09T12:00:00.000Z"
+   }
+]

@@ -1,0 +1,20 @@
+[
+   {
+      "companyId": "1",
+      "companyName": "Tech Corp",
+      "streetAddress": "123 Tech Street",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94101",
+      "timestamp": "2025-03-09T12:00:00.000Z"
+   },
+   {
+      "companyId": "2",
+      "companyName": "Creative Media",
+      "streetAddress": "456 Media Ave",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90001",
+      "timestamp": "2025-03-09T12:00:00.000Z"
+   }
+]
