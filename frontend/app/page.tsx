@@ -1,8 +1,8 @@
-import Navbar from "@/components/ui/home/navbar"
-import Hero from "@/components/ui/home/Hero"
-import Features from "@/components/ui/home/Features"
-import Testimonials from "@/components/ui/home/Testimonials"
-import Footer from "@/components/ui/home/Footer"
+import Navbar from "@/components/home/Navbar"
+import Hero from "@/components/home/Hero"
+import Features from "@/components/home/Features"
+import Testimonials from "@/components/home/Testimonials"
+import Footer from "@/components/home/Footer"
 
 export default function Home() {
   return (

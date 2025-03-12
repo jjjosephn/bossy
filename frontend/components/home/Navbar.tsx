@@ -1,7 +1,8 @@
 import React from 'react'
-import { Button } from '../button'
+import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
+import { SignInButton, SignUpButton } from '@clerk/nextjs'
 
 const Navbar = () => {
    return (
@@ -17,12 +18,16 @@ const Navbar = () => {
          </Link>
          
          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" className="rounded-full" asChild>
-               <Link href="#">Sign In</Link>
-            </Button>
-            <Button size="sm" className="rounded-full" asChild>
-               <Link href="#">Sign Up</Link>
-            </Button>
+            <SignInButton mode="modal">
+               <Button variant="outline" size="sm" className="rounded-full" asChild>
+                  <span>Sign In</span>
+               </Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+               <Button size="sm" className="rounded-full" asChild>
+                  <span>Sign Up</span>
+               </Button>
+            </SignUpButton>
          </div>
       </header>
    )
