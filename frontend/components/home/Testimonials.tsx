@@ -1,8 +1,10 @@
+'use client'
+
 import React from 'react'
 import { Button } from '../ui/button'
 import { ArrowRight, Star, Quote } from 'lucide-react'
-import Link from 'next/link'
-import { SignUp, SignUpButton } from '@clerk/nextjs'
+import { SignUpButton } from '@clerk/nextjs'
+import {useUser} from '@clerk/nextjs'
 
 type TestimonialCardProps = {
    quote: string
@@ -30,9 +32,11 @@ const TestimonialCard = ({ quote, author, role, index }: TestimonialCardProps) =
          <p className="text-sm text-primary">{role}</p>
       </div>
    </div>
-   )
+)
 
-   const Testimonials = () => {
+const Testimonials = () => {
+   const {isSignedIn} = useUser()
+
    const testimonials = [
       {
          quote: "Bossy helped me find a manager who truly supports my career growth. Best career decision I've made.",
@@ -74,18 +78,22 @@ const TestimonialCard = ({ quote, author, role, index }: TestimonialCardProps) =
          </div>
          
          <div className="flex justify-center mt-16">
-            <SignUpButton mode="modal">
-               <Button 
-                  size="lg" 
-                  className="px-8 py-6 text-lg font-medium rounded-full shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary" 
-                  asChild
-               >
-                  <span>
-                     Sign Up Now
-                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </span>
-               </Button>
-            </SignUpButton>
+            {!isSignedIn ? (
+               <SignUpButton mode="modal">
+                  <Button 
+                     size="lg" 
+                     className="px-8 py-6 text-lg font-medium rounded-full shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary" 
+                     asChild
+                  >
+                     <span>
+                        Sign Up Now
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                     </span>
+                  </Button>
+               </SignUpButton>
+            ) : (
+               ''
+            )}
          </div>
          </div>
       </section>

@@ -1,4 +1,4 @@
-import { CheckCircle, ChevronRight, Search, Star, Users } from "lucide-react"
+import { CheckCircle, Search, Star, Users } from "lucide-react"
 import type React from "react"
 import { Button } from "@/components/ui/button"
 
