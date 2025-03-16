@@ -24,15 +24,15 @@ CREATE TABLE "Company" (
 );
 
 -- CreateTable
-CREATE TABLE "Employer" (
-    "employerId" TEXT NOT NULL,
-    "employerFirstName" TEXT NOT NULL,
-    "employerLastName" TEXT NOT NULL,
+CREATE TABLE "Boss" (
+    "bossId" TEXT NOT NULL,
+    "bossFirstName" TEXT NOT NULL,
+    "bossLastName" TEXT NOT NULL,
     "position" TEXT NOT NULL,
     "companyId" TEXT NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Employer_pkey" PRIMARY KEY ("employerId")
+    CONSTRAINT "Boss_pkey" PRIMARY KEY ("bossId")
 );
 
 -- CreateTable
@@ -42,7 +42,7 @@ CREATE TABLE "Review" (
     "rating" INTEGER NOT NULL,
     "term" TEXT NOT NULL,
     "userId" TEXT,
-    "employerId" TEXT,
+    "bossId" TEXT,
     "companyId" TEXT,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -53,13 +53,13 @@ CREATE TABLE "Review" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Employer" ADD CONSTRAINT "Employer_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Boss" ADD CONSTRAINT "Boss_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_employerId_fkey" FOREIGN KEY ("employerId") REFERENCES "Employer"("employerId") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Review" ADD CONSTRAINT "Review_bossId_fkey" FOREIGN KEY ("bossId") REFERENCES "Boss"("bossId") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE SET NULL ON UPDATE CASCADE;

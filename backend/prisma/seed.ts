@@ -26,7 +26,7 @@ const dataDirectory = path.join(__dirname, "seedData");
 const orderedFileNames = [
    "user.json",
    "company.json",
-   "employer.json",
+   "boss.json",
    "review.json"
 ];
 

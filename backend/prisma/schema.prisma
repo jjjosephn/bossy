@@ -33,33 +33,33 @@ model Company {
   zipCode       String
   timestamp     DateTime @default(now())
 
-  Employer Employer[]
-  Review   Review[]
+  Boss   Boss[]
+  Review Review[]
 }
 
-model Employer {
-  employerId        String   @id @default(uuid())
-  employerFirstName String
-  employerLastName  String
-  position           String
-  companyId         String
-  timestamp         DateTime @default(now())
+model Boss {
+  bossId        String   @id @default(uuid())
+  bossFirstName String
+  bossLastName  String
+  position      String
+  companyId     String
+  timestamp     DateTime @default(now())
 
   Company Company  @relation(fields: [companyId], references: [companyId])
   Review  Review[]
 }
 
 model Review {
-  reviewId   String    @id @default(uuid())
+  reviewId   String   @id @default(uuid())
   reviewText String
   rating     Int
   term       String
   userId     String?
-  employerId String?
+  bossId     String?
   companyId  String?
-  timestamp  DateTime  @default(now())
+  timestamp  DateTime @default(now())
 
-  User       User?     @relation(fields: [userId], references: [userId])
-  Employer   Employer? @relation(fields: [employerId], references: [employerId])
-  Company    Company?  @relation(fields: [companyId], references: [companyId])
+  User    User?    @relation(fields: [userId], references: [userId])
+  Boss    Boss?    @relation(fields: [bossId], references: [bossId])
+  Company Company? @relation(fields: [companyId], references: [companyId])
 }
