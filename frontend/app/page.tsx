@@ -1,13 +1,16 @@
 import Hero from "@/components/home/Hero"
 import Features from "@/components/home/Features"
-import Testimonials from "@/components/home/Testimonials"
+// import Testimonials from "@/components/home/Testimonials"
 
 export default function Home() {
   return (
     <main className="flex-1">
-      <Hero />
-      <Features />
-      <Testimonials />
+      <div className="relative" style={{ zIndex: 10 }}>
+        <Hero />
+      </div>
+      <div className="relative" style={{ zIndex: 0 }}>
+        <Features />
+      </div>
     </main>
   )
 }
