@@ -36,17 +36,29 @@ CREATE TABLE "Boss" (
 );
 
 -- CreateTable
-CREATE TABLE "Review" (
+CREATE TABLE "BossReview" (
     "reviewId" TEXT NOT NULL,
     "reviewText" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
     "term" TEXT NOT NULL,
     "userId" TEXT,
-    "bossId" TEXT,
-    "companyId" TEXT,
+    "bossId" TEXT NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Review_pkey" PRIMARY KEY ("reviewId")
+    CONSTRAINT "BossReview_pkey" PRIMARY KEY ("reviewId")
+);
+
+-- CreateTable
+CREATE TABLE "CompanyReview" (
+    "reviewId" TEXT NOT NULL,
+    "reviewText" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "term" TEXT NOT NULL,
+    "userId" TEXT,
+    "companyId" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "CompanyReview_pkey" PRIMARY KEY ("reviewId")
 );
 
 -- CreateIndex
@@ -56,10 +68,13 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 ALTER TABLE "Boss" ADD CONSTRAINT "Boss_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_bossId_fkey" FOREIGN KEY ("bossId") REFERENCES "Boss"("bossId") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_bossId_fkey" FOREIGN KEY ("bossId") REFERENCES "Boss"("bossId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;

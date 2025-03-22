@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Star, MapPin, Building, Calendar, ChevronRight } from "lucide-react"
+import { Star, MapPin } from "lucide-react"
 
 type CompanyProfileProps = {
   company: {

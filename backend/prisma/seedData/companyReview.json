@@ -1,0 +1,19 @@
+[
+   {
+      "reviewId": "1",
+      "reviewText": "Great place to work!",
+      "rating": 5,
+      "term": "3",
+      "userId": "1",
+      "companyId": "1",
+      "timestamp": "2025-03-09T12:00:00.000Z"
+   },
+   {
+      "reviewId": "3",
+      "reviewText": "Tech Corp has a lot of opportunities for growth, but the work-life balance could be better.",
+      "rating": 3,
+      "term": "5+",
+      "companyId": "1",
+      "timestamp": "2025-03-09T12:00:00.000Z"
+   }
+]

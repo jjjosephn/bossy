@@ -27,7 +27,8 @@ const orderedFileNames = [
    "user.json",
    "company.json",
    "boss.json",
-   "review.json"
+   "bossReview.json",
+   "companyReview.json",
 ];
 
 await deleteAllData(orderedFileNames);
