@@ -6,7 +6,7 @@ import { Users, Search, Loader2, X, ArrowRight, ChevronUp, ChevronDown, UserCirc
 import { AnimatePresence } from "framer-motion"
 import type { Company } from "@/utils/search-types"
 import { BossNotFoundForm, type BossData } from "./BossNotFound"
-import { useUser } from "@clerk/nextjs"
+import { useUser, useClerk } from "@clerk/nextjs"
 
 // Mock manager data type
 interface Manager {
@@ -52,13 +52,15 @@ export function ManagerSearchStep({
   onSelectManager,
   onAddNewBoss,
 }: ManagerSearchStepProps) {
-  const {isSignedIn} = useUser()
+  const { isSignedIn } = useUser()
+  const clerk = useClerk()
   const [managers, setManagers] = useState<Manager[]>([])
   const [filteredManagers, setFilteredManagers] = useState<Manager[]>([])
   const [open, setOpen] = useState(false)
   const [dropdownForceOpen, setDropdownForceOpen] = useState(false)
   const [showBossNotFoundForm, setShowBossNotFoundForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [pendingBossForm, setPendingBossForm] = useState(false)
 
   // Generate mock managers when the component mounts or company changes
   useEffect(() => {
@@ -84,6 +86,14 @@ export function ManagerSearchStep({
     setFilteredManagers(filtered)
   }, [searchQuery, managers])
 
+  // Check if we need to open the boss form after authentication
+  useEffect(() => {
+    if (isSignedIn && pendingBossForm) {
+      setShowBossNotFoundForm(true)
+      setPendingBossForm(false)
+    }
+  }, [isSignedIn, pendingBossForm])
+
   const toggleDropdown = () => {
     if (filteredManagers.length > 0) {
       setDropdownForceOpen(!dropdownForceOpen)
@@ -100,6 +110,18 @@ export function ManagerSearchStep({
   }
 
   const handleBossNotFound = () => {
+    if (!isSignedIn) {
+      // Set pending state to open form after auth
+      setPendingBossForm(true)
+
+      // Open Clerk's sign-in modal
+      clerk.openSignIn({
+        redirectUrl: window.location.href,
+        afterSignInUrl: window.location.href,
+      })
+      return
+    }
+
     setOpen(false)
     setDropdownForceOpen(false)
     setShowBossNotFoundForm(true)
