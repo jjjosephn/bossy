@@ -48,7 +48,7 @@ const Navbar = () => {
                <SignUpButton mode="modal">
                   <Button 
                      size="sm" 
-                     className="rounded-full bg-gradient-to-r from-primary to-purple-500 dark:from-primary dark:to-blue-400 hover:shadow-md transition-all duration-300"
+                     className="rounded-full bg-gradient-to-r from-primary to-purple-500 dark:from-primary dark:to-blue-400 hover:shadow-md hover:border-primary/50 transition-all duration-300"
                   >
                      Sign Up
                   </Button>
