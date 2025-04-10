@@ -81,7 +81,7 @@ const HistoryTabs = ({ historyRequests }: HistoryTabsProps) => {
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">{request.requestDate}</TableCell>
                         <TableCell>
-                          {request.status === "accepted" ? (
+                          {request.status === "accept" ? (
                             <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
                               <CheckCircle2 className="h-3 w-3 mr-1" /> Accepted
                             </Badge>

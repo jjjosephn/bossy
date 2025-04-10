@@ -33,7 +33,7 @@ const AdminPanel = () => {
          // Create a processed request record
          const processedRequest: ProcessedRequest = {
          ...request,
-         status: action === "accept" ? "accepted" : "denied",
+         status: action,
          processedDate: new Date().toISOString().split("T")[0],
          }
 
