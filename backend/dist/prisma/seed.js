@@ -43,6 +43,7 @@ function main() {
             "boss.json",
             "bossReview.json",
             "companyReview.json",
+            "pendingBosses.json"
         ];
         yield deleteAllData(orderedFileNames);
         for (const fileName of orderedFileNames) {

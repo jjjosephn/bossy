@@ -11,15 +11,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useCheckUserExistsMutation } from "@/app/state/api"
+import { useEffect } from "react"
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()
    const { signOut } = useClerk()
+   const [checkUser] = useCheckUserExistsMutation()
    const firstname = user?.firstName
    const lastname = user?.lastName
    const imageUrl = user?.imageUrl
-
+   
    const isAdmin = user?.publicMetadata.role === 'admin'
+
+   console.log(user)
+
+   useEffect(() => {
+      if (isSignedIn) {
+         checkUser({ 
+            userId: user?.id,
+            firstName: firstname ?? "",
+            lastName: lastname ?? "",
+            email: user?.primaryEmailAddress?.emailAddress ?? ""
+         })
+      }
+   }, [isSignedIn, user?.id])
 
    return (
       <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">

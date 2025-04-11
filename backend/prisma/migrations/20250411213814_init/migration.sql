@@ -34,6 +34,19 @@ CREATE TABLE "Boss" (
 );
 
 -- CreateTable
+CREATE TABLE "PendingBosses" (
+    "pendingId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "bossFirstName" TEXT NOT NULL,
+    "bossLastName" TEXT NOT NULL,
+    "position" TEXT NOT NULL,
+    "companyId" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PendingBosses_pkey" PRIMARY KEY ("pendingId")
+);
+
+-- CreateTable
 CREATE TABLE "BossReview" (
     "reviewId" TEXT NOT NULL,
     "reviewText" TEXT NOT NULL,

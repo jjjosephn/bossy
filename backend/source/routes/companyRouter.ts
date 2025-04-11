@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkCompanyExists } from '../controllers/heroController';
+import { checkCompanyExists } from '../controllers/companyController';
 
 const router = Router();
 

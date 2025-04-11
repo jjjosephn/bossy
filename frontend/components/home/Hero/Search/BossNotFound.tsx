@@ -22,7 +22,7 @@ export interface BossData {
   firstName: string
   lastName: string
   position: string
-  companyId: string
+  mapboxId: string
 }
 
 const positionOptions = [
@@ -42,7 +42,7 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
     firstName: "",
     lastName: "",
     position: "",
-    companyId: company.id,
+    mapboxId: company.mapboxId,
   })
   const [localSubmitting, setLocalSubmitting] = useState(false)
   const [errors, setErrors] = useState({
@@ -50,6 +50,8 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
     lastName: "",
     position: "",
   })
+
+  console.log(formData)
 
   // Prevent body scrolling when modal is open
   useEffect(() => {

@@ -5,7 +5,7 @@ import Features from "@/components/home/Features"
 export default function Home() {
   return (
     <main className="flex-1">
-      <div className="relative" style={{ zIndex: 10 }}>
+      <div className="relative">
         <Hero />
       </div>
       <div className="relative" style={{ zIndex: 0 }}>

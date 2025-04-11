@@ -14,7 +14,7 @@ const Hero = () => {
         <div className="max-w-screen-xl mx-auto">
           <div className="grid gap-8 lg:grid-cols-[1fr_500px] lg:gap-16 xl:grid-cols-[1fr_600px] items-center">
             {/* Hero Left - Text Content */}
-            <div className="flex flex-col justify-center items-center text-center lg:items-start lg:text-left space-y-6">
+            <div className="flex flex-col justify-center items-center text-center lg:items-start lg:text-left space-y-6" style={{ zIndex: 10 }}>
               <div className="inline-flex gap-2 items-center bg-primary/15 text-primary rounded-full px-4 py-1.5 text-sm font-medium w-fit animate-fadeIn">
                 <Star className="h-4 w-4 fill-primary" />
                 <span>Empowering workplace transparency</span>

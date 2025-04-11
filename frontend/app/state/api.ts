@@ -8,6 +8,14 @@ export interface Company {
    timestamp: string;
 }
 
+export interface User {
+   userId: string;
+   firstName: string;
+   lastName: string;
+   email: string;
+   timestamp: string;
+}
+
 export const api = createApi({
    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
    reducerPath: 'api',
@@ -20,9 +28,18 @@ export const api = createApi({
             body,
          })
       }),
+
+      checkUserExists: build.mutation<any, { userId: string; firstName: string; lastName: string; email: string }>({
+         query: (body) => ({
+            url: '/check-user',
+            method: 'POST',
+            body,
+         })
+      }),
    }),
 });
 
 export const {
-   useCheckCompanyExistsMutation
+   useCheckCompanyExistsMutation,
+   useCheckUserExistsMutation
 } = api;

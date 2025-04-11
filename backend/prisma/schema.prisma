@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  userId      String   @id @default(uuid())
+  userId      String   @id
   firstName   String
   lastName    String
   email       String   @unique
@@ -46,6 +46,16 @@ model Boss {
 
   Company    Company      @relation(fields: [companyId], references: [companyId])
   BossReview BossReview[]
+}
+
+model PendingBosses {
+  pendingId     String   @id @default(uuid())
+  userId        String
+  bossFirstName String
+  bossLastName  String
+  position      String
+  companyId     String
+  timestamp     DateTime @default(now())
 }
 
 model BossReview {
