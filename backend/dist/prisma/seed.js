@@ -40,8 +40,9 @@ function main() {
         const orderedFileNames = [
             "user.json",
             "company.json",
-            "employer.json",
-            "review.json"
+            "boss.json",
+            "bossReview.json",
+            "companyReview.json",
         ];
         yield deleteAllData(orderedFileNames);
         for (const fileName of orderedFileNames) {

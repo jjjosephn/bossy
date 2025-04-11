@@ -14,10 +14,8 @@ CREATE TABLE "User" (
 CREATE TABLE "Company" (
     "companyId" TEXT NOT NULL,
     "companyName" TEXT NOT NULL,
-    "streetAddress" TEXT NOT NULL,
-    "city" TEXT NOT NULL,
-    "state" TEXT NOT NULL,
-    "zipCode" TEXT NOT NULL,
+    "fullAddress" TEXT NOT NULL,
+    "mapboxId" TEXT NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("companyId")

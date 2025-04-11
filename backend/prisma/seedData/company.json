@@ -1,20 +1,16 @@
 [
    {
       "companyId": "1",
-      "companyName": "Tech Corp",
-      "streetAddress": "123 Tech Street",
-      "city": "San Francisco",
-      "state": "CA",
-      "zipCode": "94101",
+      "companyName": "Micro Tech Detailing",
+      "fullAddress": "370 Laurelwood Rd #109, Santa Clara, California 95054, United States",
+      "mapboxId": "dXJuOm1ieHBvaTpiM2Q0YzVhMi03MDVjLTRkMTEtOGU1Ni01NTE3ZTk2Y2Q5MzQ",
       "timestamp": "2025-03-09T12:00:00.000Z"
    },
    {
       "companyId": "2",
-      "companyName": "Creative Media",
-      "streetAddress": "456 Media Ave",
-      "city": "Los Angeles",
-      "state": "CA",
-      "zipCode": "90001",
+      "companyName": "REI",
+      "fullAddress": "130 E El Camino Real, Sunnyvale, California 94087, United States",
+      "mapboxId": "dXJuOm1ieHBvaTpjODdmZGNhMS0wYjQzLTRkZDItYWRlNi03MWRkMjRlYzc5YTI",
       "timestamp": "2025-03-09T12:00:00.000Z"
    }
 ]

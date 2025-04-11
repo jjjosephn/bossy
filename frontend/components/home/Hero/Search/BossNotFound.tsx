@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { X, ArrowLeft, Loader2 } from "lucide-react"
 import { Portal } from "@/components/ui/portal"
-import type { Company } from "@/types/search-types"
+import type { Company } from "@/utils/search-types"
 
 interface BossNotFoundFormProps {
   company: Company

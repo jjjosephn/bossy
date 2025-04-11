@@ -26,13 +26,11 @@ model User {
 }
 
 model Company {
-  companyId     String   @id @default(uuid())
-  companyName   String
-  streetAddress String
-  city          String
-  state         String
-  zipCode       String
-  timestamp     DateTime @default(now())
+  companyId   String   @id @default(uuid())
+  companyName String
+  fullAddress String
+  mapboxId    String
+  timestamp   DateTime @default(now())
 
   Boss          Boss[]
   CompanyReview CompanyReview[]

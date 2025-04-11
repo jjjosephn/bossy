@@ -1,13 +1,12 @@
 "use client"
 
-import { useEffect } from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Building, Search, Loader2, ChevronUp, ChevronDown, X, ArrowRight, Utensils, Hotel } from "lucide-react"
 import type { MapboxSuggestion, Company } from "@/utils/search-types"
 import { useMapboxSearch } from "@/utils/mapbox-utils"
+import { useCheckCompanyExistsMutation } from "@/app/state/api"
 
 interface CompanySearchStepProps {
   searchQuery: string
@@ -30,6 +29,7 @@ export function CompanySearchStep({
 }: CompanySearchStepProps) {
   const [dropdownForceOpen, setDropdownForceOpen] = useState(false)
   const [showCantFindOption, setShowCantFindOption] = useState(false)
+  const [checkCompanyExists] = useCheckCompanyExistsMutation()
 
   const { results, loading, open, setOpen } = useMapboxSearch({
     query: searchQuery,
@@ -47,14 +47,21 @@ export function CompanySearchStep({
 
   const handleSelectCompany = (suggestion: MapboxSuggestion) => {
     const company: Company = {
-      id: suggestion.mapbox_id,
+      mapboxId: suggestion.mapbox_id,
       name: suggestion.name_preferred || suggestion.name,
+      fullAddress: suggestion.full_address || "",
       industry: suggestion.poi_category
         ? suggestion.poi_category[0]
         : suggestion.feature_type === "address"
           ? "Address"
           : "Place",
     }
+
+    checkCompanyExists({
+      mapboxId: company.mapboxId,
+      name: company.name,
+      fullAddress: company.fullAddress,
+    })
 
     onSelectCompany(company)
     setOpen(false)

@@ -54,9 +54,10 @@ export interface MapboxSuggestion {
  }
  
  export interface Company {
-   id: string
+   mapboxId: string
    name: string
    industry?: string
+   fullAddress: string
  }
  
  export type SearchStep = "company" | "custom-search" | "manager"
