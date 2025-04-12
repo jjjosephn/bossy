@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Users, Search, Loader2, X, ArrowRight, ChevronUp, ChevronDown, UserCircle } from "lucide-react"
 import { AnimatePresence } from "framer-motion"
 import type { Company } from "@/utils/search-types"
-import { BossNotFoundForm, type BossData } from "./BossNotFound"
+import { BossNotFoundForm, type PendingBossData } from "./BossNotFound"
 import { useUser, useClerk } from "@clerk/nextjs"
 
 // Mock manager data type
@@ -23,7 +23,7 @@ interface ManagerSearchStepProps {
   setSearchQuery: (query: string) => void
   loading: boolean
   onSelectManager?: (manager: Manager) => void
-  onAddNewBoss?: (bossData: BossData) => Promise<void>
+  onAddNewBoss?: (bossData: PendingBossData) => Promise<void>
 }
 
 // Generate mock managers based on company name for demo purposes
@@ -129,20 +129,6 @@ export function ManagerSearchStep({
 
   const handleCloseBossForm = () => {
     setShowBossNotFoundForm(false)
-  }
-
-  const handleSubmitBossForm = async (bossData: BossData) => {
-    if (onAddNewBoss) {
-      setIsSubmitting(true)
-      try {
-        await onAddNewBoss(bossData)
-        setShowBossNotFoundForm(false)
-      } catch (error) {
-        console.error("Error adding new boss:", error)
-      } finally {
-        setIsSubmitting(false)
-      }
-    }
   }
 
   const handleInputFocus = () => {
@@ -252,7 +238,6 @@ export function ManagerSearchStep({
           <BossNotFoundForm
             company={selectedCompany}
             onClose={handleCloseBossForm}
-            onSubmit={handleSubmitBossForm}
             isSubmitting={isSubmitting}
           />
         )}

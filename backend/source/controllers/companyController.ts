@@ -36,3 +36,31 @@ export const checkCompanyExists = async (
       res.status(500).json({ message: "Internal server error" });
    }
 }
+
+export const getCompanyByMapboxId = async (
+   req: Request,
+   res: Response
+): Promise<void> => {
+   const { mapboxId } = req.params;
+
+   try {
+      const company = await prisma.company.findFirst({
+         where: {
+            mapboxId: mapboxId
+         }
+      })
+
+      if (company) {
+         res.status(200).json(company);
+         return 
+      }
+
+      else {
+         res.status(404).json({ message: "Company not found" });
+         return 
+      }
+   } catch (error) {
+      console.error("Error fetching company by Mapbox ID:", error);
+      res.status(500).json({ message: "Internal server error" });
+   }
+}

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCompanyExists = void 0;
+exports.getCompanyByMapboxId = exports.checkCompanyExists = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const checkCompanyExists = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,3 +41,26 @@ const checkCompanyExists = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.checkCompanyExists = checkCompanyExists;
+const getCompanyByMapboxId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { mapboxId } = req.params;
+    try {
+        const company = yield prisma.company.findFirst({
+            where: {
+                mapboxId: mapboxId
+            }
+        });
+        if (company) {
+            res.status(200).json(company);
+            return;
+        }
+        else {
+            res.status(404).json({ message: "Company not found" });
+            return;
+        }
+    }
+    catch (error) {
+        console.error("Error fetching company by Mapbox ID:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getCompanyByMapboxId = getCompanyByMapboxId;

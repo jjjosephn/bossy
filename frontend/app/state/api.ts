@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { get } from 'http';
 
 export interface Company {
    companyId: string;
@@ -16,6 +17,16 @@ export interface User {
    timestamp: string;
 }
 
+export interface PendingBosess {
+   pendingId: string;
+   userId: string;
+   bossFirstName: string;
+   bossLastName: string;
+   position: string;
+   companyId: string;
+   timestamp: string;
+}
+
 export const api = createApi({
    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
    reducerPath: 'api',
@@ -23,10 +34,14 @@ export const api = createApi({
    endpoints: (build) => ({
       checkCompanyExists: build.mutation<any, { mapboxId: string; name: string; fullAddress: string }>({
          query: (body) => ({
-            url: '/check-company',
+            url: '/company/check-company',
             method: 'POST',
             body,
          })
+      }),
+
+      getCompanyByMapboxId: build.query<Company, string>({
+         query: (mapboxId) => `/company/${mapboxId}`,
       }),
 
       checkUserExists: build.mutation<any, { userId: string; firstName: string; lastName: string; email: string }>({
@@ -36,10 +51,20 @@ export const api = createApi({
             body,
          })
       }),
+
+      addBossRequest: build.mutation<any, { userId: string; bossFirstName: string; bossLastName: string; position: string; companyId: string }>({
+         query: (body) => ({
+            url: '/boss/add-boss-request',
+            method: 'POST',
+            body,
+         })
+      }),
    }),
 });
 
 export const {
    useCheckCompanyExistsMutation,
-   useCheckUserExistsMutation
+   useGetCompanyByMapboxIdQuery,
+   useCheckUserExistsMutation,
+   useAddBossRequestMutation,
 } = api;

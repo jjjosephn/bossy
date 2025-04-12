@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,19 +10,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { X, ArrowLeft, Loader2 } from "lucide-react"
 import { Portal } from "@/components/ui/portal"
 import type { Company } from "@/utils/search-types"
+import { useAddBossRequestMutation, useGetCompanyByMapboxIdQuery } from "@/app/state/api"
+import { useUser } from "@clerk/nextjs"
 
 interface BossNotFoundFormProps {
   company: Company
   onClose: () => void
-  onSubmit: (bossData: BossData) => Promise<void> | void
   isSubmitting?: boolean
 }
 
-export interface BossData {
-  firstName: string
-  lastName: string
+export interface PendingBossData {
+  userId: string,
+  bossFirstName: string
+  bossLastName: string
   position: string
-  mapboxId: string
+  companyId: string
 }
 
 const positionOptions = [
@@ -37,12 +39,16 @@ const positionOptions = [
   { value: "president", label: "President" },
 ]
 
-export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = false }: BossNotFoundFormProps) {
-  const [formData, setFormData] = useState<BossData>({
-    firstName: "",
-    lastName: "",
+export function BossNotFoundForm({ company, onClose, isSubmitting = false }: BossNotFoundFormProps) {
+  const {user} = useUser()
+  const {data: companyInfo} = useGetCompanyByMapboxIdQuery(company.mapboxId)
+  const [addBossRequest] = useAddBossRequestMutation()
+  const [formData, setFormData] = useState<PendingBossData>({
+    userId: user?.id || "",
+    bossFirstName: "",
+    bossLastName: "",
     position: "",
-    mapboxId: company.mapboxId,
+    companyId: "",
   })
   const [localSubmitting, setLocalSubmitting] = useState(false)
   const [errors, setErrors] = useState({
@@ -61,7 +67,7 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
     }
   }, [])
 
-  const handleChange = (field: keyof BossData, value: string) => {
+  const handleChange = (field: keyof PendingBossData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
 
     // Clear error when user types
@@ -72,8 +78,8 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
 
   const validateForm = (): boolean => {
     const newErrors = {
-      firstName: formData.firstName.trim() === "" ? "First name is required" : "",
-      lastName: formData.lastName.trim() === "" ? "Last name is required" : "",
+      firstName: formData.bossFirstName.trim() === "" ? "First name is required" : "",
+      lastName: formData.bossLastName.trim() === "" ? "Last name is required" : "",
       position: formData.position === "" ? "Position is required" : "",
     }
 
@@ -87,9 +93,7 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
     if (validateForm()) {
       try {
         setLocalSubmitting(true)
-        // Wait for the submission to complete
-        await onSubmit(formData)
-        // Close the modal after successful submission
+        await addBossRequest(formData)
         onClose()
       } catch (error) {
         console.error("Error submitting form:", error)
@@ -106,6 +110,15 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
 
   // Use either the prop or local submitting state
   const isCurrentlySubmitting = isSubmitting || localSubmitting
+
+  useEffect(() => {
+    if (companyInfo?.companyId) {
+      setFormData((prev) => ({
+        ...prev,
+        companyId: companyInfo.companyId,
+      }))
+    }
+  }, [companyInfo?.companyId])
 
   return (
     <Portal>
@@ -150,8 +163,8 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
                   <Label htmlFor="firstName">First Name</Label>
                   <Input
                     id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => handleChange("firstName", e.target.value)}
+                    value={formData.bossFirstName}
+                    onChange={(e) => handleChange("bossFirstName", e.target.value)}
                     placeholder="John"
                     className={errors.firstName ? "border-red-500" : ""}
                     disabled={isCurrentlySubmitting}
@@ -163,8 +176,8 @@ export function BossNotFoundForm({ company, onClose, onSubmit, isSubmitting = fa
                   <Label htmlFor="lastName">Last Name</Label>
                   <Input
                     id="lastName"
-                    value={formData.lastName}
-                    onChange={(e) => handleChange("lastName", e.target.value)}
+                    value={formData.bossLastName}
+                    onChange={(e) => handleChange("bossLastName", e.target.value)}
                     placeholder="Doe"
                     className={errors.lastName ? "border-red-500" : ""}
                     disabled={isCurrentlySubmitting}

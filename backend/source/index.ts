@@ -9,6 +9,7 @@ import morgan from 'morgan'
 import exampleRoutes from './routes/exampleRouter'
 import companyRoutes from './routes/companyRouter'
 import userRoutes from './routes/userRouter' 
+import bossRoutes from './routes/bossRouter'
 
 
 /* Configs */
@@ -24,8 +25,9 @@ app.use(cors())
 
 /* Routes */
 app.use("/example", exampleRoutes)
-app.use("/", companyRoutes)
+app.use("/company", companyRoutes)
 app.use("/", userRoutes)
+app.use("/boss", bossRoutes)
 
 /* Server */
 const port = Number(process.env.PORT) || 3001
