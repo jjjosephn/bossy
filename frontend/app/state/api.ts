@@ -39,13 +39,14 @@ export interface Boss {
 }
  
 export interface ArchivedForm {
-   archivedId: string;
+   archiveId: string;
    userId: string;
    bossFirstName: string;
    bossLastName: string;
    position: string;
    companyId: string;
    timestamp: string;
+   requestedDate: string;
    status: string;
    User: User;
    Company: Company;
@@ -86,20 +87,23 @@ export const api = createApi({
       getPendingBosses: build.query<PendingBosess[], void>({
          query: () => '/boss/pending-bosses',
       }),
-      acceptPendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string }>({
+      acceptPendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string, requestedDate: string }>({
          query: (body) => ({
             url: '/boss/accept-boss-request',
             method: 'POST',
             body,
          })
       }),
-      declinePendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string }>({
+      declinePendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string, requestedDate: string }>({
          query: (body) => ({
             url: '/boss/decline-boss-request',
             method: 'POST',
             body,
          })
       }),
+      getArchivedForms: build.query<ArchivedForm[], void>({
+         query: () => '/boss/archived-bosses',
+      })
    }),
 });
 
@@ -111,4 +115,5 @@ export const {
    useGetPendingBossesQuery,
    useAcceptPendingBossRequestMutation,
    useDeclinePendingBossRequestMutation,
+   useGetArchivedFormsQuery
 } = api;

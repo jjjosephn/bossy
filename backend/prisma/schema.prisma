@@ -73,6 +73,7 @@ model ArchivedForms {
   position      String
   companyId     String
   status        String
+  requestedDate String
   timestamp     DateTime @default(now())
 
   User    User    @relation(fields: [userId], references: [userId])
@@ -104,4 +105,3 @@ model CompanyReview {
   User    User?    @relation(fields: [userId], references: [userId])
   Company Company? @relation(fields: [companyId], references: [companyId])
 }
-

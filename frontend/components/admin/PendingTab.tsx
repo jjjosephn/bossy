@@ -37,11 +37,6 @@ export type Request = {
   }
 }
 
-export type ProcessedRequest = Request & {
-  status: "accept" | "deny"
-  processedDate: string
-}
-
 const PendingTabs = () => {
   const { user, isLoaded } = useUser()
   const [isLoading, setIsLoading] = useState(true)
@@ -102,6 +97,7 @@ const PendingTabs = () => {
         bossLastName: request.bossLastName,
         position: request.position,
         status: "accepted",
+        requestedDate: request.timestamp
       }).unwrap()
       toast.success(`Successfully approved ${request.bossFirstName} ${request.bossLastName} as a manager`)
       refetch()
@@ -123,7 +119,8 @@ const PendingTabs = () => {
         bossFirstName: request.bossFirstName,
         bossLastName: request.bossLastName,
         position: request.position,
-        status: "declined"
+        status: "declined",
+        requestedDate: request.timestamp
       }).unwrap()
       toast.success(`Successfully declined manager request`)
       refetch()
@@ -164,7 +161,7 @@ const PendingTabs = () => {
                       <TableHead className="w-1/5">Requester</TableHead>
                       <TableHead className="w-1/5">Boss</TableHead>
                       <TableHead className="w-2/5">Company</TableHead>
-                      <TableHead className="w-1/10">Date</TableHead>
+                      <TableHead className="w-1/10">Date Requested</TableHead>
                       <TableHead className="w-1/10 text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>

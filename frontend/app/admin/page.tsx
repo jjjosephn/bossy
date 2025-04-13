@@ -7,14 +7,14 @@ import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Clock, CheckCircle2 } from 'lucide-react'
-import PendingTabs, { type Request, type ProcessedRequest } from "@/components/admin/PendingTab"
+import PendingTabs from "@/components/admin/PendingTab"
 import HistoryTabs from "@/components/admin/HistoryTab"
-import { useGetPendingBossesQuery } from "../state/api"
+import { useGetArchivedFormsQuery, useGetPendingBossesQuery } from "../state/api"
 
 const AdminPanel = () => {
    const { user } = useUser()
-   const {data: pendingRequests = []} = useGetPendingBossesQuery()
-   const [historyRequests, setHistoryRequests] = useState<ProcessedRequest[]>([])
+   const {data: pendingRequests = [], refetch: refetchPending} = useGetPendingBossesQuery()
+   const {data: archivedForms = [], refetch: refetchArchived} = useGetArchivedFormsQuery()
    const [activeTab, setActiveTab] = useState("pending")
 
    console.log("Pending Requests: ", pendingRequests)
@@ -25,7 +25,17 @@ const AdminPanel = () => {
          <h1 className="text-2xl font-bold">Admin Panel</h1>
          </div>
 
-         <Tabs value={activeTab} onValueChange={setActiveTab}>
+         <Tabs
+            value={activeTab}
+            onValueChange={(value) => {
+               setActiveTab(value)
+               if (value === "pending") {
+                  refetchPending()
+               } else if (value === "history") {
+                  refetchArchived()
+               }
+            }}
+         >
             <TabsList className="grid w-full grid-cols-2 mb-6">
                <TabsTrigger value="pending" className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
@@ -38,7 +48,7 @@ const AdminPanel = () => {
                   <CheckCircle2 className="h-4 w-4" />
                   Request History
                   <Badge variant="secondary" className="ml-1">
-                  {historyRequests.length}
+                  {archivedForms.length}
                   </Badge>
                </TabsTrigger>
             </TabsList>
@@ -48,7 +58,7 @@ const AdminPanel = () => {
             </TabsContent>
 
             <TabsContent value="history">
-               <HistoryTabs historyRequests={historyRequests} />
+               <HistoryTabs />
             </TabsContent>
          </Tabs>
 

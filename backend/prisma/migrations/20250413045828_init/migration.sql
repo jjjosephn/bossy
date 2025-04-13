@@ -55,6 +55,7 @@ CREATE TABLE "ArchivedForms" (
     "position" TEXT NOT NULL,
     "companyId" TEXT NOT NULL,
     "status" TEXT NOT NULL,
+    "requestedDate" TEXT NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ArchivedForms_pkey" PRIMARY KEY ("archivedId")
