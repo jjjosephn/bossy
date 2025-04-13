@@ -25,6 +25,30 @@ export interface PendingBosess {
    position: string;
    companyId: string;
    timestamp: string;
+   User: User;
+   Company: Company;
+}
+
+export interface Boss {
+   bossId: string;
+   bossFirstName: string;
+   bossLastName: string;
+   position: string;
+   companyId: string;
+   timestamp: string;
+}
+ 
+export interface ArchivedForm {
+   archivedId: string;
+   userId: string;
+   bossFirstName: string;
+   bossLastName: string;
+   position: string;
+   companyId: string;
+   timestamp: string;
+   status: string;
+   User: User;
+   Company: Company;
 }
 
 export const api = createApi({
@@ -62,6 +86,20 @@ export const api = createApi({
       getPendingBosses: build.query<PendingBosess[], void>({
          query: () => '/boss/pending-bosses',
       }),
+      acceptPendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string }>({
+         query: (body) => ({
+            url: '/boss/accept-boss-request',
+            method: 'POST',
+            body,
+         })
+      }),
+      declinePendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string }>({
+         query: (body) => ({
+            url: '/boss/decline-boss-request',
+            method: 'POST',
+            body,
+         })
+      }),
    }),
 });
 
@@ -71,4 +109,6 @@ export const {
    useCheckUserExistsMutation,
    useAddBossRequestMutation,
    useGetPendingBossesQuery,
+   useAcceptPendingBossRequestMutation,
+   useDeclinePendingBossRequestMutation,
 } = api;

@@ -47,6 +47,20 @@ CREATE TABLE "PendingBosses" (
 );
 
 -- CreateTable
+CREATE TABLE "ArchivedForms" (
+    "archivedId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "bossFirstName" TEXT NOT NULL,
+    "bossLastName" TEXT NOT NULL,
+    "position" TEXT NOT NULL,
+    "companyId" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ArchivedForms_pkey" PRIMARY KEY ("archivedId")
+);
+
+-- CreateTable
 CREATE TABLE "BossReview" (
     "reviewId" TEXT NOT NULL,
     "reviewText" TEXT NOT NULL,
@@ -83,6 +97,12 @@ ALTER TABLE "PendingBosses" ADD CONSTRAINT "PendingBosses_userId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "PendingBosses" ADD CONSTRAINT "PendingBosses_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArchivedForms" ADD CONSTRAINT "ArchivedForms_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArchivedForms" ADD CONSTRAINT "ArchivedForms_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;

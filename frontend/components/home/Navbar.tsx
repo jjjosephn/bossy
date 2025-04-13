@@ -11,13 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useCheckUserExistsMutation } from "@/app/state/api"
+import { useCheckUserExistsMutation, useGetPendingBossesQuery } from "@/app/state/api"
 import { useEffect } from "react"
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()
    const { signOut } = useClerk()
    const [checkUser] = useCheckUserExistsMutation()
+   const {refetch} = useGetPendingBossesQuery()
    const firstname = user?.firstName
    const lastname = user?.lastName
    const imageUrl = user?.imageUrl
@@ -105,7 +106,10 @@ const Navbar = () => {
                      </Link>
                   </DropdownMenuItem>
                   {isAdmin && (
-                     <DropdownMenuItem asChild>
+                     <DropdownMenuItem 
+                        onClick={refetch}
+                        asChild
+                     >
                      <Link 
                         href="/admin" 
                         className="flex items-center gap-2 cursor-pointer rounded-lg hover:bg-primary/10 transition-colors duration-200"

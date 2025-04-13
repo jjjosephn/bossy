@@ -24,6 +24,7 @@ model User {
   BossReview    BossReview[]
   CompanyReview CompanyReview[]
   PendingBosses PendingBosses[]
+  ArchivedForms ArchivedForms[]
 }
 
 model Company {
@@ -36,6 +37,7 @@ model Company {
   Boss          Boss[]
   CompanyReview CompanyReview[]
   PendingBosses PendingBosses[]
+  ArchivedForms ArchivedForms[]
 }
 
 model Boss {
@@ -59,7 +61,21 @@ model PendingBosses {
   companyId     String
   timestamp     DateTime @default(now())
 
-  User   User    @relation(fields: [userId], references: [userId])
+  User    User    @relation(fields: [userId], references: [userId])
+  Company Company @relation(fields: [companyId], references: [companyId])
+}
+
+model ArchivedForms {
+  archivedId    String   @id @default(uuid())
+  userId        String
+  bossFirstName String
+  bossLastName  String
+  position      String
+  companyId     String
+  status        String
+  timestamp     DateTime @default(now())
+
+  User    User    @relation(fields: [userId], references: [userId])
   Company Company @relation(fields: [companyId], references: [companyId])
 }
 
@@ -88,3 +104,4 @@ model CompanyReview {
   User    User?    @relation(fields: [userId], references: [userId])
   Company Company? @relation(fields: [companyId], references: [companyId])
 }
+

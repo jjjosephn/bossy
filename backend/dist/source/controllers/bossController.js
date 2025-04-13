@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPendingBosses = exports.addBossRequest = void 0;
+exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = exports.addBossRequest = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const addBossRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,9 +35,9 @@ exports.addBossRequest = addBossRequest;
 const getPendingBosses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pendingBosses = yield prisma.pendingBosses.findMany({
-            select: {
+            include: {
                 User: true,
-                Company: true
+                Company: true,
             }
         });
         res.status(200).json(pendingBosses);
@@ -48,3 +48,63 @@ const getPendingBosses = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getPendingBosses = getPendingBosses;
+const acceptBossRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bossFirstName, bossLastName, position, companyId, userId, pendingId, status } = req.body;
+    try {
+        const newBoss = yield prisma.boss.create({
+            data: {
+                bossFirstName,
+                bossLastName,
+                position,
+                companyId
+            }
+        });
+        const newArchivedForm = yield prisma.archivedForms.create({
+            data: {
+                userId,
+                bossFirstName,
+                bossLastName,
+                position,
+                companyId,
+                status
+            }
+        });
+        const deleted = yield prisma.pendingBosses.delete({
+            where: {
+                pendingId
+            }
+        });
+        res.status(200).json({ message: "Boss request accepted", newBoss, newArchivedForm, deleted });
+    }
+    catch (error) {
+        console.error("Error accepting boss request:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.acceptBossRequest = acceptBossRequest;
+const declineBossRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bossFirstName, bossLastName, position, companyId, userId, pendingId, status } = req.body;
+    try {
+        const newArchivedForm = yield prisma.archivedForms.create({
+            data: {
+                userId,
+                bossFirstName,
+                bossLastName,
+                position,
+                companyId,
+                status
+            }
+        });
+        const deleted = yield prisma.pendingBosses.delete({
+            where: {
+                pendingId
+            }
+        });
+        res.status(200).json({ message: "Boss request declined", newArchivedForm, deleted });
+    }
+    catch (error) {
+        console.error("Error declining boss request:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.declineBossRequest = declineBossRequest;
