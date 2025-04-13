@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addBossRequest = void 0;
+exports.getPendingBosses = exports.addBossRequest = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const addBossRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,3 +32,19 @@ const addBossRequest = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.addBossRequest = addBossRequest;
+const getPendingBosses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pendingBosses = yield prisma.pendingBosses.findMany({
+            select: {
+                User: true,
+                Company: true
+            }
+        });
+        res.status(200).json(pendingBosses);
+    }
+    catch (error) {
+        console.error("Error fetching pending bosses:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getPendingBosses = getPendingBosses;

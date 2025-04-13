@@ -59,6 +59,9 @@ export const api = createApi({
             body,
          })
       }),
+      getPendingBosses: build.query<PendingBosess[], void>({
+         query: () => '/boss/pending-bosses',
+      }),
    }),
 });
 
@@ -67,4 +70,5 @@ export const {
    useGetCompanyByMapboxIdQuery,
    useCheckUserExistsMutation,
    useAddBossRequestMutation,
+   useGetPendingBossesQuery,
 } = api;

@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useEffect, use } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,10 +16,11 @@ interface BossNotFoundFormProps {
   company: Company
   onClose: () => void
   isSubmitting?: boolean
+  onSubmitSuccess?: () => void
 }
 
 export interface PendingBossData {
-  userId: string,
+  userId: string
   bossFirstName: string
   bossLastName: string
   position: string
@@ -39,9 +39,9 @@ const positionOptions = [
   { value: "president", label: "President" },
 ]
 
-export function BossNotFoundForm({ company, onClose, isSubmitting = false }: BossNotFoundFormProps) {
-  const {user} = useUser()
-  const {data: companyInfo} = useGetCompanyByMapboxIdQuery(company.mapboxId)
+export function BossNotFoundForm({ company, onClose, isSubmitting = false, onSubmitSuccess }: BossNotFoundFormProps) {
+  const { user } = useUser()
+  const { data: companyInfo } = useGetCompanyByMapboxIdQuery(company.mapboxId)
   const [addBossRequest] = useAddBossRequestMutation()
   const [formData, setFormData] = useState<PendingBossData>({
     userId: user?.id || "",
@@ -56,8 +56,6 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false }: Bos
     lastName: "",
     position: "",
   })
-
-  console.log(formData)
 
   // Prevent body scrolling when modal is open
   useEffect(() => {
@@ -94,6 +92,9 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false }: Bos
       try {
         setLocalSubmitting(true)
         await addBossRequest(formData)
+        if (onSubmitSuccess) {
+          onSubmitSuccess();
+        }
         onClose()
       } catch (error) {
         console.error("Error submitting form:", error)
@@ -152,8 +153,8 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false }: Bos
           <form onSubmit={handleSubmit} className="p-4 space-y-4">
             <div className="mb-4">
               <p className="text-sm text-muted-foreground mb-2">
-                Can't find your boss at <span className="font-medium text-foreground">{company.name}</span>? Add their
-                details below.
+                Can't find your boss at <span className="font-medium text-foreground">{company.name}</span>? Add
+                their details below.
               </p>
             </div>
 
@@ -229,4 +230,3 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false }: Bos
     </Portal>
   )
 }
-

@@ -23,6 +23,7 @@ model User {
 
   BossReview    BossReview[]
   CompanyReview CompanyReview[]
+  PendingBosses PendingBosses[]
 }
 
 model Company {
@@ -34,6 +35,7 @@ model Company {
 
   Boss          Boss[]
   CompanyReview CompanyReview[]
+  PendingBosses PendingBosses[]
 }
 
 model Boss {
@@ -56,6 +58,9 @@ model PendingBosses {
   position      String
   companyId     String
   timestamp     DateTime @default(now())
+
+  User   User    @relation(fields: [userId], references: [userId])
+  Company Company @relation(fields: [companyId], references: [companyId])
 }
 
 model BossReview {

@@ -5,6 +5,8 @@ import StoreProvider from "./redux";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +38,19 @@ export default function RootLayout({
             <Navbar />
               {children}
             <Footer />
+            <ToastContainer
+              position="top-right"
+              autoClose={2500}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss={false}
+              draggable
+              pauseOnHover={false}
+              theme="light"
+              style={{zIndex: 9999}}
+            />
           </StoreProvider>
         </body>
       </html>

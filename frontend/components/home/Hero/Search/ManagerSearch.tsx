@@ -7,6 +7,8 @@ import { AnimatePresence } from "framer-motion"
 import type { Company } from "@/utils/search-types"
 import { BossNotFoundForm, type PendingBossData } from "./BossNotFound"
 import { useUser, useClerk } from "@clerk/nextjs"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 // Mock manager data type
 interface Manager {
@@ -50,7 +52,6 @@ export function ManagerSearchStep({
   setSearchQuery,
   loading,
   onSelectManager,
-  onAddNewBoss,
 }: ManagerSearchStepProps) {
   const { isSignedIn } = useUser()
   const clerk = useClerk()
@@ -111,7 +112,6 @@ export function ManagerSearchStep({
 
   const handleBossNotFound = () => {
     if (!isSignedIn) {
-      // Set pending state to open form after auth
       setPendingBossForm(true)
 
       // Open Clerk's sign-in modal
@@ -134,6 +134,10 @@ export function ManagerSearchStep({
   const handleInputFocus = () => {
     setFilteredManagers(managers)
     setOpen(true)
+  }
+
+  const handleSubmitSuccess = () => {
+    toast.success("Boss request sent! Please check your email for updates.")
   }
 
   return (
@@ -239,6 +243,7 @@ export function ManagerSearchStep({
             company={selectedCompany}
             onClose={handleCloseBossForm}
             isSubmitting={isSubmitting}
+            onSubmitSuccess={handleSubmitSuccess}
           />
         )}
       </AnimatePresence>

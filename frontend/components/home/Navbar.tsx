@@ -38,7 +38,7 @@ const Navbar = () => {
    }, [isSignedIn, user?.id])
 
    return (
-      <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
+      <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
          <div className="w-36 flex items-center"/>
 
          <Link className="flex items-center justify-center group" href="/">
