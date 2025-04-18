@@ -67,7 +67,7 @@ export function ReviewItem({ review, formatDate, getTimeAgo }: ReviewItemProps) 
                 </Tooltip>
               </div>
 
-              <div className="flex gap-1">
+              {/* <div className="flex gap-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="ghost" size="sm" className="h-8 px-2 rounded-full hover:bg-primary/10">
@@ -113,7 +113,7 @@ export function ReviewItem({ review, formatDate, getTimeAgo }: ReviewItemProps) 
                     <p>Report this review</p>
                   </TooltipContent>
                 </Tooltip>
-              </div>
+              </div> */}
             </TooltipProvider>
           </div>
         </div>

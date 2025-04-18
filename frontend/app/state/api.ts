@@ -35,6 +35,7 @@ export interface Boss {
    position: string;
    companyId: string;
    timestamp: string;
+   Company: Company;
 }
  
 export interface ArchivedForm {
@@ -56,6 +57,7 @@ export const api = createApi({
    reducerPath: 'api',
    tagTypes: [],
    endpoints: (build) => ({
+      // Home Page
       checkCompanyExists: build.mutation<any, { mapboxId: string; name: string; fullAddress: string }>({
          query: (body) => ({
             url: '/company/check-company',
@@ -63,11 +65,9 @@ export const api = createApi({
             body,
          })
       }),
-
       getCompanyByMapboxId: build.query<Company, string>({
          query: (mapboxId) => `/company/${mapboxId}`,
       }),
-
       checkUserExists: build.mutation<any, { userId: string; firstName: string; lastName: string; email: string }>({
          query: (body) => ({
             url: '/check-user',
@@ -76,6 +76,7 @@ export const api = createApi({
          })
       }),
 
+      // Hero Section
       addBossRequest: build.mutation<any, { userId: string; bossFirstName: string; bossLastName: string; position: string; companyId: string }>({
          query: (body) => ({
             url: '/boss/add-boss-request',
@@ -87,6 +88,7 @@ export const api = createApi({
          query: (mapboxId) => `/boss/${mapboxId}`,
       }),
 
+      //Admin Page
       getPendingBosses: build.query<PendingBosess[], void>({
          query: () => '/admin/pending-bosses',
       }),
@@ -106,7 +108,12 @@ export const api = createApi({
       }),
       getArchivedForms: build.query<ArchivedForm[], void>({
          query: () => '/admin/archived-bosses',
-      })
+      }),
+
+      //Boss Page
+      getBossInfo: build.query<Boss, string>({
+         query: (bossId) => `/boss/info/${bossId}`,
+      }),
    }),
 });
 
@@ -119,5 +126,6 @@ export const {
    useGetPendingBossesQuery,
    useAcceptPendingBossRequestMutation,
    useDeclinePendingBossRequestMutation,
-   useGetArchivedFormsQuery
+   useGetArchivedFormsQuery,
+   useGetBossInfoQuery
 } = api;

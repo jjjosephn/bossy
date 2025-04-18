@@ -11,28 +11,14 @@ import {
   calculateRatingDistribution, 
   calculateRatingPercentages 
 } from '@/utils/rating-utils'
+import { useParams } from 'next/navigation'
+import { useGetBossInfoQuery } from '@/app/state/api'
 
 export default function BossReviewPage() {
-  // Mock data
-  const boss = {
-    "bossId": "1",
-    "bossFirstName": "Alice",
-    "bossLastName": "Johnson",
-    "companyId": "1",
-    "position": "Manager",
-    "timestamp": "2025-03-09T12:00:00.000Z"
-  };
-
-  const company = {
-    "companyId": "1",
-    "companyName": "Tech Corp",
-    "streetAddress": "123 Tech Street",
-    "city": "San Francisco",
-    "state": "CA",
-    "zipCode": "94101",
-    "timestamp": "2025-03-09T12:00:00.000Z"
-  };
-
+  const params = useParams()
+  const { bossId } = params
+  const { data: boss } = useGetBossInfoQuery(bossId as string)
+  console.log(boss)
   const reviews = [
     {
       "reviewId": "1",
@@ -93,20 +79,18 @@ export default function BossReviewPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Boss Profile */}
-        <BossProfile 
-          boss={boss} 
-          company={company} 
-          averageRating={averageRating} 
-          reviewCount={reviews.length} 
-        />
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Sidebar */}
+        {boss && (
+          <BossProfile 
+            boss={boss} 
+            averageRating={averageRating} 
+            reviewCount={reviews.length} 
+          />
+        )}
+
+        {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
             
-            {/* Rating Distribution */}
             <RatingDistribution 
               ratingDistribution={ratingDistribution}
               ratingPercentages={ratingPercentages}
@@ -117,7 +101,6 @@ export default function BossReviewPage() {
             <NewReview />
           </div>
 
-          {/* Reviews */}
           <div className="lg:col-span-2">
             <ReviewsList 
               reviews={reviews}
@@ -128,7 +111,7 @@ export default function BossReviewPage() {
               getTimeAgo={getTimeAgo}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

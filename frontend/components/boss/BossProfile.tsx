@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { formatCityState } from "@/utils/format-address"
 import { Star, MapPin, Building, Briefcase, ChevronRight } from "lucide-react"
 
 type BossProfileProps = {
@@ -9,18 +10,18 @@ type BossProfileProps = {
     companyId: string
     position: string
     timestamp: string
-  }
-  company: {
-    companyId: string
-    companyName: string
-    city: string
-    state: string
+    Company: {
+      companyId: string
+      companyName: string
+      fullAddress: string
+    }
   }
   averageRating: number
   reviewCount: number
 }
 
-export function BossProfile({ boss, company, averageRating, reviewCount }: BossProfileProps) {
+export function BossProfile({ boss, averageRating, reviewCount }: BossProfileProps) {
+  const cityState = formatCityState(boss.Company.fullAddress)
   return (
     <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5 rounded-xl shadow-lg p-8 mb-8 border border-primary/10">
       <div className="flex flex-col md:flex-row gap-8">
@@ -49,14 +50,14 @@ export function BossProfile({ boss, company, averageRating, reviewCount }: BossP
               <div className="bg-primary/10 p-2 rounded-full group-hover:bg-primary/20 transition-colors">
                 <Building className="h-4 w-4 text-primary" />
               </div>
-              <span className="font-medium">{company.companyName}</span>
+              <span className="font-medium">{boss.Company.companyName}</span>
             </div>
             <div className="flex items-center gap-2 group">
               <div className="bg-primary/10 p-2 rounded-full group-hover:bg-primary/20 transition-colors">
                 <MapPin className="h-4 w-4 text-primary" />
               </div>
               <span className="font-medium">
-                {company.city}, {company.state}
+                {cityState}
               </span>
             </div>
           </div>
