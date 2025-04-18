@@ -72,7 +72,6 @@ const SearchComponent = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchComponentRef.current && !searchComponentRef.current.contains(event.target as Node)) {
-        // Close any open dropdowns
         const customEvent = new CustomEvent("closeDropdowns")
         document.dispatchEvent(customEvent)
       }

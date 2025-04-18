@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { get } from 'http';
 
 export interface Company {
    companyId: string;
@@ -84,25 +83,29 @@ export const api = createApi({
             body,
          })
       }),
+      getBosses: build.query<Boss[], string>({
+         query: (mapboxId) => `/boss/${mapboxId}`,
+      }),
+
       getPendingBosses: build.query<PendingBosess[], void>({
-         query: () => '/boss/pending-bosses',
+         query: () => '/admin/pending-bosses',
       }),
       acceptPendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string, requestedDate: string }>({
          query: (body) => ({
-            url: '/boss/accept-boss-request',
+            url: '/admin/accept-boss-request',
             method: 'POST',
             body,
          })
       }),
       declinePendingBossRequest: build.mutation<any, { bossFirstName: string; bossLastName: string; position: string; companyId: string; userId: string, pendingId: string, status: string, requestedDate: string }>({
          query: (body) => ({
-            url: '/boss/decline-boss-request',
+            url: '/admin/decline-boss-request',
             method: 'POST',
             body,
          })
       }),
       getArchivedForms: build.query<ArchivedForm[], void>({
-         query: () => '/boss/archived-bosses',
+         query: () => '/admin/archived-bosses',
       })
    }),
 });
@@ -112,6 +115,7 @@ export const {
    useGetCompanyByMapboxIdQuery,
    useCheckUserExistsMutation,
    useAddBossRequestMutation,
+   useGetBossesQuery,
    useGetPendingBossesQuery,
    useAcceptPendingBossRequestMutation,
    useDeclinePendingBossRequestMutation,

@@ -7,10 +7,11 @@ import { AnimatePresence } from "framer-motion"
 import type { Company } from "@/utils/search-types"
 import { BossNotFoundForm, type PendingBossData } from "./BossNotFound"
 import { useUser, useClerk } from "@clerk/nextjs"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { useGetBossesQuery } from "@/app/state/api"
 
-// Mock manager data type
+// Manager data type from API
 interface Manager {
   id: string
   name: string
@@ -28,34 +29,19 @@ interface ManagerSearchStepProps {
   onAddNewBoss?: (bossData: PendingBossData) => Promise<void>
 }
 
-// Generate mock managers based on company name for demo purposes
-const generateMockManagers = (companyName: string): Manager[] => {
-  const departments = ["Engineering", "Marketing", "Sales", "HR", "Finance", "Operations", "Product"]
-  const positions = ["Manager", "Director", "VP", "Team Lead", "Head of", "Senior Manager"]
-
-  return Array.from({ length: 8 }, (_, i) => {
-    const department = departments[Math.floor(Math.random() * departments.length)]
-    const position = positions[Math.floor(Math.random() * positions.length)]
-
-    return {
-      id: `mgr-${i + 1}`,
-      name: `Manager ${i + 1}`,
-      position: `${position}${department ? ` of ${department}` : ""}`,
-      department: department,
-    }
-  })
-}
-
 export function ManagerSearchStep({
   selectedCompany,
   searchQuery,
   setSearchQuery,
-  loading,
+  loading: externalLoading,
   onSelectManager,
 }: ManagerSearchStepProps) {
   const { isSignedIn } = useUser()
   const clerk = useClerk()
-  const [managers, setManagers] = useState<Manager[]>([])
+
+  // Fetch bosses for the selected company
+  const { data: bosses = [], isLoading: bossesLoading, refetch } = useGetBossesQuery(selectedCompany.mapboxId)
+
   const [filteredManagers, setFilteredManagers] = useState<Manager[]>([])
   const [open, setOpen] = useState(false)
   const [dropdownForceOpen, setDropdownForceOpen] = useState(false)
@@ -63,29 +49,38 @@ export function ManagerSearchStep({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [pendingBossForm, setPendingBossForm] = useState(false)
 
-  // Generate mock managers when the component mounts or company changes
-  useEffect(() => {
-    const mockManagers = generateMockManagers(selectedCompany.name)
-    setManagers(mockManagers)
-  }, [selectedCompany.name])
+  console.log(bosses)
+  // Combined loading state
+  const loading = externalLoading || bossesLoading
 
-  // Filter managers based on search query
+  // Refetch bosses when company changes
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      // Show all managers when no search query
-      setFilteredManagers(managers)
-      return
+    if (selectedCompany?.mapboxId) {
+      refetch()
+      // Auto-open dropdown when company is selected and bosses are loaded
+      if (bosses.length > 0 && !open) {
+        setOpen(true)
+      }
     }
+  }, [selectedCompany?.mapboxId, refetch])
 
-    const filtered = managers.filter(
-      (manager) =>
-        manager.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        manager.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (manager.department && manager.department.toLowerCase().includes(searchQuery.toLowerCase())),
-    )
+  // Update filtered managers when bosses change or search query changes
+  // useEffect(() => {
+  //   if (searchQuery.trim() === "") {
+  //     // Show all bosses when no search query
+  //     setFilteredManagers(bosses)
+  //     return
+  //   }
 
-    setFilteredManagers(filtered)
-  }, [searchQuery, managers])
+  //   const filtered = bosses.filter(
+  //     (manager) =>
+  //       manager.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //       manager.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //       (manager.department && manager.department.toLowerCase().includes(searchQuery.toLowerCase())),
+  //   )
+
+  //   setFilteredManagers(filtered)
+  // }, [searchQuery, bosses])
 
   // Check if we need to open the boss form after authentication
   useEffect(() => {
@@ -96,10 +91,9 @@ export function ManagerSearchStep({
   }, [isSignedIn, pendingBossForm])
 
   const toggleDropdown = () => {
-    if (filteredManagers.length > 0) {
-      setDropdownForceOpen(!dropdownForceOpen)
-      setOpen(!open)
-    }
+    // Always allow toggling
+    setDropdownForceOpen(!dropdownForceOpen)
+    setOpen(!open)
   }
 
   const handleSelectManager = (manager: Manager) => {
@@ -132,12 +126,15 @@ export function ManagerSearchStep({
   }
 
   const handleInputFocus = () => {
-    setFilteredManagers(managers)
+    // Show all bosses when input is focused
+    setFilteredManagers(bosses)
     setOpen(true)
   }
 
   const handleSubmitSuccess = () => {
     toast.success("Boss request sent! Please check your email for updates.")
+    // Refetch bosses after successful submission
+    refetch()
   }
 
   return (
@@ -160,19 +157,17 @@ export function ManagerSearchStep({
           ) : (
             <>
               <Search className="h-5 w-5 text-muted-foreground" />
-              {filteredManagers.length > 0 && (
-                <button
-                  onClick={toggleDropdown}
-                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
-                  aria-label={open ? "Close dropdown" : "Open dropdown"}
-                >
-                  {open || dropdownForceOpen ? (
-                    <ChevronUp className="h-4 w-4 text-gray-500" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-gray-500" />
-                  )}
-                </button>
-              )}
+              <button
+                onClick={toggleDropdown}
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+                aria-label={open ? "Close dropdown" : "Open dropdown"}
+              >
+                {open || dropdownForceOpen ? (
+                  <ChevronUp className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                )}
+              </button>
             </>
           )}
         </div>
@@ -199,39 +194,50 @@ export function ManagerSearchStep({
               </button>
             </div>
 
-            {filteredManagers.length > 0 ? (
-              <>
-                {filteredManagers.map((manager) => (
-                  <div
-                    key={manager.id}
-                    className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0"
-                    onClick={() => handleSelectManager(manager)}
-                  >
-                    <UserCircle className="h-5 w-5 text-gray-500 mr-3" />
-                    <div>
-                      <div className="font-medium">{manager.name}</div>
-                      <div className="text-xs text-gray-500">{manager.position}</div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-gray-400 ml-auto" />
-                  </div>
-                ))}
-
-                {/* Boss not here option */}
-                <div
-                  className="p-3 text-center text-primary hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-t border-gray-100 dark:border-gray-700"
-                  onClick={handleBossNotFound}
-                >
-                  <span className="font-medium">Boss not here?</span>
+            <div className="max-h-[calc(60vh-40px)] overflow-y-auto">
+              {loading ? (
+                <div className="p-6 flex justify-center items-center">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 </div>
-              </>
-            ) : searchQuery.trim().length > 0 && !loading ? (
-              <div className="p-3 text-sm text-gray-500">
-                <p className="mb-2">No managers found</p>
-                <button className="text-primary font-medium" onClick={handleBossNotFound}>
-                  Boss not here?
-                </button>
-              </div>
-            ) : null}
+              ) : (
+                <>
+                  {filteredManagers.length > 0 ? (
+                    <div className="border-b border-gray-100 dark:border-gray-700">
+                      {filteredManagers.map((manager) => (
+                        <div
+                          key={manager.id}
+                          className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0"
+                          onClick={() => handleSelectManager(manager)}
+                        >
+                          <UserCircle className="h-5 w-5 text-gray-500 mr-3" />
+                          <div>
+                            <div className="font-medium">{manager.name}</div>
+                            <div className="text-xs text-gray-500">{manager.position}</div>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-gray-400 ml-auto" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : searchQuery.trim().length > 0 ? (
+                    <div className="p-3 text-sm text-gray-500 border-b border-gray-100 dark:border-gray-700">
+                      <p className="mb-2">No managers found</p>
+                    </div>
+                  ) : bosses.length === 0 ? (
+                    <div className="p-3 text-sm text-gray-500 border-b border-gray-100 dark:border-gray-700">
+                      <p className="mb-2">No managers found for this company</p>
+                    </div>
+                  ) : null}
+
+                  {/* Boss not here option - always visible */}
+                  <div
+                    className="p-3 text-center text-primary hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                    onClick={handleBossNotFound}
+                  >
+                    <span className="font-medium">Boss not here?</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -250,4 +256,3 @@ export function ManagerSearchStep({
     </>
   )
 }
-

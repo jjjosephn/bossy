@@ -18,6 +18,7 @@ import {
 import { formatDate } from "@/utils/date-utils"
 import { toast } from "react-toastify"
 
+
 export type Request = {
   pendingId: string
   bossFirstName: string
@@ -35,6 +36,12 @@ export type Request = {
     email: string
     userId: string
   }
+}
+
+// Helper function to capitalize the first letter of a string
+const capitalizeFirstLetter = (string: string): string => {
+  if (!string) return string
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 const PendingTabs = () => {
@@ -89,21 +96,24 @@ const PendingTabs = () => {
   const handleAcceptRequest = async (request: Request) => {
     try {
       setProcessingIds((prev) => [...prev, request.pendingId])
+      const capitalizedFirstName = capitalizeFirstLetter(request.bossFirstName)
+      const capitalizedLastName = capitalizeFirstLetter(request.bossLastName)
+
       await acceptRequest({
         pendingId: request.pendingId,
         userId: request.User.userId,
         companyId: request.companyId,
-        bossFirstName: request.bossFirstName,
-        bossLastName: request.bossLastName,
+        bossFirstName: capitalizedFirstName,
+        bossLastName: capitalizedLastName,
         position: request.position,
         status: "accepted",
-        requestedDate: request.timestamp
+        requestedDate: request.timestamp,
       }).unwrap()
-      toast.success(`Successfully approved ${request.bossFirstName} ${request.bossLastName} as a manager`)
+      toast.success(`Successfully accepted manager request`)
       refetch()
     } catch (error) {
       console.error("Error accepting request:", error)
-      toast.error("Failed to approve manager request")
+      toast.error("Failed to accept manager request")
     } finally {
       setProcessingIds((prev) => prev.filter((id) => id !== request.pendingId))
     }
@@ -112,15 +122,18 @@ const PendingTabs = () => {
   const handleDeclineRequest = async (request: Request) => {
     try {
       setProcessingIds((prev) => [...prev, request.pendingId])
+      const capitalizedFirstName = capitalizeFirstLetter(request.bossFirstName)
+      const capitalizedLastName = capitalizeFirstLetter(request.bossLastName)
+
       await declineRequest({
         pendingId: request.pendingId,
         userId: request.User.userId,
         companyId: request.companyId,
-        bossFirstName: request.bossFirstName,
-        bossLastName: request.bossLastName,
+        bossFirstName: capitalizedFirstName,
+        bossLastName: capitalizedLastName,
         position: request.position,
         status: "declined",
-        requestedDate: request.timestamp
+        requestedDate: request.timestamp,
       }).unwrap()
       toast.success(`Successfully declined manager request`)
       refetch()

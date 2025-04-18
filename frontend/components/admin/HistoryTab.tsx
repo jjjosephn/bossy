@@ -32,13 +32,17 @@ export type ArchivedFormsProps = {
 }
 
 const HistoryTabs = () => {
-  const { data: archivedForms = [] } = useGetArchivedFormsQuery()
+  const { data: archivedFormsRaw = [] } = useGetArchivedFormsQuery()
   const [currentHistoryPage, setCurrentHistoryPage] = useState(1)
   const requestsPerPage = 10
+  const archivedForms = [...archivedFormsRaw].sort((a, b) => {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  })
   const totalHistoryPages = Math.ceil(archivedForms.length / requestsPerPage)
   const historyIndexOfLastRequest = currentHistoryPage * requestsPerPage
   const historyIndexOfFirstRequest = historyIndexOfLastRequest - requestsPerPage
   const currentHistoryRequests = archivedForms.slice(historyIndexOfFirstRequest, historyIndexOfLastRequest)
+  
 
   useEffect(() => {
     setCurrentHistoryPage(1)
