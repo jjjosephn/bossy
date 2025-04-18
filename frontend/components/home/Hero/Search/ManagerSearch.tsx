@@ -62,7 +62,7 @@ export function ManagerSearchStep({
         setOpen(true)
       }
     }
-  }, [selectedCompany?.mapboxId, refetch])
+  }, [selectedCompany?.mapboxId, refetch])    
 
   // Update filtered managers when bosses change or search query changes
   // useEffect(() => {
