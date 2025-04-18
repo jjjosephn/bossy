@@ -25,8 +25,6 @@ const Navbar = () => {
    
    const isAdmin = user?.publicMetadata.role === 'admin'
 
-   console.log(user)
-
    useEffect(() => {
       if (isSignedIn) {
          checkUser({ 

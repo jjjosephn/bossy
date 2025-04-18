@@ -10,14 +10,14 @@ import { useUser, useClerk } from "@clerk/nextjs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useGetBossesQuery } from "@/app/state/api"
+import Link from "next/link"
 
-// Manager data type from API
-interface Manager {
-  id: string
-  name: string
+interface Boss {
+  bossId: string
+  bossFirstName: string
+  bossLastName: string
   position: string
-  department?: string
-  avatar?: string
+  companyId: string
 }
 
 interface ManagerSearchStepProps {
@@ -25,7 +25,7 @@ interface ManagerSearchStepProps {
   searchQuery: string
   setSearchQuery: (query: string) => void
   loading: boolean
-  onSelectManager?: (manager: Manager) => void
+  onSelectManager?: (manager: Boss) => void
   onAddNewBoss?: (bossData: PendingBossData) => Promise<void>
 }
 
@@ -42,47 +42,45 @@ export function ManagerSearchStep({
   // Fetch bosses for the selected company
   const { data: bosses = [], isLoading: bossesLoading, refetch } = useGetBossesQuery(selectedCompany.mapboxId)
 
-  const [filteredManagers, setFilteredManagers] = useState<Manager[]>([])
   const [open, setOpen] = useState(false)
   const [dropdownForceOpen, setDropdownForceOpen] = useState(false)
   const [showBossNotFoundForm, setShowBossNotFoundForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [pendingBossForm, setPendingBossForm] = useState(false)
 
+  // Calculate filtered managers directly instead of storing in state
+  const filteredManagers = (() => {
+    if (!bosses || bosses.length === 0) return [];
+
+    if (searchQuery.trim() === "") {
+      return bosses;
+    } else {
+      return bosses.filter(
+        (boss) =>
+          `${boss.bossFirstName} ${boss.bossLastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          boss.position.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    }
+  })();
+
+  console.log(selectedCompany)
   console.log(bosses)
-  // Combined loading state
+
   const loading = externalLoading || bossesLoading
 
-  // Refetch bosses when company changes
   useEffect(() => {
     if (selectedCompany?.mapboxId) {
-      refetch()
-      // Auto-open dropdown when company is selected and bosses are loaded
-      if (bosses.length > 0 && !open) {
-        setOpen(true)
-      }
+      refetch();
     }
-  }, [selectedCompany?.mapboxId, refetch])    
+  }, [selectedCompany?.mapboxId, refetch]);
+  
+  // Auto-open dropdown when company is selected and bosses are loaded
+  useEffect(() => {
+    if (selectedCompany?.mapboxId && bosses.length > 0 && !open) {
+      setOpen(true);
+    }
+  }, [selectedCompany?.mapboxId, bosses]); // Removed 'open' from dependencies
 
-  // Update filtered managers when bosses change or search query changes
-  // useEffect(() => {
-  //   if (searchQuery.trim() === "") {
-  //     // Show all bosses when no search query
-  //     setFilteredManagers(bosses)
-  //     return
-  //   }
-
-  //   const filtered = bosses.filter(
-  //     (manager) =>
-  //       manager.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //       manager.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //       (manager.department && manager.department.toLowerCase().includes(searchQuery.toLowerCase())),
-  //   )
-
-  //   setFilteredManagers(filtered)
-  // }, [searchQuery, bosses])
-
-  // Check if we need to open the boss form after authentication
   useEffect(() => {
     if (isSignedIn && pendingBossForm) {
       setShowBossNotFoundForm(true)
@@ -96,7 +94,7 @@ export function ManagerSearchStep({
     setOpen(!open)
   }
 
-  const handleSelectManager = (manager: Manager) => {
+  const handleSelectManager = (manager: Boss) => {
     if (onSelectManager) {
       onSelectManager(manager)
     }
@@ -126,14 +124,11 @@ export function ManagerSearchStep({
   }
 
   const handleInputFocus = () => {
-    // Show all bosses when input is focused
-    setFilteredManagers(bosses)
     setOpen(true)
   }
 
   const handleSubmitSuccess = () => {
     toast.success("Boss request sent! Please check your email for updates.")
-    // Refetch bosses after successful submission
     refetch()
   }
 
@@ -203,18 +198,21 @@ export function ManagerSearchStep({
                 <>
                   {filteredManagers.length > 0 ? (
                     <div className="border-b border-gray-100 dark:border-gray-700">
-                      {filteredManagers.map((manager) => (
+                      {filteredManagers.map((boss) => (
                         <div
-                          key={manager.id}
+                          key={boss.bossId}
                           className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0"
-                          onClick={() => handleSelectManager(manager)}
                         >
-                          <UserCircle className="h-5 w-5 text-gray-500 mr-3" />
-                          <div>
-                            <div className="font-medium">{manager.name}</div>
-                            <div className="text-xs text-gray-500">{manager.position}</div>
-                          </div>
-                          <ArrowRight className="h-4 w-4 text-gray-400 ml-auto" />
+                          <Link href={`/boss/${boss.bossId}`} className="flex items-center w-full" onClick={() => handleSelectManager(boss)}>
+                            <UserCircle className="h-5 w-5 text-gray-500 mr-3" />
+                            <div>
+                              <div className="font-medium">
+                                {boss.bossFirstName} {boss.bossLastName}
+                              </div>
+                              <div className="text-xs text-gray-500">{boss.position}</div>
+                            </div>
+                            <ArrowRight className="h-4 w-4 text-gray-400 ml-auto" />
+                          </Link>
                         </div>
                       ))}
                     </div>

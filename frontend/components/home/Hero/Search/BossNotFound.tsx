@@ -28,15 +28,15 @@ export interface PendingBossData {
 }
 
 const positionOptions = [
-  { value: "team_lead", label: "Team Lead" },
-  { value: "supervisor", label: "Supervisor" },
-  { value: "manager", label: "Manager" },
-  { value: "senior_manager", label: "Senior Manager" },
-  { value: "director", label: "Director" },
-  { value: "vice_president", label: "Vice President" },
-  { value: "senior_vice_president", label: "Senior Vice President" },
-  { value: "chief_officer", label: "Chief Officer" },
-  { value: "president", label: "President" },
+  { value: "Team Lead", label: "Team Lead" },
+  { value: "Supervisor", label: "Supervisor" },
+  { value: "Manager", label: "Manager" },
+  { value: "Senior Manager", label: "Senior Manager" },
+  { value: "Director", label: "Director" },
+  { value: "Vice President", label: "Vice President" },
+  { value: "Senior Vice President", label: "Senior Vice President" },
+  { value: "Chief Officer", label: "Chief Officer" },
+  { value: "President", label: "President" },
 ]
 
 export function BossNotFoundForm({ company, onClose, isSubmitting = false, onSubmitSuccess }: BossNotFoundFormProps) {
