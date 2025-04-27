@@ -1,6 +1,5 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { formatCityState } from "@/utils/format-address"
-import { Star, MapPin, Building, Briefcase, ChevronRight } from "lucide-react"
+import { Star, MapPin, Building, Briefcase } from "lucide-react"
 
 type BossProfileProps = {
   boss: {
@@ -22,68 +21,72 @@ type BossProfileProps = {
 
 export function BossProfile({ boss, averageRating, reviewCount }: BossProfileProps) {
   const cityState = formatCityState(boss.Company.fullAddress)
+
   return (
-    <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5 rounded-xl shadow-lg p-8 mb-8 border border-primary/10">
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="flex-shrink-0">
-          <Avatar className="h-28 w-28 border-4 border-primary/20 shadow-md">
-            <AvatarFallback className="text-3xl font-bold bg-gradient-to-br from-primary to-purple-600 dark:from-primary dark:to-blue-400 text-white">
-              {boss.bossFirstName.charAt(0)}
-              {boss.bossLastName.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-        </div>
+    <div className="bg-gradient-to-br from-primary/5 via-primary/3 to-purple-600/5 dark:from-primary/5 dark:via-primary/3 dark:to-blue-400/5 rounded-2xl shadow-lg border border-primary/10 transition-all duration-300 hover:shadow-xl hover:border-primary/20">
+      <div className="p-8">
+        <div className="flex flex-col gap-6">
+          {/* Header section with name and rating */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent">
+              {boss.bossFirstName} {boss.bossLastName}
+            </h1>
 
-        <div className="flex-grow space-y-3">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent">
-            {boss.bossFirstName} {boss.bossLastName}
-          </h1>
-
-          <div className="flex flex-wrap gap-6 text-muted-foreground">
-            <div className="flex items-center gap-2 group">
-              <div className="bg-primary/10 p-2 rounded-full group-hover:bg-primary/20 transition-colors">
-                <Briefcase className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-3 bg-white/50 dark:bg-black/20 px-4 py-2 rounded-full shadow-sm">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`h-5 w-5 transition-all duration-300 ${
+                      star <= Math.round(averageRating) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"
+                    }`}
+                  />
+                ))}
               </div>
-              <span className="font-medium">{boss.position}</span>
-            </div>
-            <div className="flex items-center gap-2 group">
-              <div className="bg-primary/10 p-2 rounded-full group-hover:bg-primary/20 transition-colors">
-                <Building className="h-4 w-4 text-primary" />
+              <div className="font-semibold text-lg">
+                {averageRating.toFixed(1)}
+                <span className="text-sm text-muted-foreground ml-1">({reviewCount})</span>
               </div>
-              <span className="font-medium">{boss.Company.companyName}</span>
-            </div>
-            <div className="flex items-center gap-2 group">
-              <div className="bg-primary/10 p-2 rounded-full group-hover:bg-primary/20 transition-colors">
-                <MapPin className="h-4 w-4 text-primary" />
-              </div>
-              <span className="font-medium">
-                {cityState}
-              </span>
             </div>
           </div>
-        </div>
 
-        <div className="md:border-l md:border-primary/10 md:pl-8 flex flex-col items-center justify-center py-4 md:py-0">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent">
-              {averageRating.toFixed(1)}
+          {/* Info cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white/50 dark:bg-black/20 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]">
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <Briefcase className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase text-muted-foreground font-medium">Position</div>
+                  <div className="font-semibold">{boss.position}</div>
+                </div>
+              </div>
             </div>
-            <div className="text-xl font-medium text-muted-foreground">/5</div>
-          </div>
-          <div className="flex mt-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={`h-5 w-5 ${
-                  star <= Math.round(averageRating) 
-                    ? "fill-primary text-primary" 
-                    : "text-muted-foreground/30"
-                }`}
-              />
-            ))}
-          </div>
-          <div className="text-sm text-muted-foreground mt-2 font-medium">
-            Based on {reviewCount} reviews
+
+            <div className="bg-white/50 dark:bg-black/20 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]">
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <Building className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase text-muted-foreground font-medium">Company</div>
+                  <div className="font-semibold">{boss.Company.companyName}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/50 dark:bg-black/20 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]">
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <MapPin className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase text-muted-foreground font-medium">Location</div>
+                  <div className="font-semibold">{cityState}</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

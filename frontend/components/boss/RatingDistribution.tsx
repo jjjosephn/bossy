@@ -4,6 +4,8 @@ import { Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
+import { NewReview } from "@/components/boss/NewReview"
+
 
 type RatingDistributionProps = {
   ratingDistribution: number[]
@@ -20,7 +22,7 @@ export function RatingDistribution({
 }: RatingDistributionProps) {
   return (
     <Card className="bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5 border border-primary/10 shadow-md overflow-hidden">
-      <CardContent className="pt-6 px-6 pb-4">
+      <CardContent className="px-6">
         <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent">Rating Distribution</h2>
         {[5, 4, 3, 2, 1].map((rating) => (
           <div
@@ -64,6 +66,8 @@ export function RatingDistribution({
           </Button>
         )}
       </CardContent>
+      <NewReview />
     </Card>
+    
   )
 }
