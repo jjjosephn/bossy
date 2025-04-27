@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button"
 import { PenLine } from "lucide-react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import BossReviewForm from "@/components/boss/BossReviewForm"
-import { useNewReviewMutation } from "@/app/state/api"
+import { useNewBossReviewMutation, useGetBossReviewsQuery } from "@/app/state/api"
+import { useParams } from "next/navigation"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 interface NewReviewProps {
   reviewText: string
@@ -16,12 +19,16 @@ interface NewReviewProps {
 
 export function NewReview() {
   const [open, setOpen] = useState(false)
-  const [newReview] = useNewReviewMutation()
+  const { bossId } = useParams<{ bossId: string }>()
+  const [newReview] = useNewBossReviewMutation()
+  const { refetch: refetchReviews } = useGetBossReviewsQuery(bossId as string)
+  
 
   const handleSubmit = async (data: NewReviewProps) => {
-    console.log("Submitting review:", data)
     try {
       await newReview(data).unwrap()
+      refetchReviews()
+      toast.success("Your review has been submitted for approval.")
     } catch (error) {
       console.error("Failed to create review:", error)
     }

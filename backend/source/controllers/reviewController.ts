@@ -3,7 +3,7 @@ import {PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const newReview = async (
+export const newBossReview = async (
    req: Request,
    res: Response
 ): Promise<void> => {
@@ -21,6 +21,24 @@ export const newReview = async (
       res.status(200).json({message: "Review created", review});
    } catch (error) {
       console.error("Error creating review:", error);
+      res.status(500).json({message: "Internal server error"});
+   }
+}
+
+export const getBossReviews = async (
+   req: Request,
+   res: Response
+): Promise<void> => {
+   const {bossId} = req.params;
+   try {
+      const reviews = await prisma.bossReview.findMany({
+         where: {
+            bossId: bossId
+         }
+      });
+      res.status(200).json(reviews);
+   } catch (error) {
+      console.error("Error fetching reviews:", error);
       res.status(500).json({message: "Internal server error"});
    }
 }

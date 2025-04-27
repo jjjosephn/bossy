@@ -44,7 +44,7 @@ export function BossProfile({ boss, averageRating, reviewCount }: BossProfilePro
                 ))}
               </div>
               <div className="font-semibold text-lg">
-                {averageRating.toFixed(1)}
+                {reviewCount > 0 ? averageRating.toFixed(1) : "N/A"}
                 <span className="text-sm text-muted-foreground ml-1">({reviewCount})</span>
               </div>
             </div>

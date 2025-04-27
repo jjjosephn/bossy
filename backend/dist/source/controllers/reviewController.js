@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newReview = void 0;
+exports.getBossReviews = exports.newBossReview = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const newReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const newBossReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { reviewText, rating, term, userId, bossId } = req.body;
     try {
         const review = yield prisma.bossReview.create({
@@ -31,4 +31,20 @@ const newReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: "Internal server error" });
     }
 });
-exports.newReview = newReview;
+exports.newBossReview = newBossReview;
+const getBossReviews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bossId } = req.params;
+    try {
+        const reviews = yield prisma.bossReview.findMany({
+            where: {
+                bossId: bossId
+            }
+        });
+        res.status(200).json(reviews);
+    }
+    catch (error) {
+        console.error("Error fetching reviews:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getBossReviews = getBossReviews;

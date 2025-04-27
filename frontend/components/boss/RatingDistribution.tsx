@@ -51,7 +51,7 @@ export function RatingDistribution({
               />
             </div>
             <div className="w-16 text-sm font-medium text-right">
-              {ratingDistribution[rating - 1]} ({ratingPercentages[rating - 1].toFixed(0)}%)
+              {ratingDistribution[rating - 1]} ({isNaN(ratingPercentages[rating - 1]) ? 'N/A' : ratingPercentages[rating - 1].toFixed(0) + '%'})
             </div>
           </div>
         ))}

@@ -57,7 +57,6 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false, onSub
     position: "",
   })
 
-  // Prevent body scrolling when modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden"
     return () => {
@@ -104,12 +103,10 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false, onSub
     }
   }
 
-  // Stop propagation to prevent closing when clicking inside the modal
   const handleModalClick = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
 
-  // Use either the prop or local submitting state
   const isCurrentlySubmitting = isSubmitting || localSubmitting
 
   useEffect(() => {

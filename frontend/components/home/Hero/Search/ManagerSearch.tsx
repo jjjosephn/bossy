@@ -39,7 +39,6 @@ export function ManagerSearchStep({
   const { isSignedIn } = useUser()
   const clerk = useClerk()
 
-  // Fetch bosses for the selected company
   const { data: bosses = [], isLoading: bossesLoading, refetch } = useGetBossesQuery(selectedCompany.mapboxId)
 
   const [open, setOpen] = useState(false)
@@ -48,7 +47,6 @@ export function ManagerSearchStep({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [pendingBossForm, setPendingBossForm] = useState(false)
 
-  // Calculate filtered managers directly instead of storing in state
   const filteredManagers = (() => {
     if (!bosses || bosses.length === 0) return [];
 
@@ -63,9 +61,6 @@ export function ManagerSearchStep({
     }
   })();
 
-  console.log(selectedCompany)
-  console.log(bosses)
-
   const loading = externalLoading || bossesLoading
 
   useEffect(() => {
@@ -74,7 +69,6 @@ export function ManagerSearchStep({
     }
   }, [selectedCompany?.mapboxId, refetch]);
   
-  // Auto-open dropdown when company is selected and bosses are loaded
   useEffect(() => {
     if (selectedCompany?.mapboxId && bosses.length > 0 && !open) {
       setOpen(true);
@@ -106,7 +100,6 @@ export function ManagerSearchStep({
     if (!isSignedIn) {
       setPendingBossForm(true)
 
-      // Open Clerk's sign-in modal
       clerk.openSignIn({
         redirectUrl: window.location.href,
         afterSignInUrl: window.location.href,

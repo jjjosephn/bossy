@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { get } from 'http';
 
 export interface Company {
    companyId: string;
@@ -53,6 +54,16 @@ export interface ArchivedForm {
 }
 
 export interface BossReview {
+   reviewId: string;
+   reviewText: string;
+   rating: number;
+   term: string;
+   userId: string;
+   bossId: string;
+   timestamp: string;
+}
+
+export interface NewBossReview {
    reviewText: string;
    rating: number;
    term: string;
@@ -124,12 +135,15 @@ export const api = createApi({
       }),
 
       // Reviews
-      newReview: build.mutation<any, BossReview>({
+      newBossReview: build.mutation<any, NewBossReview>({
          query: (body) => ({
             url: '/review/new',
             method: 'POST',
             body,
          })
+      }),
+      getBossReviews: build.query<BossReview[], string>({
+         query: (bossId) => `/review/boss/${bossId}`,
       }),
    }),
 });
@@ -145,5 +159,6 @@ export const {
    useDeclinePendingBossRequestMutation,
    useGetArchivedFormsQuery,
    useGetBossInfoQuery,
-   useNewReviewMutation
+   useNewBossReviewMutation,
+   useGetBossReviewsQuery,
 } = api;
