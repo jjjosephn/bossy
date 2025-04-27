@@ -9,7 +9,7 @@ import SearchComponent from "./Hero/SearchComponent"
 
 const Hero = () => {
   return (
-    <section className="w-full pb-12 md:pb-24 lg:pb-32 pt-6 md:pt-20 lg:pt-24 relative bg-gradient-to-b from-gray-300 to-white dark:from-gray-900 dark:to-gray-800">
+    <section className="w-full pb-12 md:pb-24 lg:pb-32 pt-6 md:pt-20 lg:pt-24 relative bg-gradient-to-b from-gray-300 to-white dark:from-gray-600 dark:to-gray-800">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-screen-xl mx-auto">
           <div className="grid gap-8 lg:grid-cols-[1fr_500px] lg:gap-16 xl:grid-cols-[1fr_600px] items-center">

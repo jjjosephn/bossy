@@ -52,6 +52,14 @@ export interface ArchivedForm {
    Company: Company;
 }
 
+export interface BossReview {
+   reviewText: string;
+   rating: number;
+   term: string;
+   userId?: string;
+   bossId: string;
+}
+
 export const api = createApi({
    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
    reducerPath: 'api',
@@ -114,6 +122,15 @@ export const api = createApi({
       getBossInfo: build.query<Boss, string>({
          query: (bossId) => `/boss/info/${bossId}`,
       }),
+
+      // Reviews
+      newReview: build.mutation<any, BossReview>({
+         query: (body) => ({
+            url: '/review/new',
+            method: 'POST',
+            body,
+         })
+      }),
    }),
 });
 
@@ -127,5 +144,6 @@ export const {
    useAcceptPendingBossRequestMutation,
    useDeclinePendingBossRequestMutation,
    useGetArchivedFormsQuery,
-   useGetBossInfoQuery
+   useGetBossInfoQuery,
+   useNewReviewMutation
 } = api;

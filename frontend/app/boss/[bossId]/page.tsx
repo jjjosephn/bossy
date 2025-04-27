@@ -3,19 +3,14 @@
 import { useState } from "react"
 import { useParams } from "next/navigation"
 
-// Components
 import { BossProfile } from "@/components/boss/BossProfile"
 import { RatingDistribution } from "@/components/boss/RatingDistribution"
 import { ReviewsList } from "@/components/boss/ReviewsList"
 
-// Utilities
 import { formatDate, getTimeAgo } from "@/utils/date-utils"
 import { calculateAverageRating, calculateRatingDistribution, calculateRatingPercentages } from "@/utils/rating-utils"
-
-// API
 import { useGetBossInfoQuery } from "@/app/state/api"
 
-// Types
 type Review = {
   reviewId: string
   reviewText: string
@@ -26,7 +21,6 @@ type Review = {
   timestamp: string
 }
 
-// Mock data - ideally this would come from an API
 const MOCK_REVIEWS: Review[] = [
   {
     reviewId: "1",

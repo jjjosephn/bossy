@@ -10,6 +10,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { useParams } from "next/navigation"
 import { useGetBossInfoQuery } from "@/app/state/api"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useUser } from "@clerk/nextjs"
+
+interface BossReviewFormProps {
+  onSubmit?: (data: any) => void
+  onCancel?: () => void
+}
 
 const formSchema = z.object({
   reviewText: z.string().min(10, {
@@ -21,6 +27,7 @@ const formSchema = z.object({
       message: "Please select a rating.",
     })
     .max(5),
+  userId: z.string().optional(),
   term: z.string({
     required_error: "Please select how long you worked with this boss.",
   }),
@@ -33,9 +40,10 @@ const termOptions = [
   { value: "5+", label: "5+ years" },
 ]
 
-export default function BossReviewForm({ onSubmit, onCancel }) {
+export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormProps) {
   const { bossId } = useParams<{ bossId: string }>()
   const { data: boss } = useGetBossInfoQuery(bossId as string)
+  const { user } = useUser()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,11 +51,11 @@ export default function BossReviewForm({ onSubmit, onCancel }) {
       reviewText: "",
       rating: 0,
       term: "",
+      userId: user?.id,
     },
   })
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    // Add the bossId to the submitted values
     onSubmit?.({
       ...values,
       bossId,

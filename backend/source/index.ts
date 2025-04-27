@@ -11,7 +11,7 @@ import companyRoutes from './routes/companyRouter'
 import userRoutes from './routes/userRouter' 
 import bossRoutes from './routes/bossRouter'
 import adminRoutes from './routes/adminRouter'
-
+import reviewRoutes from './routes/reviewRouter'
 
 /* Configs */
 dotenv.config()
@@ -30,6 +30,7 @@ app.use("/company", companyRoutes)
 app.use("/", userRoutes)
 app.use("/boss", bossRoutes)
 app.use("/admin", adminRoutes)
+app.use("/review", reviewRoutes)
 
 /* Server */
 const port = Number(process.env.PORT) || 3001
