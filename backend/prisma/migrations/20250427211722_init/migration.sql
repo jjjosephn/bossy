@@ -75,6 +75,19 @@ CREATE TABLE "BossReview" (
 );
 
 -- CreateTable
+CREATE TABLE "ArchivedBossReviews" (
+    "archiveId" TEXT NOT NULL,
+    "bossId" TEXT NOT NULL,
+    "userId" TEXT,
+    "reviewText" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "requestedDate" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ArchivedBossReviews_pkey" PRIMARY KEY ("archiveId")
+);
+
+-- CreateTable
 CREATE TABLE "CompanyReview" (
     "reviewId" TEXT NOT NULL,
     "reviewText" TEXT NOT NULL,
@@ -110,6 +123,9 @@ ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_userId_fkey" FOREIGN KEY ("u
 
 -- AddForeignKey
 ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_bossId_fkey" FOREIGN KEY ("bossId") REFERENCES "Boss"("bossId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArchivedBossReviews" ADD CONSTRAINT "ArchivedBossReviews_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;

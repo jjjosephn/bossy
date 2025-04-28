@@ -35,9 +35,13 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <StoreProvider>
-            <Navbar />
-              {children}
-            <Footer />
+            <div className="flex min-h-screen flex-col">
+                <Navbar />
+                <main className="flex-grow">
+                  {children}
+                </main>
+                <Footer />
+              </div>
             <ToastContainer
               position="top-right"
               autoClose={2500}

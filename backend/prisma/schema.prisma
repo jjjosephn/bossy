@@ -21,10 +21,11 @@ model User {
   fieldOfWork String?
   timestamp   DateTime @default(now())
 
-  BossReview    BossReview[]
-  CompanyReview CompanyReview[]
-  PendingBosses PendingBosses[]
-  ArchivedForms ArchivedForms[]
+  BossReview          BossReview[]
+  CompanyReview       CompanyReview[]
+  PendingBosses       PendingBosses[]
+  ArchivedForms       ArchivedForms[]
+  ArchivedBossReviews ArchivedBossReviews[]
 }
 
 model Company {
@@ -91,6 +92,18 @@ model BossReview {
 
   User User? @relation(fields: [userId], references: [userId])
   Boss Boss? @relation(fields: [bossId], references: [bossId])
+}
+
+model ArchivedBossReviews {
+  archiveId     String   @id @default(uuid())
+  bossId        String
+  userId        String?
+  reviewText    String
+  status        String
+  requestedDate String
+  timestamp     DateTime @default(now())
+
+  User User? @relation(fields: [userId], references: [userId])
 }
 
 model CompanyReview {
