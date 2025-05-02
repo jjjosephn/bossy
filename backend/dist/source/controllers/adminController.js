@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getArchivedForms = exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = void 0;
+exports.declinePendingBossReview = exports.acceptPendingBossReview = exports.getAllPendingBossReviews = exports.getArchivedForms = exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getPendingBosses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -115,3 +115,97 @@ const getArchivedForms = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getArchivedForms = getArchivedForms;
+const getAllPendingBossReviews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const reviews = yield prisma.pendingBossReviews.findMany({
+            include: {
+                Review: {
+                    include: {
+                        User: true,
+                        Boss: {
+                            include: {
+                                Company: true,
+                            },
+                        }
+                    }
+                }
+            },
+        });
+        res.status(200).json(reviews);
+    }
+    catch (error) {
+        console.error("Error fetching reviews:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getAllPendingBossReviews = getAllPendingBossReviews;
+const acceptPendingBossReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { pendingId, reviewId } = req.body;
+    try {
+        const review = yield prisma.bossReview.findUnique({
+            where: {
+                reviewId,
+            },
+        });
+        const deleted = yield prisma.pendingBossReviews.delete({
+            where: {
+                pendingId,
+            },
+        });
+        const acceptedReview = yield prisma.archivedBossReviews.create({
+            data: {
+                bossId: (review === null || review === void 0 ? void 0 : review.bossId) || "",
+                userId: (review === null || review === void 0 ? void 0 : review.userId) ? review.userId : undefined,
+                reviewText: (review === null || review === void 0 ? void 0 : review.reviewText) || "",
+                status: "accepted",
+                requestedDate: (review === null || review === void 0 ? void 0 : review.timestamp) ? review.timestamp.toISOString() : ""
+            }
+        });
+        res.status(200).json({
+            message: "Review accepted",
+            review,
+            deleted,
+            acceptedReview
+        });
+    }
+    catch (error) {
+        console.error("Error accepting review:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.acceptPendingBossReview = acceptPendingBossReview;
+const declinePendingBossReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { pendingId, reviewId } = req.body;
+    try {
+        const deleted = yield prisma.pendingBossReviews.delete({
+            where: {
+                pendingId,
+            },
+        });
+        const deletedReview = yield prisma.bossReview.delete({
+            where: {
+                reviewId,
+            },
+        });
+        const archivedReview = yield prisma.archivedBossReviews.create({
+            data: {
+                bossId: deletedReview.bossId,
+                userId: deletedReview.userId,
+                reviewText: deletedReview.reviewText,
+                status: "declined",
+                requestedDate: deletedReview.timestamp.toISOString()
+            }
+        });
+        res.status(200).json({
+            message: "Review declined",
+            deleted,
+            deletedReview,
+            archivedReview
+        });
+    }
+    catch (error) {
+        console.error("Error declining review:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.declinePendingBossReview = declinePendingBossReview;

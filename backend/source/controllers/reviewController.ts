@@ -18,7 +18,20 @@ export const newBossReview = async (
             bossId
          }
       });
-      res.status(200).json({message: "Review created", review});
+
+      if (review) {
+         res.status(200).json({message: "Review created", review});
+         const pendingReview = await prisma.pendingBossReviews.create({
+            data: {
+               reviewId: review.reviewId
+            }
+         })
+         if (pendingReview) {
+            console.log("Pending review created:", pendingReview);
+         } else {
+            console.error("Failed to create pending review");
+         }
+      }
    } catch (error) {
       console.error("Error creating review:", error);
       res.status(500).json({message: "Internal server error"});

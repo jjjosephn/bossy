@@ -61,6 +61,14 @@ export interface BossReview {
    userId: string;
    bossId: string;
    timestamp: string;
+   Boss: Boss;
+   User: User;
+}
+
+export interface PendingBossReview {
+   pendingId: string;
+   reviewId: string;
+   Review: BossReview;
 }
 
 export interface NewBossReview {
@@ -128,6 +136,23 @@ export const api = createApi({
       getArchivedForms: build.query<ArchivedForm[], void>({
          query: () => '/admin/archived-bosses',
       }),
+      getPendingBossReviews: build.query<PendingBossReview[], void>({
+         query: () => '/admin/pending-boss-reviews',
+      }),
+      acceptPendingBossReview: build.mutation<any, { reviewId: string; pendingId: string; }>({
+         query: (body) => ({
+            url: '/admin/accept-pending-boss-review',
+            method: 'POST',
+            body,
+         })
+      }),
+      declinePendingBossReview: build.mutation<any, { reviewId: string; pendingId: string; }>({
+         query: (body) => ({
+            url: '/admin/decline-pending-boss-review',
+            method: 'POST',
+            body,
+         })
+      }),
 
       //Boss Page
       getBossInfo: build.query<Boss, string>({
@@ -161,4 +186,7 @@ export const {
    useGetBossInfoQuery,
    useNewBossReviewMutation,
    useGetBossReviewsQuery,
+   useGetPendingBossReviewsQuery,
+   useAcceptPendingBossReviewMutation,
+   useDeclinePendingBossReviewMutation,
 } = api;

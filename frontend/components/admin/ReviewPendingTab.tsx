@@ -7,81 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Check, X, ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "react-toastify"
-
-// This would be replaced with your actual API hooks
-const useMockPendingReviews = () => {
-  // Mock data - replace with your actual API call
-  const pendingReviews = [
-    {
-      reviewId: "1",
-      reviewText:
-        "Great manager who really cares about the team. Always available for questions and provides clear direction.",
-      rating: 4,
-      term: "Spring 2023",
-      timestamp: "2023-04-15T10:30:00Z",
-      bossId: "b1",
-      userId: "u1",
-      Boss: {
-        bossFirstName: "John",
-        bossLastName: "Smith",
-        position: "Engineering Manager",
-        Company: {
-          companyName: "Tech Solutions Inc.",
-        },
-      },
-      User: {
-        firstName: "Alex",
-        lastName: "Johnson",
-        email: "alex@example.com",
-      },
-    },
-    {
-      reviewId: "2",
-      reviewText: "Micromanages too much and doesn't trust the team to make decisions. Communication could be better.",
-      rating: 2,
-      term: "Fall 2023",
-      timestamp: "2023-10-20T14:45:00Z",
-      bossId: "b2",
-      userId: "u2",
-      Boss: {
-        bossFirstName: "Sarah",
-        bossLastName: "Williams",
-        position: "Product Manager",
-        Company: {
-          companyName: "Digital Innovations LLC",
-        },
-      },
-      User: {
-        firstName: "Taylor",
-        lastName: "Smith",
-        email: "taylor@example.com",
-      },
-    },
-  ]
-
-  const refetch = () => console.log("Refetching pending reviews")
-
-  return { data: pendingReviews, refetch }
-}
-
-// Mock mutations - replace with your actual API mutations
-const useApproveReviewMutation = () => {
-  const approveReview = async (reviewId: string) => {
-    console.log(`Approving review ${reviewId}`)
-    return { data: { success: true } }
-  }
-
-  return [approveReview, { isLoading: false }]
-}
-
-const useDeclineReviewMutation = () => {
-  const declineReview = async (reviewId: string) => {
-    console.log(`Declining review ${reviewId}`)
-    return { data: { success: true } }
-  }
-
-  return [declineReview, { isLoading: false }]
-}
+import { useGetPendingBossReviewsQuery, useAcceptPendingBossReviewMutation, useDeclinePendingBossReviewMutation } from "@/app/state/api"
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -106,9 +32,9 @@ const StarRating = ({ rating }: { rating: number }) => {
 const ReviewPendingTab = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [processingIds, setProcessingIds] = useState<string[]>([])
-  const { data: pendingReviews = [], refetch } = useMockPendingReviews()
-  const [approveReview, { isLoading: isApproving }] = useApproveReviewMutation()
-  const [declineReview, { isLoading: isDeclining }] = useDeclineReviewMutation()
+  const { data: pendingReviews = [], refetch } = useGetPendingBossReviewsQuery()
+  const [acceptReview, {isLoading: isApproving}] = useAcceptPendingBossReviewMutation()
+  const [declineReview, {isLoading: isDeclining}] = useDeclinePendingBossReviewMutation()
 
   const reviewsPerPage = 10
   const totalPages = Math.ceil(pendingReviews.length / reviewsPerPage)
@@ -116,31 +42,25 @@ const ReviewPendingTab = () => {
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage
   const currentReviews = pendingReviews.slice(indexOfFirstReview, indexOfLastReview)
 
-  const handleApproveReview = async (reviewId: string) => {
+  const handleApproveReview = async (reviewId: string, pendingId: string) => {
     try {
-      setProcessingIds((prev) => [...prev, reviewId])
-      await approveReview(reviewId)
+      await acceptReview({ reviewId, pendingId }).unwrap()
       toast.success("Review approved successfully")
       refetch()
     } catch (error) {
       console.error("Error approving review:", error)
       toast.error("Failed to approve review")
-    } finally {
-      setProcessingIds((prev) => prev.filter((id) => id !== reviewId))
     }
   }
 
-  const handleDeclineReview = async (reviewId: string) => {
+  const handleDeclineReview = async (reviewId: string, pendingId: string) => {
     try {
-      setProcessingIds((prev) => [...prev, reviewId])
-      await declineReview(reviewId)
+      await declineReview({reviewId, pendingId}).unwrap()
       toast.success("Review declined successfully")
       refetch()
     } catch (error) {
       console.error("Error declining review:", error)
       toast.error("Failed to decline review")
-    } finally {
-      setProcessingIds((prev) => prev.filter((id) => id !== reviewId))
     }
   }
 
@@ -172,7 +92,7 @@ const ReviewPendingTab = () => {
                   <TableHead className="w-1/6">Boss</TableHead>
                   <TableHead className="w-1/12">Term</TableHead>
                   <TableHead className="w-1/4">Review</TableHead>
-                  <TableHead className="w-1/12">Date</TableHead>
+                  <TableHead className="w-1/12">Requested Date</TableHead>
                   <TableHead className="w-1/6 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -183,39 +103,39 @@ const ReviewPendingTab = () => {
                     <TableCell className="align-top">
                       <div className="flex flex-col">
                         <span className="font-medium">
-                          {review.User.firstName} {review.User.lastName}
+                          {review.Review.User.firstName} {review.Review.User.lastName}
                         </span>
-                        <span className="text-xs text-muted-foreground break-words">{review.User.email}</span>
+                        <span className="text-xs text-muted-foreground break-words">{review.Review.User.email}</span>
                       </div>
                     </TableCell>
                     <TableCell className="align-top">
                       <div className="flex flex-col">
                         <span className="text-sm">
-                          {review.Boss.bossFirstName} {review.Boss.bossLastName}
+                          {review.Review.Boss.bossFirstName} {review.Review.Boss.bossLastName}
                         </span>
-                        <span className="text-xs text-muted-foreground">{review.Boss.position}</span>
-                        <span className="text-xs text-muted-foreground">{review.Boss.Company.companyName}</span>
+                        <span className="text-xs text-muted-foreground">{review.Review.Boss.position}</span>
+                        <span className="text-xs text-muted-foreground">{review.Review.Boss.Company.companyName}</span>
                       </div>
                     </TableCell>
                     <TableCell className="align-top">
                       <div className="flex flex-col gap-1">
-                        <span className="text-sm">{review.term}</span>
-                        <StarRating rating={review.rating} />
+                        <span className="text-sm">{review.Review.term} years</span>
+                        <StarRating rating={review.Review.rating} />
                       </div>
                     </TableCell>
                     <TableCell className="align-top">
                       <div className="max-h-36 w-64 overflow-y-auto text-sm p-3 bg-muted/30 rounded-md border border-border whitespace-normal">
-                        {review.reviewText}
+                        {review.Review.reviewText}
                       </div>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground align-top whitespace-nowrap">
-                      {formatDate(review.timestamp)}
+                      {formatDate(review.Review.timestamp)}
                     </TableCell>
                     <TableCell className="text-right align-top">
                       <div className="flex flex-col gap-2">
                         <Button
                           size="sm"
-                          onClick={() => handleApproveReview(review.reviewId)}
+                          onClick={() => handleApproveReview(review.reviewId, review.pendingId)}
                           disabled={processingIds.includes(review.reviewId)}
                           className="w-full"
                         >
@@ -230,7 +150,7 @@ const ReviewPendingTab = () => {
                           variant="outline"
                           size="sm"
                           className="w-full text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
-                          onClick={() => handleDeclineReview(review.reviewId)}
+                          onClick={() => handleDeclineReview(review.reviewId, review.pendingId)}
                           disabled={processingIds.includes(review.reviewId)}
                         >
                           {processingIds.includes(review.reviewId) && isDeclining ? (

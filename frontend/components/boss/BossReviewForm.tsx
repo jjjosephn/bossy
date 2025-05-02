@@ -30,7 +30,8 @@ const formSchema = z.object({
   userId: z.string().optional(),
   term: z.string({
     required_error: "Please select how long you worked with this boss.",
-  }),
+  })
+  .min(1, { message: "Please select how long you worked with this boss." }),
 })
 
 const termOptions = [
@@ -66,7 +67,7 @@ export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormPro
     <Card className="w-full max-w-lg border-0 shadow-none">
       <CardHeader>
         <CardTitle>Submit Boss Review</CardTitle>
-        <CardDescription>Share your experience working with this manager</CardDescription>
+        <CardDescription>Share your experience working with this {boss?.position}</CardDescription>
       </CardHeader>
 
       {boss && (
@@ -89,7 +90,7 @@ export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormPro
               name="term"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How long did you work with this manager?</FormLabel>
+                  <FormLabel>How long did you work with this {boss?.position}?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>

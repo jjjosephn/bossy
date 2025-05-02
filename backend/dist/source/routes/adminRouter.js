@@ -7,4 +7,7 @@ router.get('/pending-bosses', adminController_1.getPendingBosses);
 router.post('/accept-boss-request', adminController_1.acceptBossRequest);
 router.post('/decline-boss-request', adminController_1.declineBossRequest);
 router.get('/archived-bosses', adminController_1.getArchivedForms);
+router.get('/pending-boss-reviews', adminController_1.getAllPendingBossReviews);
+router.post('/accept-pending-boss-review', adminController_1.acceptPendingBossReview);
+router.post('/decline-pending-boss-review', adminController_1.declinePendingBossReview);
 exports.default = router;

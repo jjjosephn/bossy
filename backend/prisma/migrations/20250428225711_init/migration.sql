@@ -75,6 +75,14 @@ CREATE TABLE "BossReview" (
 );
 
 -- CreateTable
+CREATE TABLE "PendingBossReviews" (
+    "pendingId" TEXT NOT NULL,
+    "reviewId" TEXT NOT NULL,
+
+    CONSTRAINT "PendingBossReviews_pkey" PRIMARY KEY ("pendingId")
+);
+
+-- CreateTable
 CREATE TABLE "ArchivedBossReviews" (
     "archiveId" TEXT NOT NULL,
     "bossId" TEXT NOT NULL,
@@ -123,6 +131,9 @@ ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_userId_fkey" FOREIGN KEY ("u
 
 -- AddForeignKey
 ALTER TABLE "BossReview" ADD CONSTRAINT "BossReview_bossId_fkey" FOREIGN KEY ("bossId") REFERENCES "Boss"("bossId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PendingBossReviews" ADD CONSTRAINT "PendingBossReviews_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "BossReview"("reviewId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ArchivedBossReviews" ADD CONSTRAINT "ArchivedBossReviews_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;

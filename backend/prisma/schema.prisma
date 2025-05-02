@@ -90,8 +90,16 @@ model BossReview {
   bossId     String
   timestamp  DateTime @default(now())
 
-  User User? @relation(fields: [userId], references: [userId])
-  Boss Boss? @relation(fields: [bossId], references: [bossId])
+  User          User?                @relation(fields: [userId], references: [userId])
+  Boss          Boss?                @relation(fields: [bossId], references: [bossId])
+  PendingBosses PendingBossReviews[]
+}
+
+model PendingBossReviews {
+  pendingId String @id @default(uuid())
+  reviewId  String
+
+  Review BossReview @relation(fields: [reviewId], references: [reviewId])
 }
 
 model ArchivedBossReviews {
