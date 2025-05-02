@@ -26,7 +26,9 @@ export default function BossReviewPage() {
   const { data: boss } = useGetBossInfoQuery(bossId as string)
   const [sortOption, setSortOption] = useState<"newest" | "highest" | "lowest" | "oldest">("newest")
   const [filterRating, setFilterRating] = useState<number>(0)
-  const { data: reviews = [] } = useGetBossReviewsQuery(bossId as string)
+  const { data: reviews = [] } = useGetBossReviewsQuery(bossId as string, {
+    refetchOnMountOrArgChange: true,
+  })
 
   const averageRating = calculateAverageRating(reviews)
   const ratingDistribution = calculateRatingDistribution(reviews)

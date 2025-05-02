@@ -46,7 +46,6 @@ const capitalizeFirstLetter = (string: string): string => {
 
 const PendingTabs = () => {
   const { user, isLoaded } = useUser()
-  const [isLoading, setIsLoading] = useState(true)
   const [currentPendingPage, setCurrentPendingPage] = useState(1)
   const { data: pendingRequests = [], refetch } = useGetPendingBossesQuery()
   const [acceptRequest, { isLoading: isAccepting }] = useAcceptPendingBossRequestMutation()
@@ -57,7 +56,6 @@ const PendingTabs = () => {
   const requestsPerPage = 10
   const isAdmin = user?.publicMetadata.role === "admin"
 
-  // Calculate pagination values for pending requests
   const totalPendingPages = Math.ceil(pendingRequests.length / requestsPerPage)
   const pendingIndexOfLastRequest = currentPendingPage * requestsPerPage
   const pendingIndexOfFirstRequest = pendingIndexOfLastRequest - requestsPerPage
@@ -67,31 +65,14 @@ const PendingTabs = () => {
     if (isLoaded) {
       if (!isAdmin) {
         router.push("/")
-      } else {
-        setTimeout(() => setIsLoading(false), 800)
-      }
+      } 
     }
   }, [isAdmin, router, isLoaded])
 
-  // Reset to first page when pending requests change
   useEffect(() => {
     setCurrentPendingPage(1)
   }, [pendingRequests.length])
 
-  // Show skeleton while checking admin status
-  if (isLoading || !isLoaded) {
-    return (
-      <div className="container mx-auto p-6 max-w-6xl">
-        <div className="flex items-center gap-2 mb-6">
-          <Skeleton className="h-8 w-8 rounded-full" />
-          <Skeleton className="h-8 w-48" />
-        </div>
-
-        <Skeleton className="h-10 w-full mb-6" />
-        <Skeleton className="h-[500px] w-full rounded-lg" />
-      </div>
-    )
-  }
 
   const handleAcceptRequest = async (request: Request) => {
     try {

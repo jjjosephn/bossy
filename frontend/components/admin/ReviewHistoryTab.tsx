@@ -6,69 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle2, XCircle, ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useGetArchivedBossReviewsQuery } from "@/app/state/api"
 
-// This would be replaced with your actual API hooks
-const useMockArchivedReviews = () => {
-  // Mock data - replace with your actual API call
-  const archivedReviews = [
-    {
-      archiveId: "a1",
-      bossId: "b1",
-      userId: "u1",
-      reviewText:
-        "Great manager who really cares about the team. Always available for questions and provides clear direction.",
-      status: "approved",
-      requestedDate: "2023-04-15T10:30:00Z",
-      timestamp: "2023-04-16T08:20:00Z",
-      rating: 4,
-      term: "Spring 2023",
-      Boss: {
-        bossFirstName: "John",
-        bossLastName: "Smith",
-        position: "Engineering Manager",
-        Company: {
-          companyName: "Tech Solutions Inc.",
-        },
-      },
-      User: {
-        firstName: "Alex",
-        lastName: "Johnson",
-        email: "alex@example.com",
-      },
-    },
-    {
-      archiveId: "a2",
-      bossId: "b2",
-      userId: "u2",
-      reviewText:
-        "This review contains inappropriate language and personal attacks that violate our community guidelines.",
-      status: "declined",
-      requestedDate: "2023-10-20T14:45:00Z",
-      timestamp: "2023-10-21T09:15:00Z",
-      rating: 1,
-      term: "Fall 2023",
-      Boss: {
-        bossFirstName: "Sarah",
-        bossLastName: "Williams",
-        position: "Product Manager",
-        Company: {
-          companyName: "Digital Innovations LLC",
-        },
-      },
-      User: {
-        firstName: "Taylor",
-        lastName: "Smith",
-        email: "taylor@example.com",
-      },
-    },
-  ]
-
-  const refetch = () => console.log("Refetching archived reviews")
-
-  return { data: archivedReviews, refetch }
-}
-
-// Helper function to format date
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -77,26 +16,17 @@ const formatDate = (dateString: string) => {
   })
 }
 
-// Star rating component
-const StarRating = ({ rating }: { rating: number }) => {
-  return (
-    <div className="flex items-center">
-      {[...Array(5)].map((_, i) => (
-        <Star key={i} className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} />
-      ))}
-    </div>
-  )
-}
-
 const ReviewHistoryTab = () => {
   const [currentPage, setCurrentPage] = useState(1)
-  const { data: archivedReviews = [] } = useMockArchivedReviews()
-
+  const { data: archivedReviews = [] } = useGetArchivedBossReviewsQuery()
+  const sortedReviews = [...archivedReviews].sort((a, b) => {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  })
   const reviewsPerPage = 10
-  const totalPages = Math.ceil(archivedReviews.length / reviewsPerPage)
+  const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage)
   const indexOfLastReview = currentPage * reviewsPerPage
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage
-  const currentReviews = archivedReviews.slice(indexOfFirstReview, indexOfLastReview)
+  const currentReviews = sortedReviews.slice(indexOfFirstReview, indexOfLastReview)
 
   return (
     <Card>
@@ -124,10 +54,9 @@ const ReviewHistoryTab = () => {
                 <TableRow>
                   <TableHead className="w-1/6">Reviewer</TableHead>
                   <TableHead className="w-1/6">Boss</TableHead>
-                  <TableHead className="w-1/12">Term</TableHead>
                   <TableHead className="w-1/4">Review</TableHead>
-                  <TableHead className="w-1/12">Submitted</TableHead>
                   <TableHead className="w-1/12">Status</TableHead>
+                  <TableHead className="w-1/12">Requested Date</TableHead>
                   <TableHead className="w-1/12">Processed</TableHead>
                 </TableRow>
               </TableHeader>
@@ -153,29 +82,23 @@ const ReviewHistoryTab = () => {
                       </div>
                     </TableCell>
                     <TableCell className="align-top">
-                      <div className="flex flex-col gap-1">
-                        <span className="text-sm">{review.term}</span>
-                        <StarRating rating={review.rating} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="align-top">
-                      <div className="max-h-36 w-64 overflow-y-auto text-sm p-3 bg-muted/30 rounded-md border border-border whitespace-normal">
+                      <div className="max-h-36 w-64 overflow-y-auto text-sm p-3 bg-muted/30 rounded-md border border-border whitespace-pre-wrap break-words">
                         {review.reviewText}
                       </div>
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground align-top whitespace-nowrap">
-                      {formatDate(review.requestedDate)}
-                    </TableCell>
                     <TableCell className="align-top">
-                      {review.status === "approved" ? (
+                      {review.status === "accepted" ? (
                         <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
-                          <CheckCircle2 className="h-3 w-3 mr-1" /> Approved
+                          <CheckCircle2 className="h-3 w-3 mr-1" /> Accepted
                         </Badge>
                       ) : (
                         <Badge className="bg-red-100 text-red-800 hover:bg-red-100 border-red-200">
                           <XCircle className="h-3 w-3 mr-1" /> Declined
                         </Badge>
                       )}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground align-top whitespace-nowrap">
+                      {formatDate(review.requestedDate)}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground align-top whitespace-nowrap">
                       {formatDate(review.timestamp)}

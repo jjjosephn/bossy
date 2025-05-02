@@ -9,7 +9,7 @@ import { BossNotFoundForm, type PendingBossData } from "./BossNotFound"
 import { useUser, useClerk } from "@clerk/nextjs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { useGetBossesQuery } from "@/app/state/api"
+import { useGetBossesQuery, useGetBossReviewsQuery } from "@/app/state/api"
 import Link from "next/link"
 
 interface Boss {
@@ -46,7 +46,6 @@ export function ManagerSearchStep({
   const [showBossNotFoundForm, setShowBossNotFoundForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [pendingBossForm, setPendingBossForm] = useState(false)
-
   const filteredManagers = (() => {
     if (!bosses || bosses.length === 0) return [];
 

@@ -243,3 +243,25 @@ export const declinePendingBossReview = async (
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const getArchivedBossReviews = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const reviews = await prisma.archivedBossReviews.findMany({
+      include: {
+        User: true,
+        Boss: {
+          include: {
+            Company: true,
+          },
+        }
+      },
+    });
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error fetching archived reviews:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

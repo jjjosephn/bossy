@@ -79,6 +79,18 @@ export interface NewBossReview {
    bossId: string;
 }
 
+export interface ArchivedBossReview {
+   archiveId: string;
+   bossId: string;
+   userId?: string;
+   reviewText: string;
+   status: string;
+   requestedDate: string;
+   timestamp: string;
+   User: User;
+   Boss: Boss;
+}
+
 export const api = createApi({
    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
    reducerPath: 'api',
@@ -153,6 +165,9 @@ export const api = createApi({
             body,
          })
       }),
+      getArchivedBossReviews: build.query<ArchivedBossReview[], void>({
+         query: () => '/admin/archived-boss-reviews',
+      }),
 
       //Boss Page
       getBossInfo: build.query<Boss, string>({
@@ -189,4 +204,5 @@ export const {
    useGetPendingBossReviewsQuery,
    useAcceptPendingBossReviewMutation,
    useDeclinePendingBossReviewMutation,
+   useGetArchivedBossReviewsQuery,
 } = api;

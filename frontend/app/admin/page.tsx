@@ -11,29 +11,24 @@ import PendingTabs from "@/components/admin/PendingTab"
 import HistoryTabs from "@/components/admin/HistoryTab"
 import ReviewPendingTab from "@/components/admin/ReviewPendingTab"
 import ReviewHistoryTab from "@/components/admin/ReviewHistoryTab"
-import { useGetArchivedFormsQuery, useGetPendingBossesQuery, useGetPendingBossReviewsQuery } from "../state/api"
-
-// Mock hooks for review counts - replace with your actual API hooks
-const useMockPendingReviewsCount = () => {
-  return { data: 2 }
-}
-
-const useMockArchivedReviewsCount = () => {
-  return { data: 2 }
-}
+import { useGetArchivedBossReviewsQuery, useGetArchivedFormsQuery, useGetPendingBossesQuery, useGetPendingBossReviewsQuery } from "../state/api"
 
 const AdminPanel = () => {
    const { user } = useUser()
-   const { data: pendingRequests = [], refetch: refetchPending } = useGetPendingBossesQuery()
-   const { data: archivedForms = [], refetch: refetchArchived } = useGetArchivedFormsQuery()
-   const { data: pendingReviews = [], refetch: refetchReviews } = useGetPendingBossReviewsQuery()
+   const { data: pendingRequests = [], refetch: refetchPending } = useGetPendingBossesQuery(undefined, {
+      refetchOnMountOrArgChange: true
+   })
+   const { data: archivedForms = [], refetch: refetchArchived } = useGetArchivedFormsQuery(undefined, {
+      refetchOnMountOrArgChange: true
+   })
+   const { data: pendingReviews = [], refetch: refetchReviews } = useGetPendingBossReviewsQuery(undefined, {
+      refetchOnMountOrArgChange: true
+   })
+   const { data: archivedReviews = [], refetch: refetchArchivedBossReviews } = useGetArchivedBossReviewsQuery(undefined, {
+      refetchOnMountOrArgChange: true
+   })
    const [activeTab, setActiveTab] = useState("pending")
    const [activeReviewTab, setActiveReviewTab] = useState("pending")
-
-   console.log("Pending Requests:", pendingReviews)
-
-   // Mock review counts - replace with your actual API calls
-   const { data: archivedReviewsCount = 0 } = useMockArchivedReviewsCount()
 
    return (
       <div className="container mx-auto p-6 max-w-6xl">
@@ -93,7 +88,7 @@ const AdminPanel = () => {
                if (value === "pending") {
                   refetchReviews()
                } else if (value === "history") {
-                  // refetchArchived()
+                  refetchArchivedBossReviews()
                }            
             }}
          >
@@ -109,7 +104,7 @@ const AdminPanel = () => {
                   <CheckCircle2 className="h-4 w-4" />
                   Review History
                   <Badge variant="secondary" className="ml-1">
-                     {archivedReviewsCount}
+                     {archivedReviews.length}
                   </Badge>
                </TabsTrigger>
             </TabsList>
