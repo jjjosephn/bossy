@@ -67,9 +67,15 @@ const ReviewHistoryTab = () => {
                     <TableCell className="align-top">
                       <div className="flex flex-col">
                         <span className="font-medium">
-                          {review.User.firstName} {review.User.lastName}
+                          {review.User ? (
+                            <>
+                              {review.User.firstName} {review.User.lastName}
+                            </>
+                          ): (
+                            "N/A"
+                          )}
                         </span>
-                        <span className="text-xs text-muted-foreground break-words">{review.User.email}</span>
+                        <span className="text-xs text-muted-foreground break-words">{review.User?.email ?? ""}</span>
                       </div>
                     </TableCell>
                     <TableCell className="align-top">

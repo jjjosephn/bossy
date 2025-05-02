@@ -103,9 +103,15 @@ const ReviewPendingTab = () => {
                     <TableCell className="align-top">
                       <div className="flex flex-col">
                         <span className="font-medium">
-                          {review.Review.User.firstName} {review.Review.User.lastName}
+                          {review.Review.User ? (
+                            <>
+                              {review.Review.User.firstName} {review.Review.User.lastName}
+                            </>
+                          ): (
+                            "N/A"
+                          )}
                         </span>
-                        <span className="text-xs text-muted-foreground break-words">{review.Review.User.email}</span>
+                        <span className="text-xs text-muted-foreground break-words">{review.Review.User?.email ?? ""}</span>
                       </div>
                     </TableCell>
                     <TableCell className="align-top">

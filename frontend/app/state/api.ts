@@ -58,7 +58,7 @@ export interface BossReview {
    reviewText: string;
    rating: number;
    term: string;
-   userId: string;
+   userId?: string;
    bossId: string;
    timestamp: string;
    Boss: Boss;

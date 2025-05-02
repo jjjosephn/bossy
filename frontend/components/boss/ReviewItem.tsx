@@ -9,7 +9,7 @@ type ReviewItemProps = {
     reviewText: string
     rating: number
     term: string
-    userId: string
+    userId?: string
     timestamp: string
   }
   formatDate: (dateString: string) => string
