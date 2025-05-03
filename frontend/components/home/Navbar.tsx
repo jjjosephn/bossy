@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "../ui/button"
 import Link from "next/link"
-import { LogOut, Star, User, Settings, ShieldAlert } from "lucide-react"
+import { LogOut, Star, User, ShieldAlert } from "lucide-react"
 import { SignInButton, SignUpButton, useClerk, useUser } from "@clerk/nextjs"
 import {
   DropdownMenu,
@@ -11,8 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useCheckUserExistsMutation, useGetPendingBossesQuery } from "@/app/state/api"
-import { useEffect } from "react"
+import { useCheckUserExistsMutation, useGetBossInfoQuery, useGetPendingBossesQuery } from "@/app/state/api"
+import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
+import { ManagerSearchStep } from "./Hero/Search/ManagerSearch"
+import type { Company } from "@/utils/search-types"
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()
@@ -22,6 +25,14 @@ const Navbar = () => {
    const firstname = user?.firstName
    const lastname = user?.lastName
    const imageUrl = user?.imageUrl
+   const pathname = usePathname()
+   const isBossPage = /^\/boss\/[^\/]+$/.test(pathname)
+   const [searchQuery, setSearchQuery] = useState("")
+   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
+   const bossId = isBossPage ? pathname.split('/')[2] : null
+   const { data: bossInfo } = useGetBossInfoQuery(bossId ?? '', { skip: !bossId })
+
+   console.log("Boss Info:", bossInfo)
    
    const isAdmin = user?.publicMetadata.role === 'admin'
 
@@ -38,17 +49,17 @@ const Navbar = () => {
 
    return (
       <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
-         <div className="w-36 flex items-center"/>
-
-         <Link className="flex items-center justify-center group" href="/">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-purple-600 dark:from-primary dark:to-blue-400 flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
-               <Star className="h-6 w-6 text-white" />
-            </div>
-            <span className="ml-2 text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent animate-gradientShift relative group-hover:after:w-full after:absolute after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-purple-600 dark:after:from-primary dark:after:to-blue-400 after:bottom-0 after:left-0 after:w-0 after:transition-all">
-               Bossy
-            </span>
-         </Link>
-
+         <div className="flex-1 flex justify-start">
+            <Link className="flex items-center group" href="/">
+               <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-purple-600 dark:from-primary dark:to-blue-400 flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
+                  <Star className="h-6 w-6 text-white" />
+               </div>
+               <span className="ml-2 text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent animate-gradientShift relative group-hover:after:w-full after:absolute after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-purple-600 dark:after:from-primary dark:after:to-blue-400 after:bottom-0 after:left-0 after:w-0 after:transition-all">
+                  Bossy
+               </span>
+            </Link>
+         </div>
+         
          {!isSignedIn ? (
             <div className="flex items-center gap-3">
                <SignInButton mode="modal">
@@ -96,7 +107,7 @@ const Navbar = () => {
                   </div>
                   <DropdownMenuItem asChild>
                      <Link 
-                        href="/profile" 
+                        href={`/profile/${user?.id}`}
                         className="flex items-center gap-2 cursor-pointer rounded-lg hover:bg-primary/10 transition-colors duration-200"
                      >
                         <User className="h-4 w-4" />

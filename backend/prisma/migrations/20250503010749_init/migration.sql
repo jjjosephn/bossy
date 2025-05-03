@@ -108,9 +108,6 @@ CREATE TABLE "CompanyReview" (
     CONSTRAINT "CompanyReview_pkey" PRIMARY KEY ("reviewId")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
 -- AddForeignKey
 ALTER TABLE "Boss" ADD CONSTRAINT "Boss_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
 

@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
-import { User, Home } from "lucide-react"
+import { User, Home, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -52,15 +52,21 @@ export default function ProfilePage() {
    return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5 py-10 px-4">
          <div className="w-full max-w-4xl mx-auto">
-            <div className="flex flex-col gap-8">
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-col md:flex-row gap-6">
+               {/* SideCard and Back button in a column on the left */}
+               <div className="w-full md:w-1/3 flex flex-col gap-4">
                   <SideCard />
-                  <div className="md:col-span-2">
-                     <Content />  
-                  </div>
-                  <Button className="gap-2 bg-gradient-to-br from-primary/50 to-purple-400/50 dark:from-primary/50 dark:to-blue-300/50" onClick={() => (router.back())}>
+                  <Button 
+                     className="gap-2 bg-gradient-to-br from-primary/50 to-purple-400/50 dark:from-primary/50 dark:to-blue-300/50" 
+                     onClick={() => router.back()}
+                  >
+                     <ArrowLeft className="h-4 w-4" />
                      Back
                   </Button>
+               </div>
+               
+               <div className="w-full md:w-2/3">
+                  <Content />
                </div>
             </div>
          </div>

@@ -109,7 +109,7 @@ export const api = createApi({
       }),
       checkUserExists: build.mutation<any, { userId: string; firstName: string; lastName: string; email: string }>({
          query: (body) => ({
-            url: '/check-user',
+            url: '/user/check-user',
             method: 'POST',
             body,
          })
@@ -185,6 +185,11 @@ export const api = createApi({
       getBossReviews: build.query<BossReview[], string>({
          query: (bossId) => `/review/boss/${bossId}`,
       }),
+
+      // Profile Page
+      getReviewsByUserId: build.query<BossReview[], string>({
+         query: (userId) => `/user/get-reviews/${userId}`,
+      }),
    }),
 });
 
@@ -205,4 +210,5 @@ export const {
    useAcceptPendingBossReviewMutation,
    useDeclinePendingBossReviewMutation,
    useGetArchivedBossReviewsQuery,
+   useGetReviewsByUserIdQuery
 } = api;

@@ -27,7 +27,7 @@ app.use(cors())
 /* Routes */
 app.use("/example", exampleRoutes)
 app.use("/company", companyRoutes)
-app.use("/", userRoutes)
+app.use("/user", userRoutes)
 app.use("/boss", bossRoutes)
 app.use("/admin", adminRoutes)
 app.use("/review", reviewRoutes)

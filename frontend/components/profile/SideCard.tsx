@@ -2,13 +2,14 @@ import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { CalendarDays, Mail, Pencil } from 'lucide-react'
-import { Button } from '../ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useUser } from '@clerk/nextjs'
+import { useGetReviewsByUserIdQuery } from '@/app/state/api'
 
 
 const SideCard = () => {
    const { user } = useUser()
+   const { data: reviews } = useGetReviewsByUserIdQuery(user?.id ?? "")
    
    const createdDate = user?.createdAt ? new Date(user.createdAt).toLocaleDateString("en-US", {
       year: "numeric",
@@ -32,9 +33,6 @@ const SideCard = () => {
                <Mail className="h-4 w-4" />
                {user?.primaryEmailAddress?.emailAddress}
             </CardDescription>
-            <Button variant="outline" size="sm" className="mt-3 border-primary/20 text-primary hover:bg-primary/5 rounded-full">
-               <Pencil className="h-3.5 w-3.5 mr-2" /> Edit Profile
-            </Button>
          </CardHeader>
          <CardContent>
             <div className="space-y-4 mt-2">
@@ -52,7 +50,7 @@ const SideCard = () => {
             </div>
             <div className="mt-6 flex flex-wrap gap-2 items-center justify-center">
                <Badge variant="outline" className="text-xs border-primary/20">
-                  0 Reviews
+                  {reviews?.length} Reviews
                </Badge>
             </div>
          </CardContent>

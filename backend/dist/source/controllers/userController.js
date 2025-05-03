@@ -9,33 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkUserExists = void 0;
+exports.getReviewsByUserId = exports.checkUserExists = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const checkUserExists = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, firstName, lastName, email } = req.body;
     try {
         const existingUser = yield prisma.user.findUnique({
-            where: {
-                userId: userId
-            }
+            where: { userId }
         });
         if (existingUser) {
             res.status(200).json({ exists: true, user: existingUser });
             return;
         }
-        else {
-            const newUser = yield prisma.user.create({
-                data: {
-                    userId,
-                    firstName,
-                    lastName,
-                    email
-                }
-            });
-            res.status(200).json({ exists: false, user: newUser });
-            return;
-        }
+        const newUser = yield prisma.user.create({
+            data: {
+                userId,
+                firstName,
+                lastName,
+                email
+            }
+        });
+        res.status(200).json({ exists: false, user: newUser });
     }
     catch (error) {
         console.error("Error checking user existence:", error);
@@ -43,3 +38,24 @@ const checkUserExists = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.checkUserExists = checkUserExists;
+const getReviewsByUserId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    try {
+        const reviews = yield prisma.bossReview.findMany({
+            where: { userId },
+            include: {
+                Boss: {
+                    include: {
+                        Company: true,
+                    }
+                }
+            },
+        });
+        res.status(200).json(reviews);
+    }
+    catch (error) {
+        console.error("Error fetching reviews:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.getReviewsByUserId = getReviewsByUserId;

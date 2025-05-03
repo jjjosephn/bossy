@@ -29,7 +29,7 @@ app.use((0, cors_1.default)());
 /* Routes */
 app.use("/example", exampleRouter_1.default);
 app.use("/company", companyRouter_1.default);
-app.use("/", userRouter_1.default);
+app.use("/user", userRouter_1.default);
 app.use("/boss", bossRouter_1.default);
 app.use("/admin", adminRouter_1.default);
 app.use("/review", reviewRouter_1.default);

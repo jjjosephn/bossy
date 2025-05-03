@@ -17,7 +17,7 @@ model User {
   userId      String   @id
   firstName   String
   lastName    String
-  email       String   @unique
+  email       String   
   fieldOfWork String?
   timestamp   DateTime @default(now())
 
