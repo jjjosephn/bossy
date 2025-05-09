@@ -53,7 +53,6 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5 py-10 px-4">
          <div className="w-full max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row gap-6">
-               {/* SideCard and Back button in a column on the left */}
                <div className="w-full md:w-1/3 flex flex-col gap-4">
                   <SideCard />
                   <Button 

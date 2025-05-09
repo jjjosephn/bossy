@@ -22,7 +22,7 @@ const Reviews = () => {
       }
       return stars
    }
-   
+
    return (
       <Card className="shadow-md border-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
          <CardHeader className="pb-2 pt-4">
@@ -41,42 +41,44 @@ const Reviews = () => {
             <>
                <CardContent className="space-y-4 pt-0 px-3 ">
                   {reviews.slice(page * 10, page * 10 + 10).map((review) => (
-                     <div
-                        key={review.reviewId}
-                        className="p-2 rounded-md border border-gray-100 dark:border-gray-800 bg-gradient-to-br from-white to-gray-5x`0 dark:from-gray-800 dark:to-gray-900 shadow-sm"
-                     >
-                        <div className="flex items-start justify-between gap-1 mb-1.5">
-                           <div>
-                              <h4 className="text-xs font-medium flex items-center gap-1">
-                                 <Building className="h-3 w-3 text-primary" />
-                                 {review.Boss.Company.companyName}
-                              </h4>
-                              <p className="text-xs text-muted-foreground flex items-center gap-1">
-                                 <User className="h-2.5 w-2.5 text-primary" />
-                                 {review.Boss.bossFirstName} {review.Boss.bossLastName}
-                                 <span className="mx-0.5 text-gray-300 dark:text-gray-600">•</span>
-                                 <Briefcase className="h-2.5 w-2.5" />
-                                 <span className="truncate max-w-32">{review.Boss.position}</span>
-                              </p>
+                     <Link href={`/boss/${review.bossId}`} key={review.reviewId}>
+                        <div
+                           key={review.reviewId}
+                           className="p-2 mb-4 rounded-md border transform transition duration-200 hover:scale-101 border-gray-100 dark:border-gray-800 bg-gradient-to-br from-white to-gray-5x`0 dark:from-gray-800 dark:to-gray-900 shadow-md"
+                        >
+                           <div className="flex items-start justify-between gap-1 mb-1.5">
+                              <div>
+                                 <h4 className="text-xs font-medium flex items-center gap-1">
+                                    <Building className="h-3 w-3 text-primary" />
+                                    {review.Boss.Company.companyName}
+                                 </h4>
+                                 <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                    <User className="h-2.5 w-2.5 text-primary" />
+                                    {review.Boss.bossFirstName} {review.Boss.bossLastName}
+                                    <span className="mx-0.5 text-gray-300 dark:text-gray-600">•</span>
+                                    <Briefcase className="h-2.5 w-2.5" />
+                                    <span className="truncate max-w-32">{review.Boss.position}</span>
+                                 </p>
+                              </div>
+                              <div className="flex items-center">{renderStars(review.rating)}</div>
                            </div>
-                           <div className="flex items-center">{renderStars(review.rating)}</div>
+                           <div className="p-1.5 rounded bg-white/80 dark:bg-gray-800/80 text-xs">
+                              <p className="line-clamp-3">{review.reviewText}</p>
+                           </div>
+                           <div className="flex justify-between items-center mt-1.5 text-xs text-muted-foreground">
+                              <span className="text-2xs">
+                                 Term: <span className="font-medium">{review.term} {review.term === "<1" ? 'year' : 'years'}</span>
+                              </span>
+                              <span className="text-2xs">
+                                 {new Date(review.timestamp).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                 })}
+                              </span>
+                           </div>
                         </div>
-                        <div className="p-1.5 rounded bg-white/80 dark:bg-gray-800/80 text-xs">
-                           <p className="line-clamp-3">{review.reviewText}</p>
-                        </div>
-                        <div className="flex justify-between items-center mt-1.5 text-xs text-muted-foreground">
-                           <span className="text-2xs">
-                              Term: <span className="font-medium">{review.term} {review.term === "<1" ? 'year' : 'years'}</span>
-                           </span>
-                           <span className="text-2xs">
-                              {new Date(review.timestamp).toLocaleDateString("en-US", {
-                                 year: "numeric",
-                                 month: "short",
-                                 day: "numeric",
-                              })}
-                           </span>
-                        </div>
-                     </div>
+                     </Link>
                   ))}
                </CardContent>
 

@@ -9,7 +9,7 @@ import Reviews from "./Reviews"
 
 const Content = () => {
   const { user } = useUser()
-  const { data: reviews = [] } = useGetReviewsByUserIdQuery(user?.id ?? "")
+  const { data: reviews = [], refetch: refetchUserReviews } = useGetReviewsByUserIdQuery(user?.id ?? "")
 
   console.log("User Reviews:", reviews)
 
@@ -25,6 +25,9 @@ const Content = () => {
         </TabsTrigger>
         <TabsTrigger
           value="reviews"
+          onClick={() => {
+            refetchUserReviews()
+          }}
           className="gap-2 data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary/50 data-[state=active]:to-purple-400/50 dark:data-[state=active]:from-primary dark:data-[state=active]:to-blue-300/50 data-[state=active]:text-white"
         >
           <Star className="h-4 w-4" />
