@@ -7,6 +7,7 @@ import { CustomSearchStep } from "./Search/CustomSearch"
 import { ManagerSearchStep } from "./Search/ManagerSearch"
 import { useLocation } from "@/utils/locations-utils"
 import type { Company, SearchStep } from "@/utils/search-types"
+import { useLazyGetSearchComponentMapboxDataQuery } from "@/app/state/api"
 
 const SearchComponent = () => {
   const [searchStep, setSearchStep] = useState<SearchStep>("company")
@@ -18,7 +19,8 @@ const SearchComponent = () => {
   const [loading, setLoading] = useState(false)
   const searchComponentRef = useRef<HTMLDivElement>(null)
   const { userLocation, locationLoading } = useLocation()
-  const ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+  const [encodedSearch, setEncodedSearch] = useState<string>("")
+  const [triggerGetMapboxData, { data, isLoading, isError }] = useLazyGetSearchComponentMapboxDataQuery()
 
   const handleBackToCompany = () => {
     setSearchStep("company")
@@ -45,30 +47,20 @@ const SearchComponent = () => {
     setCustomLocation(locationString)
 
     try {
-      // Search for companies near this address
-      const encodedSearch = encodeURIComponent(companyName)
-      const sessionToken = `${Math.random().toString(36).substring(2)}-${Date.now()}`
-      const searchResponse = await fetch(
-        `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodedSearch}&language=en&types=poi&limit=10&proximity=${locationString}&session_token=${sessionToken}&access_token=${ACCESS_TOKEN}`,
-      )
+      const result = await triggerGetMapboxData({
+        encodedSearch: encodeURIComponent(companyName),
+        locationString,
+      }).unwrap();
 
-      if (!searchResponse.ok) {
-        throw new Error("Network response was not ok")
-      }
-
-      const searchData = await searchResponse.json()
-
-      // Update the results and go back to company search step
-      setSearchQuery(companyName)
-      setSearchStep("company")
+      console.log("Mapbox data:", result);
+      setSearchQuery(companyName);
+      setSearchStep("company");
     } catch (error) {
-      alert(
-        "We couldn't find any companies matching your search. Please try again with a different address or company name.",
-      )
+      console.error("Mapbox fetch error:", error);
+      alert("We couldn't find any companies matching your search. Please try again.");
     }
   }
 
-  // Handle clicks outside the component to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchComponentRef.current && !searchComponentRef.current.contains(event.target as Node)) {

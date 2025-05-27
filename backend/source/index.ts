@@ -6,12 +6,12 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 
 /* Route Imports */
-import exampleRoutes from './routes/exampleRouter'
 import companyRoutes from './routes/companyRouter'
 import userRoutes from './routes/userRouter' 
 import bossRoutes from './routes/bossRouter'
 import adminRoutes from './routes/adminRouter'
 import reviewRoutes from './routes/reviewRouter'
+import mapboxRoutes from './routes/mapboxRouter'
 
 /* Configs */
 dotenv.config()
@@ -25,12 +25,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
 
 /* Routes */
-app.use("/example", exampleRoutes)
 app.use("/company", companyRoutes)
 app.use("/user", userRoutes)
 app.use("/boss", bossRoutes)
 app.use("/admin", adminRoutes)
 app.use("/review", reviewRoutes)
+app.use("/mapbox", mapboxRoutes)
 
 /* Server */
 const port = Number(process.env.PORT) || 3001

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { MapPin, Loader2, X, ArrowRight } from "lucide-react"
 import type { MapboxSuggestion, MapboxRetrieveResponse } from "@/utils/search-types"
 import { useMapboxSearch } from "@/utils/mapbox-utils"
+import { useLazyGetCustomSearchMapboxDataQuery } from "@/app/state/api"
+
 
 interface CustomSearchStepProps {
   companyNameInput: string
@@ -28,8 +30,8 @@ export function CustomSearchStep({
 }: CustomSearchStepProps) {
   const [selectedAddress, setSelectedAddress] = useState<MapboxSuggestion | null>(null)
   const [customSearchLoading, setCustomSearchLoading] = useState(false)
-  const ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-
+  const [triggerGetMapboxData, { data, isLoading, isError }] = useLazyGetCustomSearchMapboxDataQuery()
+  
   const {
     results: addressResults,
     loading: addressLoading,
@@ -42,7 +44,7 @@ export function CustomSearchStep({
     customLocation: null,
     searchType: "address",
     enabled: true,
-    limit: 5,
+    limit: 10,
   })
 
   const handleSelectAddress = (suggestion: MapboxSuggestion) => {
@@ -56,42 +58,33 @@ export function CustomSearchStep({
     setCustomSearchLoading(true)
 
     try {
-      // Get coordinates for the selected address
-      const response = await fetch(
-        `https://api.mapbox.com/search/searchbox/v1/retrieve/${selectedAddress.mapbox_id}?session_token=${sessionToken}&access_token=${ACCESS_TOKEN}`,
-      )
+      const data: MapboxRetrieveResponse = await triggerGetMapboxData({
+        selectedAddressMapboxId: selectedAddress.mapbox_id
+      }).unwrap()
 
-      if (!response.ok) {
-        throw new Error("Failed to retrieve location details")
-      }
-
-      const data: MapboxRetrieveResponse = await response.json()
-
-      // Check if we have valid data
       if (!data.features || data.features.length === 0) {
         throw new Error("Invalid location data received")
       }
 
+      console.log("Mapbox data:", data)
       const feature = data.features[0]
 
-      // Set the custom location based on the selected address coordinates
       if (feature.properties?.coordinates) {
         const { longitude, latitude } = feature.properties.coordinates
         const locationString = `${longitude},${latitude}`
 
-        // Call the parent function to handle the search
         await onCustomSearch(companyNameInput, locationString)
       } else {
         throw new Error("Could not find coordinates for this address")
       }
     } catch (error) {
-      alert(
-        "We couldn't find any companies matching your search. Please try again with a different address or company name.",
-      )
+      console.error("Custom search error:", error)
+      alert("We couldn't find any companies matching your search. Please try again with a different address or company name.")
     } finally {
       setCustomSearchLoading(false)
     }
   }
+
 
   return (
     <div className="space-y-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">

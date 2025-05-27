@@ -190,6 +190,26 @@ export const api = createApi({
       getReviewsByUserId: build.query<BossReview[], string>({
          query: (userId) => `/user/get-reviews/${userId}`,
       }),
+
+      // Mapbox
+      getSearchComponentMapboxData: build.query<any, { encodedSearch: string; locationString: string }>({
+         query: ({ encodedSearch, locationString }) => ({
+            url: `/mapbox/fetch-search-component-mapbox-data?encodedSearch=${encodedSearch}&locationString=${locationString}`,
+            method: 'GET',
+         }),
+      }),
+      getCustomSearchMapboxData: build.query<any, { selectedAddressMapboxId: string }>({
+         query: ({ selectedAddressMapboxId,  }) => ({
+            url: `/mapbox/fetch-custom-search-mapbox-data?selectedAddressMapboxId=${selectedAddressMapboxId}`,
+            method: 'GET',
+         }),
+      }),
+      getMapboxUtilsData: build.query<any, { query: string; proximity: string; customLocation: string | null; searchType?: string; enabled?: boolean; limit?: string }>({
+         query: ({ query, proximity, customLocation, searchType = 'poi,address', enabled = true, limit = '10' }) => ({
+            url: `/mapbox/fetch-mapbox-utils-data?query=${encodeURIComponent(query)}&proximity=${proximity}&customLocation=${customLocation || ''}&searchType=${searchType}&enabled=${enabled}&limit=${limit}`,
+            method: 'GET',
+         }),
+      }),
    }),
 });
 
@@ -210,5 +230,11 @@ export const {
    useAcceptPendingBossReviewMutation,
    useDeclinePendingBossReviewMutation,
    useGetArchivedBossReviewsQuery,
-   useGetReviewsByUserIdQuery
+   useGetReviewsByUserIdQuery,
+   useGetSearchComponentMapboxDataQuery,
+   useLazyGetSearchComponentMapboxDataQuery,
+   useGetCustomSearchMapboxDataQuery,
+   useLazyGetCustomSearchMapboxDataQuery,
+   useGetMapboxUtilsDataQuery,
+   useLazyGetMapboxUtilsDataQuery,
 } = api;

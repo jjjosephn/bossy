@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./redux";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/home/Navbar";
+import Navbar from "@/components/home/Navbar/Navbar";
 import Footer from "@/components/home/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

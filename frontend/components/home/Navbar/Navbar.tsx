@@ -1,5 +1,5 @@
 "use client"
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 import Link from "next/link"
 import { LogOut, Star, User, ShieldAlert, Search, X, ArrowRight } from "lucide-react"
 import { SignInButton, SignUpButton, useClerk, useUser } from "@clerk/nextjs"
@@ -19,8 +19,7 @@ import {
 } from "@/app/state/api"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import { Input } from "../ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import NavbarSearch from "./NavbarSearch"
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()
@@ -32,14 +31,6 @@ const Navbar = () => {
    const imageUrl = user?.imageUrl
    const pathname = usePathname()
    const isBossPage = /^\/boss\/[^/]+$/.test(pathname)
-   const bossId = isBossPage ? pathname.split("/")[2] : null
-   const { data: bossInfo } = useGetBossInfoQuery(bossId ?? "", { skip: !bossId })
-   const { data: bosses } = useGetBossesQuery(bossInfo?.Company.mapboxId ?? "", { skip: !bossInfo?.Company.mapboxId })
-
-   // Search state
-   const [open, setOpen] = useState(false)
-   const [searchQuery, setSearchQuery] = useState("")
-
    const isAdmin = user?.publicMetadata.role === "admin"
 
    useEffect(() => {
@@ -52,27 +43,6 @@ const Navbar = () => {
          })
       }
    }, [isSignedIn, user?.id])
-
-   const filteredBosses =
-      bosses?.filter((boss) => {
-         const fullName = `${boss.bossFirstName} ${boss.bossLastName}`.toLowerCase()
-         return (
-         fullName.includes(searchQuery.toLowerCase()) || boss.position?.toLowerCase().includes(searchQuery.toLowerCase())
-         )
-      }) || []
-      
-   useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (open && !(event.target as Element)?.closest('[data-popover-wrapper]')) {
-          setOpen(false)
-        }
-      }
-      
-      document.addEventListener('mousedown', handleClickOutside)
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside)
-      }
-   }, [open])
 
    return (
       <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
@@ -88,81 +58,7 @@ const Navbar = () => {
             </Link>
 
             {isBossPage && (
-               <div className="w-full flex justify-center">
-                  <div className="w-full max-w-xl">
-                     <Popover open={open} onOpenChange={setOpen}>
-                        <div className="flex items-center gap-2 w-full">
-                           <PopoverTrigger asChild>
-                           <div className="relative flex-1">
-                              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Input
-                                 type="text"
-                                 placeholder="Search for a boss"
-                                 value={searchQuery}
-                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                 onClick={() => setOpen(true)}
-                                 className="w-full rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-6 pl-12 pr-4 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                              />
-                           </div>
-                           </PopoverTrigger>
-                  
-                           <span className="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                           at &nbsp;
-                              <span className="underline inline-block hover:scale-105 transition-transform duration-200 ease-in-out">
-                                 {bossInfo?.Company?.companyName}
-                              </span>
-                           </span>
-                        </div>
-                  
-                        <PopoverContent
-                           className="p-0 w-full max-w-xl"
-                           align="start"
-                           sideOffset={5}
-                           style={{ width: 'var(--radix-popover-trigger-width)' }}
-                        >
-                           <div className="rounded-md bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-auto">
-                              <div className="top-0 z-10 flex justify-between items-center p-2 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-                                 <span className="text-xs text-gray-500">
-                                    {filteredBosses.length} {filteredBosses.length === 1 ? "result" : "results"} found
-                                 </span>
-                                 <button
-                                    onClick={() => setOpen(false)}
-                                    className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
-                                    aria-label="Close dropdown"
-                                 >
-                                    <X className="h-4 w-4 text-gray-500" />
-                                 </button>
-                              </div>
-
-                              {filteredBosses.length > 0 ? (
-                                 <>
-                                    {filteredBosses.map((boss) => (
-                                       <Link href={`/boss/${boss.bossId}`} key={boss.bossId} onClick={() => setOpen(false)}>
-                                          <div
-                                             className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0"
-                                          >
-                                             <User className="h-5 w-5 text-gray-500 mr-3" />
-                                             <div>
-                                                <div className="font-medium">
-                                                {boss.bossFirstName} {boss.bossLastName}
-                                                </div>
-                                                <div className="text-xs text-gray-500">{boss.position}</div>
-                                             </div>
-                                             <ArrowRight className="h-4 w-4 text-gray-400 ml-auto" />
-                                          </div>
-                                       </Link>
-                                    ))}
-                                 </>
-                              ) : searchQuery.trim().length > 0 ? (
-                                 <div className="p-3 text-sm text-gray-500">
-                                    <p>No bosses found</p>
-                                 </div>
-                              ) : null}
-                           </div>
-                        </PopoverContent>
-                     </Popover>
-                  </div>
-               </div>
+               <NavbarSearch />
             )}
          </div>
 
