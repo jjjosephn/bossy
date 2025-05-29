@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newCompanyReview = exports.getBossReviews = exports.newBossReview = void 0;
+exports.getCompanyReviews = exports.newCompanyReview = exports.getBossReviews = exports.newBossReview = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const newBossReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -94,3 +94,24 @@ const newCompanyReview = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.newCompanyReview = newCompanyReview;
+const getCompanyReviews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { mapboxId } = req.params;
+    try {
+        const company = yield prisma.company.findFirst({
+            where: {
+                mapboxId: mapboxId
+            },
+        });
+        const reviews = yield prisma.companyReview.findMany({
+            where: {
+                companyId: company === null || company === void 0 ? void 0 : company.companyId
+            }
+        });
+        res.status(200).json(reviews);
+    }
+    catch (error) {
+        console.error("Error fetching reviews:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getCompanyReviews = getCompanyReviews;

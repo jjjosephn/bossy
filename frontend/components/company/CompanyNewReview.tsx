@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { PenLine } from "lucide-react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import CompanyReviewForm from "@/components/company/CompanyReviewForm"
-import { useGetBossReviewsQuery, useNewCompanyReviewMutation } from "@/app/state/api"
+import { useGetBossReviewsQuery, useGetCompanyReviewsQuery, useNewCompanyReviewMutation } from "@/app/state/api"
 import { useParams } from "next/navigation"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -19,9 +19,9 @@ interface NewReviewProps {
 
 export function CompanyNewReview() {
   const [open, setOpen] = useState(false)
-  const { bossId } = useParams<{ bossId: string }>()
+  const { mapboxId } = useParams()
   const [newReview] = useNewCompanyReviewMutation()
-  const { refetch: refetchReviews } = useGetBossReviewsQuery(bossId as string)
+  const { refetch: refetchReviews } = useGetCompanyReviewsQuery(mapboxId as string)
   
 
   const handleSubmit = async (data: NewReviewProps) => {

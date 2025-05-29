@@ -6,10 +6,7 @@ type CompanyProfileProps = {
   company: {
     companyId: string
     companyName: string
-    streetAddress: string
-    city: string
-    state: string
-    zipCode: string
+    fullAddress: string
     timestamp: string
   }
   averageRating?: number
@@ -21,7 +18,6 @@ const CompanyProfile = ({
   averageRating = 0, 
   reviewCount = 0 
 }: CompanyProfileProps) => {
-  // Format the timestamp to show just the year the company was added
   const addedYear = new Date(company.timestamp).getFullYear();
   
   return (
@@ -46,7 +42,7 @@ const CompanyProfile = ({
                 <MapPin className="h-4 w-4 text-primary" />
               </div>
               <span className="font-medium">
-               {company.streetAddress} {company.city}, {company.state} {company.zipCode}
+               {company.fullAddress}
               </span>
             </div>
           </div>

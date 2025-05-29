@@ -40,6 +40,7 @@ const NavbarSearch = () => {
     }) || []
 
   const handleSelectCompany = async (company: Company) => {
+    console.log("Selected company:", company)
     setSelectedCompany(company)
     setCompanyNameInput(company.name)
     setCompanySearch(false)

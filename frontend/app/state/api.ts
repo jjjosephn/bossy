@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { get } from 'http';
 
 export interface Company {
    companyId: string;
@@ -89,6 +88,18 @@ export interface ArchivedBossReview {
    timestamp: string;
    User: User;
    Boss: Boss;
+}
+
+export interface CompanyReview {
+   reviewId: string;
+   reviewText: string;
+   rating: number;
+   term: string;
+   userId?: string;
+   companyId: string;
+   timestamp: string;
+   User: User;
+   Company: Company;
 }
 
 export const api = createApi({
@@ -219,6 +230,9 @@ export const api = createApi({
             body,
          })
       }),
+      getCompanyReviews: build.query<CompanyReview[], string>({
+         query: (mapboxId) => `/review/company/${mapboxId}`,
+      }),
    }),
 });
 
@@ -247,4 +261,5 @@ export const {
    useGetMapboxUtilsDataQuery,
    useLazyGetMapboxUtilsDataQuery,
    useNewCompanyReviewMutation,
+   useGetCompanyReviewsQuery,
 } = api;

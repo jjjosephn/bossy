@@ -6,4 +6,5 @@ const router = (0, express_1.Router)();
 router.post('/newbossreview', reviewController_1.newBossReview);
 router.get('/boss/:bossId', reviewController_1.getBossReviews);
 router.post('/newcompanyreview', reviewController_1.newCompanyReview);
+router.get('/company/:mapboxId', reviewController_1.getCompanyReviews);
 exports.default = router;
