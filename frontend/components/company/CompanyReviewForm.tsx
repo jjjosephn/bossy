@@ -8,11 +8,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { useParams } from "next/navigation"
-import { useGetBossInfoQuery } from "@/app/state/api"
+import { useGetCompanyByMapboxIdQuery } from "@/app/state/api"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useUser } from "@clerk/nextjs"
 
-interface BossReviewFormProps {
+interface CompanyReviewFormProps {
   onSubmit?: (data: any) => void
   onCancel?: () => void
 }
@@ -41,9 +41,9 @@ const termOptions = [
   { value: "5+", label: "5+ years" },
 ]
 
-export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormProps) {
-  const { bossId } = useParams<{ bossId: string }>()
-  const { data: boss } = useGetBossInfoQuery(bossId as string)
+export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewFormProps) {
+  const { mapboxId } = useParams()
+  const { data: company } = useGetCompanyByMapboxIdQuery(mapboxId as string)
   const { user } = useUser()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,26 +59,23 @@ export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormPro
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     onSubmit?.({
       ...values,
-      bossId,
+      companyId: company?.companyId
     })
   }
 
   return (
     <Card className="w-full max-w-lg border-0 shadow-none">
       <CardHeader>
-        <CardTitle>Submit Boss Review</CardTitle>
-        <CardDescription>Share your experience working with this {boss?.position}</CardDescription>
+        <CardTitle>Submit Company Review</CardTitle>
+        <CardDescription>Share your experience working at {company?.companyName}</CardDescription>
       </CardHeader>
 
-      {boss && (
+      {company && (
         <CardContent className="">
           <div className="font-medium text-lg">
-            {boss.bossFirstName} {boss.bossLastName}
+            {company?.companyName}
           </div>
-          <div className="text-sm text-muted-foreground">
-            {boss.position} at {boss.Company.companyName}
-          </div>
-          <div className="text-xs text-muted-foreground mt-1">{boss.Company.fullAddress}</div>
+          <div className="text-xs text-muted-foreground mt-1">{company.fullAddress}</div>
         </CardContent>
       )}
 
@@ -90,7 +87,7 @@ export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormPro
               name="term"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How long did you work with this {boss?.position}?</FormLabel>
+                  <FormLabel>How long did you work at {company?.companyName}?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -142,7 +139,7 @@ export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormPro
                   <FormLabel>Your Review</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={`Share your experience working with this ${boss?.position}...`}
+                      placeholder={`Share your experience working at ${company?.companyName}...`}
                       className="min-h-[120px]"
                       {...field}
                     />

@@ -177,7 +177,7 @@ export const api = createApi({
       // Reviews
       newBossReview: build.mutation<any, NewBossReview>({
          query: (body) => ({
-            url: '/review/new',
+            url: '/review/newbossreview',
             method: 'POST',
             body,
          })
@@ -210,6 +210,15 @@ export const api = createApi({
             method: 'GET',
          }),
       }),
+
+      // Company Page
+      newCompanyReview: build.mutation<any, { reviewText: string; rating: number; term: string; userId?: string; companyId: string }>({
+         query: (body) => ({
+            url: '/review/newcompanyreview',
+            method: 'POST',
+            body,
+         })
+      }),
    }),
 });
 
@@ -237,4 +246,5 @@ export const {
    useLazyGetCustomSearchMapboxDataQuery,
    useGetMapboxUtilsDataQuery,
    useLazyGetMapboxUtilsDataQuery,
+   useNewCompanyReviewMutation,
 } = api;

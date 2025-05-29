@@ -17,15 +17,16 @@ model User {
   userId      String   @id
   firstName   String
   lastName    String
-  email       String   
+  email       String
   fieldOfWork String?
   timestamp   DateTime @default(now())
 
-  BossReview          BossReview[]
-  CompanyReview       CompanyReview[]
-  PendingBosses       PendingBosses[]
-  ArchivedForms       ArchivedForms[]
-  ArchivedBossReviews ArchivedBossReviews[]
+  BossReview             BossReview[]
+  CompanyReview          CompanyReview[]
+  PendingBosses          PendingBosses[]
+  ArchivedForms          ArchivedForms[]
+  ArchivedBossReviews    ArchivedBossReviews[]
+  ArchivedCompanyReviews ArchivedCompanyReviews[]
 }
 
 model Company {
@@ -35,10 +36,45 @@ model Company {
   mapboxId    String
   timestamp   DateTime @default(now())
 
-  Boss          Boss[]
-  CompanyReview CompanyReview[]
-  PendingBosses PendingBosses[]
-  ArchivedForms ArchivedForms[]
+  Boss                   Boss[]
+  CompanyReview          CompanyReview[]
+  PendingBosses          PendingBosses[]
+  ArchivedForms          ArchivedForms[]
+  ArchivedCompanyReviews ArchivedCompanyReviews[]
+}
+
+model CompanyReview {
+  reviewId   String   @id @default(uuid())
+  reviewText String
+  rating     Int
+  term       String
+  userId     String?
+  companyId  String
+  timestamp  DateTime @default(now())
+
+  User                  User?                   @relation(fields: [userId], references: [userId])
+  Company               Company                 @relation(fields: [companyId], references: [companyId])
+  PendingCompanyReviews PendingCompanyReviews[]
+}
+
+model PendingCompanyReviews {
+  pendingId String @id @default(uuid())
+  reviewId  String
+
+  Review CompanyReview @relation(fields: [reviewId], references: [reviewId])
+}
+
+model ArchivedCompanyReviews {
+  archiveId     String   @id @default(uuid())
+  companyId     String
+  userId        String?
+  reviewText    String
+  status        String
+  requestedDate String
+  timestamp     DateTime @default(now())
+
+  User    User?   @relation(fields: [userId], references: [userId])
+  Company Company @relation(fields: [companyId], references: [companyId])
 }
 
 model Boss {
@@ -49,8 +85,8 @@ model Boss {
   companyId     String
   timestamp     DateTime @default(now())
 
-  Company    Company      @relation(fields: [companyId], references: [companyId])
-  BossReview BossReview[]
+  Company             Company               @relation(fields: [companyId], references: [companyId])
+  BossReview          BossReview[]
   ArchviedBossReviews ArchivedBossReviews[]
 }
 
@@ -113,18 +149,5 @@ model ArchivedBossReviews {
   timestamp     DateTime @default(now())
 
   User User? @relation(fields: [userId], references: [userId])
-  Boss Boss @relation(fields: [bossId], references: [bossId])
-}
-
-model CompanyReview {
-  reviewId   String   @id @default(uuid())
-  reviewText String
-  rating     Int
-  term       String
-  userId     String?
-  companyId  String
-  timestamp  DateTime @default(now())
-
-  User    User?    @relation(fields: [userId], references: [userId])
-  Company Company? @relation(fields: [companyId], references: [companyId])
+  Boss Boss  @relation(fields: [bossId], references: [bossId])
 }

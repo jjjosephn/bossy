@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBossReviews = exports.newBossReview = void 0;
+exports.newCompanyReview = exports.getBossReviews = exports.newBossReview = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const newBossReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,3 +61,36 @@ const getBossReviews = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getBossReviews = getBossReviews;
+const newCompanyReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { reviewText, rating, term, userId, companyId } = req.body;
+    try {
+        const review = yield prisma.companyReview.create({
+            data: {
+                reviewText,
+                rating,
+                term,
+                userId,
+                companyId
+            }
+        });
+        if (review) {
+            res.status(200).json({ message: "Review created", review });
+            const pendingReview = yield prisma.pendingCompanyReviews.create({
+                data: {
+                    reviewId: review.reviewId
+                }
+            });
+            if (pendingReview) {
+                console.log("Pending review created:", pendingReview);
+            }
+            else {
+                console.error("Failed to create pending review");
+            }
+        }
+    }
+    catch (error) {
+        console.error("Error creating review:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.newCompanyReview = newCompanyReview;

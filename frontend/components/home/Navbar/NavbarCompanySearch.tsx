@@ -94,7 +94,7 @@ export function NavbarCompanySearchStep({
       </div>
       <Input
         type="search"
-        className="block w-full rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-7 pl-12 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+        className="w-full rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-6 pl-12 pr-4 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
         placeholder="Search for a company"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}

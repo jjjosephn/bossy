@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import CompanyProfile from '@/components/company/CompanyProfile'
 import CompanyRatingDistribution from '@/components/company/CompanyRatingDistribution'
 import CompanyReviewsList from '@/components/company/CompanyReviewsList'
-import { NewReview } from '@/components/boss/NewReview'
 import { formatDate, getTimeAgo } from '@/utils/date-utils'
 import { 
   calculateAverageRating, 
@@ -55,30 +54,22 @@ export default function CompanyReviewPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Boss Profile */}
         <CompanyProfile 
           company={company} 
           averageRating={averageRating} 
           reviewCount={reviews.length} 
         />
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            
-            Rating Distribution
             <CompanyRatingDistribution 
               ratingDistribution={ratingDistribution}
               ratingPercentages={ratingPercentages}
               filterRating={filterRating}
               setFilterRating={setFilterRating}
             />
-
-            <NewReview />
           </div>
 
-          {/* Reviews */}
           <div className="lg:col-span-2">
             <CompanyReviewsList 
               reviews={reviews}

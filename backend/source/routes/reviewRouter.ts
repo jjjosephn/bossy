@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { getBossReviews, newBossReview } from '../controllers/reviewController';
+import { getBossReviews, newBossReview, newCompanyReview } from '../controllers/reviewController';
 
 const router = Router();
 
-router.post('/new', newBossReview);
+router.post('/newbossreview', newBossReview);
 router.get('/boss/:bossId', getBossReviews);
+router.post('/newcompanyreview', newCompanyReview);
 
 export default router;

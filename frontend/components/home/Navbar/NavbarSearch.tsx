@@ -51,12 +51,6 @@ const NavbarSearch = () => {
     }
   }
 
-  const handleCantFindCompany = () => {
-    // Handle the "Can't find your company" action
-    setCustomSearch(true)
-    setOpen(false)
-  }
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node
@@ -116,13 +110,6 @@ const NavbarSearch = () => {
                       <span className="text-xs text-gray-500">
                         {filteredBosses.length} {filteredBosses.length === 1 ? "result" : "results"} found
                       </span>
-                      <button
-                        onClick={() => setOpen(false)}
-                        className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
-                        aria-label="Close dropdown"
-                      >
-                        <X className="h-4 w-4 text-gray-500" />
-                      </button>
                     </div>
 
                     {filteredBosses.length > 0 && (
@@ -165,13 +152,6 @@ const NavbarSearch = () => {
                       customLocation={customLocation}
                       locationLoading={locationLoading}
                     />
-                    <button
-                      onClick={() => setCompanySearch(false)}
-                      className="absolute right-3 top-4 p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none transition-colors duration-200 z-10"
-                      aria-label="Close company search"
-                    >
-                      <X className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    </button>
                   </div>
                 ) : (
                   <button

@@ -47,6 +47,8 @@ function main() {
             "archivedForms.json",
             "archivedBossReviews.json",
             "pendingBossReviews.json",
+            "pendingCompanyReviews.json",
+            "archivedCompanyReviews.json",
         ];
         yield deleteAllData(orderedFileNames);
         for (const fileName of orderedFileNames) {

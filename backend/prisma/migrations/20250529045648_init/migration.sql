@@ -22,6 +22,40 @@ CREATE TABLE "Company" (
 );
 
 -- CreateTable
+CREATE TABLE "CompanyReview" (
+    "reviewId" TEXT NOT NULL,
+    "reviewText" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "term" TEXT NOT NULL,
+    "userId" TEXT,
+    "companyId" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "CompanyReview_pkey" PRIMARY KEY ("reviewId")
+);
+
+-- CreateTable
+CREATE TABLE "PendingCompanyReviews" (
+    "pendingId" TEXT NOT NULL,
+    "reviewId" TEXT NOT NULL,
+
+    CONSTRAINT "PendingCompanyReviews_pkey" PRIMARY KEY ("pendingId")
+);
+
+-- CreateTable
+CREATE TABLE "ArchivedCompanyReviews" (
+    "archiveId" TEXT NOT NULL,
+    "companyId" TEXT NOT NULL,
+    "userId" TEXT,
+    "reviewText" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "requestedDate" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ArchivedCompanyReviews_pkey" PRIMARY KEY ("archiveId")
+);
+
+-- CreateTable
 CREATE TABLE "Boss" (
     "bossId" TEXT NOT NULL,
     "bossFirstName" TEXT NOT NULL,
@@ -95,18 +129,20 @@ CREATE TABLE "ArchivedBossReviews" (
     CONSTRAINT "ArchivedBossReviews_pkey" PRIMARY KEY ("archiveId")
 );
 
--- CreateTable
-CREATE TABLE "CompanyReview" (
-    "reviewId" TEXT NOT NULL,
-    "reviewText" TEXT NOT NULL,
-    "rating" INTEGER NOT NULL,
-    "term" TEXT NOT NULL,
-    "userId" TEXT,
-    "companyId" TEXT NOT NULL,
-    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+-- AddForeignKey
+ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
 
-    CONSTRAINT "CompanyReview_pkey" PRIMARY KEY ("reviewId")
-);
+-- AddForeignKey
+ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PendingCompanyReviews" ADD CONSTRAINT "PendingCompanyReviews_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "CompanyReview"("reviewId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArchivedCompanyReviews" ADD CONSTRAINT "ArchivedCompanyReviews_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArchivedCompanyReviews" ADD CONSTRAINT "ArchivedCompanyReviews_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Boss" ADD CONSTRAINT "Boss_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -137,9 +173,3 @@ ALTER TABLE "ArchivedBossReviews" ADD CONSTRAINT "ArchivedBossReviews_userId_fke
 
 -- AddForeignKey
 ALTER TABLE "ArchivedBossReviews" ADD CONSTRAINT "ArchivedBossReviews_bossId_fkey" FOREIGN KEY ("bossId") REFERENCES "Boss"("bossId") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "../../ui/button"
 import Link from "next/link"
-import { LogOut, Star, User, ShieldAlert, Search, X, ArrowRight } from "lucide-react"
+import { LogOut, Star, User, ShieldAlert } from "lucide-react"
 import { SignInButton, SignUpButton, useClerk, useUser } from "@clerk/nextjs"
 import {
   DropdownMenu,
@@ -13,13 +13,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   useCheckUserExistsMutation,
-  useGetBossesQuery,
-  useGetBossInfoQuery,
   useGetPendingBossesQuery,
 } from "@/app/state/api"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import NavbarSearch from "./NavbarSearch"
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()
@@ -30,7 +29,7 @@ const Navbar = () => {
    const lastname = user?.lastName
    const imageUrl = user?.imageUrl
    const pathname = usePathname()
-   const isBossPage = /^\/boss\/[^/]+$/.test(pathname)
+   const isHomePage = pathname === "/"
    const isAdmin = user?.publicMetadata.role === "admin"
 
    useEffect(() => {
@@ -46,8 +45,8 @@ const Navbar = () => {
 
    return (
       <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
-         <div className={`${!isBossPage ? "pl-32" : ""}`} />
-         <div className={`flex-1 flex ${isBossPage ? "justify-start gap-4 items-center" : "justify-center"}`}>
+         <div className={`${isHomePage ? "pl-32" : ""}`} />
+         <div className={`flex-1 flex ${!isHomePage ? "justify-start gap-4 items-center" : "justify-center"}`}>
             <Link className="flex items-center group" href="/">
                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-purple-600 dark:from-primary dark:to-blue-400 flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
                   <Star className="h-6 w-6 text-white" />
@@ -57,7 +56,7 @@ const Navbar = () => {
                </span>
             </Link>
 
-            {isBossPage && (
+            {!isHomePage && (
                <NavbarSearch />
             )}
          </div>

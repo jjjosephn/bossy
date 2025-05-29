@@ -4,6 +4,7 @@ import { Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
+import { CompanyNewReview } from "@/components/company/CompanyNewReview"
 
 type CompanyRatingDistributionProps = {
   ratingDistribution: number[]
@@ -63,7 +64,9 @@ export default function CompanyRatingDistribution({
             Clear filter
           </Button>
         )}
+
       </CardContent>
+      <CompanyNewReview />
     </Card>
   )
 }
