@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReviewsByUserId = exports.checkUserExists = void 0;
+exports.getCompanyReviewsByUserId = exports.getReviewsByUserId = exports.checkUserExists = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const checkUserExists = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,3 +59,20 @@ const getReviewsByUserId = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getReviewsByUserId = getReviewsByUserId;
+const getCompanyReviewsByUserId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    try {
+        const reviews = yield prisma.companyReview.findMany({
+            where: { userId },
+            include: {
+                Company: true,
+            },
+        });
+        res.status(200).json(reviews);
+    }
+    catch (error) {
+        console.error("Error fetching company reviews:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.getCompanyReviewsByUserId = getCompanyReviewsByUserId;

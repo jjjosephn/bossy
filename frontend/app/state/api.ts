@@ -240,6 +240,9 @@ export const api = createApi({
       getReviewsByUserId: build.query<BossReview[], string>({
          query: (userId) => `/user/get-reviews/${userId}`,
       }),
+      getCompanyReviewsByUserId: build.query<CompanyReview[], string>({
+         query: (userId) => `/user/get-company-reviews/${userId}`,
+      }),
 
       // Mapbox
       getSearchComponentMapboxData: build.query<any, { encodedSearch: string; locationString: string }>({
@@ -305,4 +308,5 @@ export const {
    useAcceptPendingCompanyReviewMutation,
    useDeclinePendingCompanyReviewMutation,
    useGetArchivedCompanyReviewsQuery,
+   useGetCompanyReviewsByUserIdQuery,
 } = api;

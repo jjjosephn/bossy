@@ -35,27 +35,48 @@ export const checkUserExists = async (
    }
  };
  
- export const getReviewsByUserId = async (
-   req: Request,
-   res: Response
+export const getReviewsByUserId = async (
+  req: Request,
+  res: Response
 ): Promise<void> => {
-   const { userId } = req.params;
- 
-   try {
-      const reviews = await prisma.bossReview.findMany({
-         where: { userId },
-         include: {
-            Boss: {
-               include: {
-                  Company: true,
-               }
-            }
-         },
-      });
- 
-      res.status(200).json(reviews);
-   } catch (error) {
-      console.error("Error fetching reviews:", error);
-      res.status(500).json({ error: "Internal server error" });
-   }
- }
+  const { userId } = req.params;
+
+  try {
+    const reviews = await prisma.bossReview.findMany({
+        where: { userId },
+        include: {
+          Boss: {
+              include: {
+                Company: true,
+              }
+          }
+        },
+    });
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export const getCompanyReviewsByUserId = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { userId } = req.params;
+
+  try {
+    const reviews = await prisma.companyReview.findMany({
+        where: { userId },
+        include: {
+          Company: true,
+        },
+    });
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error fetching company reviews:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

@@ -9,25 +9,26 @@ import { useState } from "react"
 
 type Review = {
    reviewId: string
-   bossId: string
-   rating: number
    reviewText: string
+   rating: number
    term: string
-   timestamp: string
-   Boss: {
-      bossFirstName: string
-      bossLastName: string
-      position: string
-      Company: {
-         companyName: string
-      }
+   User: {
+      userId: string
+      firstName: string
+      lastName: string
    }
+   Company: {
+      companyName: string
+      fullAddress: string
+      mapboxId: string
+   }
+   timestamp: string
 }
 type ReviewsProps = {
    reviews: Review[]
 }
 
-const Reviews = ({reviews}: ReviewsProps) => {
+const CompanyReviews = ({reviews}: ReviewsProps) => {
    const [page, setPage] = useState(0)
 
    const renderStars = (rating: number) => {
@@ -58,7 +59,7 @@ const Reviews = ({reviews}: ReviewsProps) => {
             <>
                <CardContent className="space-y-4 pt-0 px-3 ">
                   {reviews.slice(page * 10, page * 10 + 10).map((review) => (
-                     <Link href={`/boss/${review.bossId}`} key={review.reviewId}>
+                     <Link href={`/company/${review.Company.mapboxId}`} key={review.reviewId}>
                         <div
                            key={review.reviewId}
                            className="p-2 mb-4 rounded-md border transform transition duration-200 hover:scale-101 border-gray-100 dark:border-gray-800 bg-gradient-to-br from-white to-gray-5x`0 dark:from-gray-800 dark:to-gray-900 shadow-md"
@@ -67,14 +68,10 @@ const Reviews = ({reviews}: ReviewsProps) => {
                               <div>
                                  <h4 className="text-xs font-medium flex items-center gap-1">
                                     <Building className="h-3 w-3 text-primary" />
-                                    {review.Boss.Company.companyName}
+                                    {review.Company.companyName}
                                  </h4>
                                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                                    <User className="h-2.5 w-2.5 text-primary" />
-                                    {review.Boss.bossFirstName} {review.Boss.bossLastName}
-                                    <span className="mx-0.5 text-gray-300 dark:text-gray-600">•</span>
-                                    <Briefcase className="h-2.5 w-2.5" />
-                                    <span className="truncate max-w-32">{review.Boss.position}</span>
+                                    {review.Company.fullAddress}
                                  </p>
                               </div>
                               <div className="flex items-center">{renderStars(review.rating)}</div>
@@ -151,4 +148,4 @@ const Reviews = ({reviews}: ReviewsProps) => {
    )
 }
 
-export default Reviews
+export default CompanyReviews

@@ -3,19 +3,19 @@ import { useUser } from "@clerk/nextjs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Mail, Pencil, User, LinkIcon, Star } from "lucide-react"
-import { useGetReviewsByUserIdQuery } from "@/app/state/api"
+import { Mail, Pencil, User, LinkIcon, Star, Building2, UserCheck } from "lucide-react"
+import { useGetReviewsByUserIdQuery, useGetCompanyReviewsByUserIdQuery } from "@/app/state/api"
 import Reviews from "./Reviews"
+import CompanyReviews from "./CompanyReviews"
 
 const Content = () => {
   const { user } = useUser()
-  const { data: reviews = [], refetch: refetchUserReviews } = useGetReviewsByUserIdQuery(user?.id ?? "")
-
-  console.log("User Reviews:", reviews)
+  const { data: bossReviews = [], refetch: refetchBossReviews } = useGetReviewsByUserIdQuery(user?.id ?? "")
+  const { data: companyReviews = [], refetch: refetchCompanyReviews } = useGetCompanyReviewsByUserIdQuery(user?.id ?? "")
 
   return (
     <Tabs defaultValue="account" className="w-full">
-      <TabsList className="w-full grid grid-cols-2 mb-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm p-1 rounded-lg">
+      <TabsList className="w-full grid grid-cols-3 mb-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm p-1 rounded-lg">
         <TabsTrigger
           value="account"
           className="gap-2 data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary/50 data-[state=active]:to-purple-400/50 dark:data-[state=active]:from-primary dark:data-[state=active]:to-blue-300/50 data-[state=active]:text-white"
@@ -24,14 +24,24 @@ const Content = () => {
           Account
         </TabsTrigger>
         <TabsTrigger
-          value="reviews"
+          value="boss-reviews"
           onClick={() => {
-            refetchUserReviews()
+            refetchBossReviews()
           }}
           className="gap-2 data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary/50 data-[state=active]:to-purple-400/50 dark:data-[state=active]:from-primary dark:data-[state=active]:to-blue-300/50 data-[state=active]:text-white"
         >
-          <Star className="h-4 w-4" />
-          Reviews
+          <UserCheck className="h-4 w-4" />
+          Boss Reviews
+        </TabsTrigger>
+        <TabsTrigger
+          value="company-reviews"
+          onClick={() => {
+            refetchCompanyReviews()
+          }}
+          className="gap-2 data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary/50 data-[state=active]:to-purple-400/50 dark:data-[state=active]:from-primary dark:data-[state=active]:to-blue-300/50 data-[state=active]:text-white"
+        >
+          <Building2 className="h-4 w-4" />
+          Company Reviews
         </TabsTrigger>
       </TabsList>
 
@@ -87,23 +97,51 @@ const Content = () => {
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" size="sm" className="gap-2 border-primary/20 hover:bg-primary/10 text-primary">
-              <Pencil className="h-3.5 w-3.5" />
-              Update Information
-            </Button>
-            <Button
-              size="sm"
-              className="bg-gradient-to-br from-primary/50 to-purple-400/50 dark:from-primary/50 dark:to-blue-300/50 hover:opacity-90"
-            >
-              Save Changes
-            </Button>
-          </CardFooter>
         </Card>
       </TabsContent>
 
-      <TabsContent value="reviews" className="space-y-6">
-        <Reviews />
+      <TabsContent value="boss-reviews" className="space-y-6">
+        <Card className="shadow-xl border-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <UserCheck className="h-5 w-5 text-primary" />
+                  Boss Reviews
+                </CardTitle>
+                <CardDescription>Reviews you've written about your bosses and managers.</CardDescription>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {bossReviews.length} review{bossReviews.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Reviews reviews={bossReviews} />
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="company-reviews" className="space-y-6">
+        <Card className="shadow-xl border-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-primary" />
+                  Company Reviews
+                </CardTitle>
+                <CardDescription>Reviews you've written about companies you've worked for.</CardDescription>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {companyReviews.length} review{companyReviews.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <CompanyReviews reviews={companyReviews} />
+          </CardContent>
+        </Card>
       </TabsContent>
     </Tabs>
   )

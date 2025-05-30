@@ -4,12 +4,18 @@ import { Badge } from '../ui/badge'
 import { CalendarDays, Mail, Pencil } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useUser } from '@clerk/nextjs'
-import { useGetReviewsByUserIdQuery } from '@/app/state/api'
+import { useGetReviewsByUserIdQuery, useGetCompanyReviewsByUserIdQuery } from '@/app/state/api'
 
 
 const SideCard = () => {
    const { user } = useUser()
-   const { data: reviews } = useGetReviewsByUserIdQuery(user?.id ?? "")
+   const { data: reviews = [] } = useGetReviewsByUserIdQuery(user?.id ?? "", {
+      refetchOnMountOrArgChange: true,
+   })
+   const { data: companyReviews = [] } = useGetCompanyReviewsByUserIdQuery(user?.id ?? "", {
+      refetchOnMountOrArgChange: true,
+   })
+   
    
    const createdDate = user?.createdAt ? new Date(user.createdAt).toLocaleDateString("en-US", {
       year: "numeric",
@@ -50,7 +56,7 @@ const SideCard = () => {
             </div>
             <div className="mt-6 flex flex-wrap gap-2 items-center justify-center">
                <Badge variant="outline" className="text-xs border-primary/20">
-                  {reviews?.length} Reviews
+                  {reviews?.length + companyReviews?.length} Reviews
                </Badge>
             </div>
          </CardContent>
