@@ -8,6 +8,7 @@ import { ManagerSearchStep } from "./Search/ManagerSearch"
 import { useLocation } from "@/utils/locations-utils"
 import type { Company, SearchStep } from "@/utils/search-types"
 import { useLazyGetSearchComponentMapboxDataQuery } from "@/app/state/api"
+import Link from "next/link"
 
 const SearchComponent = () => {
   const [searchStep, setSearchStep] = useState<SearchStep>("company")
@@ -99,7 +100,14 @@ const SearchComponent = () => {
               : "Step 2: Find your boss"}
         </span>
         {searchStep === "manager" && selectedCompany && (
-          <span className="ml-2 text-sm text-primary font-medium">at {selectedCompany.name}</span>
+          <span className="ml-2 text-sm text-primary font-medium">at 
+            <Link
+              href={`/company/${selectedCompany.mapboxId}`}
+              className="ml-1 underline transition-transform duration-200 hover:scale-150 hover:text"
+            >
+              {selectedCompany.name}
+            </Link>
+          </span>
         )}
       </div>
 

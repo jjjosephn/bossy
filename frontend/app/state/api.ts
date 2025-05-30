@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { get } from 'http';
 
 export interface Company {
    companyId: string;
@@ -102,6 +103,24 @@ export interface CompanyReview {
    Company: Company;
 }
 
+export interface PendingCompanyReview {
+   pendingId: string;
+   reviewId: string;
+   Review: CompanyReview;
+}
+
+export interface ArchivedCompanyReview {
+   archiveId: string;
+   companyId: string;
+   userId?: string;
+   reviewText: string;
+   status: string;
+   requestedDate: string;
+   timestamp: string;
+   User: User;
+   Company: Company;
+}
+
 export const api = createApi({
    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
    reducerPath: 'api',
@@ -178,6 +197,26 @@ export const api = createApi({
       }),
       getArchivedBossReviews: build.query<ArchivedBossReview[], void>({
          query: () => '/admin/archived-boss-reviews',
+      }),
+      getPendingCompanyReviews: build.query<PendingCompanyReview[], void>({
+         query: () => '/admin/pending-company-reviews',
+      }),
+      acceptPendingCompanyReview: build.mutation<any, { reviewId: string; pendingId: string; }>({
+         query: (body) => ({
+            url: '/admin/accept-pending-company-review',
+            method: 'POST',
+            body,
+         })
+      }),
+      declinePendingCompanyReview: build.mutation<any, { reviewId: string; pendingId: string; }>({
+         query: (body) => ({
+            url: '/admin/decline-pending-company-review',
+            method: 'POST',
+            body,
+         })
+      }),
+      getArchivedCompanyReviews: build.query<ArchivedCompanyReview[], void>({
+         query: () => '/admin/archived-company-reviews',
       }),
 
       //Boss Page
@@ -262,4 +301,8 @@ export const {
    useLazyGetMapboxUtilsDataQuery,
    useNewCompanyReviewMutation,
    useGetCompanyReviewsQuery,
+   useGetPendingCompanyReviewsQuery,
+   useAcceptPendingCompanyReviewMutation,
+   useDeclinePendingCompanyReviewMutation,
+   useGetArchivedCompanyReviewsQuery,
 } = api;

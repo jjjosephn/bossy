@@ -11,4 +11,8 @@ router.get('/pending-boss-reviews', adminController_1.getAllPendingBossReviews);
 router.post('/accept-pending-boss-review', adminController_1.acceptPendingBossReview);
 router.post('/decline-pending-boss-review', adminController_1.declinePendingBossReview);
 router.get('/archived-boss-reviews', adminController_1.getArchivedBossReviews);
+router.get('/pending-company-reviews', adminController_1.getPendingCompanyReviews);
+router.post('/accept-pending-company-review', adminController_1.acceptPendingCompanyReview);
+router.post('/decline-pending-company-review', adminController_1.declinePendingCompanyReview);
+router.get('/archived-company-reviews', adminController_1.getArchivedCompanyReviews);
 exports.default = router;

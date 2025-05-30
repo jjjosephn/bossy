@@ -265,3 +265,124 @@ export const getArchivedBossReviews = async (
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const getPendingCompanyReviews = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const pendingReviews = await prisma.pendingCompanyReviews.findMany({
+      include: {
+        Review: {
+          include: {
+            User: true,
+            Company: true,
+          },
+        },
+      },
+    });
+    res.status(200).json(pendingReviews);
+  } catch (error) {
+    console.error("Error fetching pending company reviews:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const acceptPendingCompanyReview = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { pendingId, reviewId } = req.body;
+
+  try {
+    const review = await prisma.companyReview.findUnique({
+      where: {
+        reviewId,
+      },
+    });
+
+    const deleted = await prisma.pendingCompanyReviews.delete({
+      where: {
+        pendingId,
+      },
+    });
+
+    const acceptedReview = await prisma.archivedCompanyReviews.create({
+      data: {
+        companyId: review?.companyId || "",
+        userId: review?.userId ? review.userId : undefined,
+        reviewText: review?.reviewText || "",
+        status: "accepted",
+        requestedDate: review?.timestamp ? review.timestamp.toISOString() : ""
+      }
+    });
+    res.status(200).json({
+      message: "Review accepted",
+      review,
+      deleted,
+      acceptedReview
+    });
+  } catch (error) {
+    console.error("Error accepting company review:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const declinePendingCompanyReview = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { pendingId, reviewId } = req.body;
+
+  try {
+    const deleted = await prisma.pendingCompanyReviews.delete({
+      where: {
+        pendingId,
+      },
+    });
+
+    const deletedReview = await prisma.companyReview.delete({
+      where: {
+        reviewId,
+      },
+    });
+
+    const archivedReview = await prisma.archivedCompanyReviews.create({
+      data: {
+        companyId: deletedReview.companyId,
+        userId: deletedReview.userId,
+        reviewText: deletedReview.reviewText,
+        status: "declined",
+        requestedDate: deletedReview.timestamp.toISOString()
+      }
+    });
+
+    res.status(200).json({
+      message: "Review declined",
+      deleted,
+      deletedReview,
+      archivedReview
+    });
+  } catch (error) {
+    console.error("Error declining company review:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const getArchivedCompanyReviews = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const reviews = await prisma.archivedCompanyReviews.findMany({
+      include: {
+        User: true,
+        Company: true,
+      },
+    });
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error fetching archived company reviews:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

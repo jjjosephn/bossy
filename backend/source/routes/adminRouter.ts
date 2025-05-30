@@ -1,5 +1,18 @@
 import { Router } from 'express';
-import { acceptBossRequest, declineBossRequest, getArchivedForms, getPendingBosses, getAllPendingBossReviews, acceptPendingBossReview, declinePendingBossReview, getArchivedBossReviews } from '../controllers/adminController';
+import { 
+   acceptBossRequest, 
+   declineBossRequest, 
+   getArchivedForms, 
+   getPendingBosses, 
+   getAllPendingBossReviews, 
+   acceptPendingBossReview, 
+   declinePendingBossReview, 
+   getArchivedBossReviews, 
+   getPendingCompanyReviews, 
+   acceptPendingCompanyReview,
+   declinePendingCompanyReview,
+   getArchivedCompanyReviews
+} from '../controllers/adminController';
 
 const router = Router();
 
@@ -11,5 +24,9 @@ router.get('/pending-boss-reviews', getAllPendingBossReviews)
 router.post('/accept-pending-boss-review', acceptPendingBossReview)
 router.post('/decline-pending-boss-review', declinePendingBossReview)
 router.get('/archived-boss-reviews', getArchivedBossReviews)
+router.get('/pending-company-reviews', getPendingCompanyReviews);
+router.post('/accept-pending-company-review', acceptPendingCompanyReview);
+router.post('/decline-pending-company-review', declinePendingCompanyReview);
+router.get('/archived-company-reviews', getArchivedCompanyReviews);
 
 export default router;
