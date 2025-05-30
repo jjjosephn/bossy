@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Star } from "lucide-react"
+import { Loader2, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -11,9 +11,10 @@ import { useParams } from "next/navigation"
 import { useGetCompanyByMapboxIdQuery } from "@/app/state/api"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useUser } from "@clerk/nextjs"
+import { useState } from "react"
 
 interface CompanyReviewFormProps {
-  onSubmit?: (data: any) => void
+  onSubmit?: (data: any) => Promise<void> | void
   onCancel?: () => void
 }
 
@@ -45,6 +46,7 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
   const { mapboxId } = useParams()
   const { data: company } = useGetCompanyByMapboxIdQuery(mapboxId as string)
   const { user } = useUser()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,11 +58,20 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
     },
   })
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSubmit?.({
-      ...values,
-      companyId: company?.companyId
-    })
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (isSubmitting) return 
+    
+    setIsSubmitting(true)
+    try {
+      await onSubmit?.({
+        ...values,
+        companyId: company?.companyId
+      })
+    } catch (error) {
+      console.error('Error submitting review:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -151,14 +162,22 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
             />
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
               Cancel
             </Button>
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 hover:opacity-90 transition-opacity font-medium"
             >
-              Submit Review
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                  Submitting...
+                </>
+              ) : ( 
+                "Submit Review"
+              )}
             </Button>
           </CardFooter>
         </form>
