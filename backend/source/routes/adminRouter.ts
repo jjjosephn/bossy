@@ -11,7 +11,8 @@ import {
    getPendingCompanyReviews, 
    acceptPendingCompanyReview,
    declinePendingCompanyReview,
-   getArchivedCompanyReviews
+   getArchivedCompanyReviews,
+   newFeedback
 } from '../controllers/adminController';
 
 const router = Router();
@@ -28,5 +29,6 @@ router.get('/pending-company-reviews', getPendingCompanyReviews);
 router.post('/accept-pending-company-review', acceptPendingCompanyReview);
 router.post('/decline-pending-company-review', declinePendingCompanyReview);
 router.get('/archived-company-reviews', getArchivedCompanyReviews);
+router.post('/new-feedback', newFeedback);
 
 export default router;

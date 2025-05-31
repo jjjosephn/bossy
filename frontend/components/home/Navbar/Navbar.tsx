@@ -18,7 +18,6 @@ import {
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import NavbarSearch from "./NavbarSearch"
-import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()

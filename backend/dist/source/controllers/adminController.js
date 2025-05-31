@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getArchivedCompanyReviews = exports.declinePendingCompanyReview = exports.acceptPendingCompanyReview = exports.getPendingCompanyReviews = exports.getArchivedBossReviews = exports.declinePendingBossReview = exports.acceptPendingBossReview = exports.getAllPendingBossReviews = exports.getArchivedForms = exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = void 0;
+exports.newFeedback = exports.getArchivedCompanyReviews = exports.declinePendingCompanyReview = exports.acceptPendingCompanyReview = exports.getPendingCompanyReviews = exports.getArchivedBossReviews = exports.declinePendingBossReview = exports.acceptPendingBossReview = exports.getAllPendingBossReviews = exports.getArchivedForms = exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getPendingBosses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -335,3 +335,23 @@ const getArchivedCompanyReviews = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.getArchivedCompanyReviews = getArchivedCompanyReviews;
+const newFeedback = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { feedbackType, description, email, rating, contactBack } = req.body;
+    try {
+        const feedback = yield prisma.feedback.create({
+            data: {
+                feedbackType,
+                description,
+                email,
+                rating,
+                contactBack,
+            },
+        });
+        res.status(200).json({ message: "Feedback submitted", feedback });
+    }
+    catch (error) {
+        console.error("Error submitting feedback:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.newFeedback = newFeedback;

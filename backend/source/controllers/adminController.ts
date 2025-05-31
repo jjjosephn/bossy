@@ -386,3 +386,26 @@ export const getArchivedCompanyReviews = async (
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const newFeedback = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { feedbackType, description, email, rating, contactBack } = req.body;
+  try {
+    const feedback = await prisma.feedback.create({
+      data: {
+        feedbackType,
+        description,
+        email,
+        rating,
+        contactBack,
+      },
+    });
+    res.status(200).json({ message: "Feedback submitted", feedback });
+  }
+  catch (error) {
+    console.error("Error submitting feedback:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

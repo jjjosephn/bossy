@@ -121,6 +121,14 @@ export interface ArchivedCompanyReview {
    Company: Company;
 }
 
+export interface NewFeedback {
+   feedbackType: string;
+   description: string;
+   email: string;
+   rating?: number;
+   contactBack: boolean;
+}
+
 export const api = createApi({
    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
    reducerPath: 'api',
@@ -218,6 +226,13 @@ export const api = createApi({
       getArchivedCompanyReviews: build.query<ArchivedCompanyReview[], void>({
          query: () => '/admin/archived-company-reviews',
       }),
+      newFeedback: build.mutation<any, NewFeedback>({
+         query: (body) => ({
+            url: '/admin/new-feedback',
+            method: 'POST',
+            body,
+         })
+      }),
 
       //Boss Page
       getBossInfo: build.query<Boss, string>({
@@ -309,4 +324,5 @@ export const {
    useDeclinePendingCompanyReviewMutation,
    useGetArchivedCompanyReviewsQuery,
    useGetCompanyReviewsByUserIdQuery,
+   useNewFeedbackMutation,
 } = api;

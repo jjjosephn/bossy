@@ -151,3 +151,13 @@ model ArchivedBossReviews {
   User User? @relation(fields: [userId], references: [userId])
   Boss Boss  @relation(fields: [bossId], references: [bossId])
 }
+
+model Feedback {
+  feedbackId   String   @id @default(uuid())
+  feedbackType String
+  description  String
+  email        String
+  rating       Int?
+  contactBack  Boolean
+  timestamp    DateTime @default(now())
+}

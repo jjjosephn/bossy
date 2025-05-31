@@ -129,6 +129,19 @@ CREATE TABLE "ArchivedBossReviews" (
     CONSTRAINT "ArchivedBossReviews_pkey" PRIMARY KEY ("archiveId")
 );
 
+-- CreateTable
+CREATE TABLE "Feedback" (
+    "feedbackId" TEXT NOT NULL,
+    "feedbackType" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "rating" INTEGER,
+    "contactBack" BOOLEAN NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Feedback_pkey" PRIMARY KEY ("feedbackId")
+);
+
 -- AddForeignKey
 ALTER TABLE "CompanyReview" ADD CONSTRAINT "CompanyReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
 
