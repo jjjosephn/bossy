@@ -68,9 +68,6 @@ const Content = () => {
                 <p className="text-sm">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-primary/10 text-primary">
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
               </div>
             </div>
             <div className="space-y-2">
@@ -80,9 +77,6 @@ const Content = () => {
               </h3>
               <div className="flex justify-between items-center p-3 rounded-lg bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5">
                 <p className="text-sm">{user?.primaryEmailAddress?.emailAddress}</p>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-primary/10 text-primary">
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
               </div>
             </div>
             <div className="space-y-2">
@@ -111,9 +105,10 @@ const Content = () => {
                 </CardTitle>
                 <CardDescription>Reviews you've written about your bosses and managers.</CardDescription>
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="mt-2 inline-block rounded-full bg-muted px-4 py-1 text-sm text-muted-foreground shadow-sm">
                 {bossReviews.length} review{bossReviews.length !== 1 ? 's' : ''}
               </div>
+
             </div>
           </CardHeader>
           <CardContent>
@@ -133,7 +128,7 @@ const Content = () => {
                 </CardTitle>
                 <CardDescription>Reviews you've written about companies you've worked for.</CardDescription>
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="mt-2 inline-block rounded-full bg-muted px-4 py-1 text-sm text-muted-foreground shadow-sm">
                 {companyReviews.length} review{companyReviews.length !== 1 ? 's' : ''}
               </div>
             </div>
