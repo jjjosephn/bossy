@@ -233,6 +233,15 @@ export const api = createApi({
             body,
          })
       }),
+      getFeedbacks: build.query<any, void>({
+         query: () => '/admin/feedbacks',
+      }),
+      acknowledgeFeedback: build.mutation<any, string>({
+         query: (feedbackId) => ({
+            url: `/admin/acknowledge-feedback/${feedbackId}`,
+            method: 'DELETE',
+         })
+      }),
 
       //Boss Page
       getBossInfo: build.query<Boss, string>({
@@ -325,4 +334,6 @@ export const {
    useGetArchivedCompanyReviewsQuery,
    useGetCompanyReviewsByUserIdQuery,
    useNewFeedbackMutation,
+   useGetFeedbacksQuery,
+   useAcknowledgeFeedbackMutation
 } = api;

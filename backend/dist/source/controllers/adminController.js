@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newFeedback = exports.getArchivedCompanyReviews = exports.declinePendingCompanyReview = exports.acceptPendingCompanyReview = exports.getPendingCompanyReviews = exports.getArchivedBossReviews = exports.declinePendingBossReview = exports.acceptPendingBossReview = exports.getAllPendingBossReviews = exports.getArchivedForms = exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = void 0;
+exports.acknowledgeFeedback = exports.getFeedbacks = exports.newFeedback = exports.getArchivedCompanyReviews = exports.declinePendingCompanyReview = exports.acceptPendingCompanyReview = exports.getPendingCompanyReviews = exports.getArchivedBossReviews = exports.declinePendingBossReview = exports.acceptPendingBossReview = exports.getAllPendingBossReviews = exports.getArchivedForms = exports.declineBossRequest = exports.acceptBossRequest = exports.getPendingBosses = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getPendingBosses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -355,3 +355,30 @@ const newFeedback = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.newFeedback = newFeedback;
+const getFeedbacks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const feedbacks = yield prisma.feedback.findMany();
+        res.status(200).json(feedbacks);
+    }
+    catch (error) {
+        console.error("Error fetching feedbacks:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getFeedbacks = getFeedbacks;
+const acknowledgeFeedback = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { feedbackId } = req.params;
+    try {
+        const feedback = yield prisma.feedback.delete({
+            where: {
+                feedbackId: feedbackId
+            },
+        });
+        res.status(200).json({ message: "Feedback acknowledged", feedback });
+    }
+    catch (error) {
+        console.error("Error acknowledging feedback:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.acknowledgeFeedback = acknowledgeFeedback;

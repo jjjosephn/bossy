@@ -16,4 +16,6 @@ router.post('/accept-pending-company-review', adminController_1.acceptPendingCom
 router.post('/decline-pending-company-review', adminController_1.declinePendingCompanyReview);
 router.get('/archived-company-reviews', adminController_1.getArchivedCompanyReviews);
 router.post('/new-feedback', adminController_1.newFeedback);
+router.get('/feedbacks', adminController_1.getFeedbacks);
+router.delete('/acknowledge-feedback/:feedbackId', adminController_1.acknowledgeFeedback);
 exports.default = router;

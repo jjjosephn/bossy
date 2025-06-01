@@ -12,7 +12,9 @@ import {
    acceptPendingCompanyReview,
    declinePendingCompanyReview,
    getArchivedCompanyReviews,
-   newFeedback
+   newFeedback,
+   getFeedbacks,
+   acknowledgeFeedback
 } from '../controllers/adminController';
 
 const router = Router();
@@ -30,5 +32,7 @@ router.post('/accept-pending-company-review', acceptPendingCompanyReview);
 router.post('/decline-pending-company-review', declinePendingCompanyReview);
 router.get('/archived-company-reviews', getArchivedCompanyReviews);
 router.post('/new-feedback', newFeedback);
+router.get('/feedbacks', getFeedbacks)
+router.delete('/acknowledge-feedback/:feedbackId', acknowledgeFeedback)
 
 export default router;

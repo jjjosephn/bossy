@@ -2,11 +2,16 @@
 
 import { useState } from "react"
 import { useUser } from "@clerk/nextjs"
-import { ShieldAlert, MessageSquare } from "lucide-react"
+import { ShieldAlert, MessageSquare, Filter, Search, Mail, Calendar, ThumbsUp, ThumbsDown, Phone, Star as StarIcon, Eye } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Clock, CheckCircle2, Star } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import PendingTabs from "@/components/admin/PendingTab"
 import HistoryTabs from "@/components/admin/HistoryTab"
 import ReviewPendingTab from "@/components/admin/BossReviewPendingTab"
@@ -21,6 +26,7 @@ import {
    useGetPendingCompanyReviewsQuery 
 } from "../state/api"
 import CompanyReviewHistoryTab from "@/components/admin/CompanyReviewHistoryTab"
+import UserFeedback from "@/components/admin/UserFeedback"
 
 const AdminPanel = () => {
    const { user } = useUser()
@@ -47,6 +53,9 @@ const AdminPanel = () => {
    const [activeTab, setActiveTab] = useState("pending")
    const [activeReviewTab, setActiveReviewTab] = useState("pending")
 
+   // Mock feedback data - replace with actual API call
+   const mockFeedbacks = []
+
    return (
       <div className="container mx-auto p-6 max-w-6xl">
          <div className="flex items-center gap-2 mb-6">
@@ -60,7 +69,7 @@ const AdminPanel = () => {
                setMainTab(value)
             }}
          >
-            <TabsList className="grid w-full grid-cols-2 mb-8 bg-gray-500 text-black">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
                <TabsTrigger value="submissions" className="flex items-center gap-2">
                   <ShieldAlert className="h-4 w-4" />
                   Review Submissions
@@ -199,14 +208,7 @@ const AdminPanel = () => {
                   <h2 className="text-xl font-semibold">User Feedbacks</h2>
                </div>
                
-               <div className="bg-card rounded-lg border p-6">
-                  <div className="text-center text-muted-foreground">
-                     <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                     <h3 className="text-lg font-medium mb-2">Feedback Management</h3>
-                     <p>This section will display all user feedback submissions.</p>
-                     <p className="text-sm mt-2">You can add your feedback components here.</p>
-                  </div>
-               </div>
+               <UserFeedback />
             </TabsContent>
          </Tabs>
 

@@ -409,3 +409,35 @@ export const newFeedback = async (
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export const getFeedbacks = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const feedbacks = await prisma.feedback.findMany()
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    console.error("Error fetching feedbacks:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const acknowledgeFeedback = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { feedbackId } = req.params;
+
+  try {
+    const feedback = await prisma.feedback.delete({
+      where: {
+        feedbackId: feedbackId
+      },
+    });
+    res.status(200).json({ message: "Feedback acknowledged", feedback });
+  } catch (error) {
+    console.error("Error acknowledging feedback:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
