@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { ChevronDown, ChevronRight, Shield, Users, MessageSquare, AlertTriangle, Mail, CheckCircle } from 'lucide-react'
+import Link from 'next/link'
 
 type GuidelineCardProps = {
    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>,
@@ -143,7 +144,7 @@ export default function Guidelines() {
                 <strong>Moderators do not arbitrate facts.</strong> They cannot verify or dispute details in reviews.
               </GuidelineItem>
               <GuidelineItem>
-                <strong>If you suspect spam or unfair targeting,</strong> contact us at <a href="mailto:support@bossy.com" className="text-blue-600 hover:text-blue-800 underline font-medium">support@bossy.com</a>. We will review the situation.
+                <strong>If you suspect spam or unfair targeting,</strong> please send us a <Link href='/feedback' className="text-blue-600 hover:text-blue-800 underline font-medium">feedback</Link>. We will review the situation.
               </GuidelineItem>
               <GuidelineItem>
                 <strong>Higher-ups should not rate themselves.</strong> We encourage managers and leads to foster an open culture and invite genuine feedback from their teams.
@@ -189,7 +190,7 @@ export default function Guidelines() {
           </GuidelineCard>
         </div>
 
-        <div className="mt-8 bg-white rounded-xl shadow-xl border border-gray-200 p-8 text-center">
+        {/* <div className="mt-8 bg-white rounded-xl shadow-xl border border-gray-200 p-8 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gray-100 rounded-full">
               <Mail className="w-8 h-8 text-gray-700" />
@@ -206,7 +207,7 @@ export default function Guidelines() {
             <Mail className="w-5 h-5" />
             <span>support@bossy.com</span>
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   )

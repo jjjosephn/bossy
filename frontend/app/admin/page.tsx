@@ -69,7 +69,7 @@ const AdminPanel = () => {
                setMainTab(value)
             }}
          >
-            <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsList className="grid w-full grid-cols-2 mb-8 bg-gray-400 text-black">
                <TabsTrigger value="submissions" className="flex items-center gap-2">
                   <ShieldAlert className="h-4 w-4" />
                   Review Submissions

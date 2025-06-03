@@ -120,7 +120,7 @@ export function ManagerSearchStep({
   }
 
   const handleSubmitSuccess = () => {
-    toast.success("Boss request sent! Please check your email for updates.")
+    toast.success("Boss request sent! Please check back later.")
     refetch()
   }
 

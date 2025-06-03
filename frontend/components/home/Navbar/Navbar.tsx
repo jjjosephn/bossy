@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "../../ui/button"
 import Link from "next/link"
-import { LogOut, Star, User, ShieldAlert } from "lucide-react"
+import { LogOut, User, ShieldAlert } from "lucide-react"
 import { SignInButton, SignUpButton, useClerk, useUser } from "@clerk/nextjs"
 import {
   DropdownMenu,
@@ -18,6 +18,7 @@ import {
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import NavbarSearch from "./NavbarSearch"
+import Image from "next/image"
 
 const Navbar = () => {
    const { isSignedIn, user } = useUser()
@@ -47,12 +48,18 @@ const Navbar = () => {
          <div className={`${isHomePage ? "pl-32" : ""}`} />
          <div className={`flex-1 flex ${!isHomePage ? "justify-start gap-4 items-center" : "justify-center"}`}>
             <Link className="flex items-center group" href="/">
-               <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-purple-600 dark:from-primary dark:to-blue-400 flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
-                  <Star className="h-6 w-6 text-white" />
+               <div className="flex transform transition-transform group-hover:scale-105">
+                  <Image
+                     src="/bossylogo.png"
+                     alt="Bossy logo"
+                     width={44}
+                     height={44}
+                     className="h-10 w-10"
+                  />
+                  <span className="ml-2 text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent animate-gradientShift relative group-hover:after:w-full after:absolute after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-purple-600 dark:after:from-primary dark:after:to-blue-400 after:bottom-0 after:left-0 after:w-0 after:transition-all">
+                     Bossy
+                  </span>
                </div>
-               <span className="ml-2 text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-blue-400 bg-clip-text text-transparent animate-gradientShift relative group-hover:after:w-full after:absolute after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-purple-600 dark:after:from-primary dark:after:to-blue-400 after:bottom-0 after:left-0 after:w-0 after:transition-all">
-                  Bossy
-               </span>
             </Link>
 
             {!isHomePage && (

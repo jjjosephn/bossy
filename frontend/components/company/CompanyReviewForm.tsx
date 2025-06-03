@@ -2,16 +2,17 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Loader2, Star } from "lucide-react"
+import { Loader2, Star, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { useParams } from "next/navigation"
 import { useGetCompanyByMapboxIdQuery } from "@/app/state/api"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface CompanyReviewFormProps {
   onSubmit?: (data: any) => Promise<void> | void
@@ -29,10 +30,11 @@ const formSchema = z.object({
     })
     .max(5),
   userId: z.string().optional(),
-  term: z.string({
-    required_error: "Please select how long you worked with this boss.",
-  })
-  .min(1, { message: "Please select how long you worked with this boss." }),
+  term: z
+    .string({
+      required_error: "Please select how long you worked with this boss.",
+    })
+    .min(1, { message: "Please select how long you worked with this boss." }),
 })
 
 const termOptions = [
@@ -59,16 +61,16 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
   })
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (isSubmitting) return 
-    
+    if (isSubmitting) return
+
     setIsSubmitting(true)
     try {
       await onSubmit?.({
         ...values,
-        companyId: company?.companyId
+        companyId: company?.companyId,
       })
     } catch (error) {
-      console.error('Error submitting review:', error)
+      console.error("Error submitting review:", error)
     } finally {
       setIsSubmitting(false)
     }
@@ -83,9 +85,7 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
 
       {company && (
         <CardContent className="">
-          <div className="font-medium text-lg">
-            {company?.companyName}
-          </div>
+          <div className="font-medium text-lg">{company?.companyName}</div>
           <div className="text-xs text-muted-foreground mt-1">{company.fullAddress}</div>
         </CardContent>
       )}
@@ -147,19 +147,38 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
               name="reviewText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Review</FormLabel>
+                  <FormLabel className="text-base font-medium">Your Review</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder={`Share your experience working at ${company?.companyName}...`}
-                      className="min-h-[120px]"
+                      className="min-h-[120px] resize-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Be honest but professional in your feedback</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950 mb-4">
+              <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              <AlertDescription className="text-amber-800 dark:text-amber-200">
+                <div className="space-y-2">
+                  <p className="font-medium">Review Guidelines</p>
+                  <ul className="list-disc list-inside space-y-1 text-sm">
+                    <li>Reviews that don't follow guidelines will be removed</li>
+                    <li>Be honest, but professional in your review</li>
+                    <li>Make sure to proofread</li>
+                  </ul>
+                  <a
+                    href="/guidelines"
+                    target="_blank"
+                    className="text-sm text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100 hover:underline inline-block font-medium"
+                  >
+                    View All Guidelines →
+                  </a>
+                </div>
+              </AlertDescription>
+            </Alert>
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
@@ -175,7 +194,7 @@ export default function CompanyReviewForm({ onSubmit, onCancel }: CompanyReviewF
                   <Loader2 className="animate-spin h-4 w-4 mr-2" />
                   Submitting...
                 </>
-              ) : ( 
+              ) : (
                 "Submit Review"
               )}
             </Button>
