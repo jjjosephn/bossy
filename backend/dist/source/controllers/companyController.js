@@ -43,7 +43,6 @@ const checkCompanyExists = (req, res) => __awaiter(void 0, void 0, void 0, funct
 exports.checkCompanyExists = checkCompanyExists;
 const getCompanyByMapboxId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { mapboxId } = req.params;
-    console.log("Fetching company with Mapbox ID:", mapboxId);
     try {
         const company = yield prisma.company.findFirst({
             where: {
@@ -51,7 +50,6 @@ const getCompanyByMapboxId = (req, res) => __awaiter(void 0, void 0, void 0, fun
             }
         });
         res.status(200).json(company);
-        console.log("Company fetched successfully:", company);
         return;
     }
     catch (error) {

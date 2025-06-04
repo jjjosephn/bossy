@@ -28,7 +28,6 @@ export default function UserFeedback () {
    })
    const [acknowledgeFeedback] = useAcknowledgeFeedbackMutation()
 
-   console.log("Feedbacks:", feedbacks)
    const filteredFeedbacks = feedbacks.filter((feedback: Feedback) => {
       const matchesSearch = feedback.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            feedback.email.toLowerCase().includes(searchTerm.toLowerCase()) ||

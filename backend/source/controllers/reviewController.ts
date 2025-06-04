@@ -26,11 +26,7 @@ export const newBossReview = async (
                reviewId: review.reviewId
             }
          })
-         if (pendingReview) {
-            console.log("Pending review created:", pendingReview);
-         } else {
-            console.error("Failed to create pending review");
-         }
+         res.status(200).json({message: "Pending review created", pendingReview});
       }
    } catch (error) {
       console.error("Error creating review:", error);
@@ -79,11 +75,7 @@ export const newCompanyReview = async (
                reviewId: review.reviewId
             }
          })
-         if (pendingReview) {
-            console.log("Pending review created:", pendingReview);
-         } else {
-            console.error("Failed to create pending review");
-         }
+         res.status(200).json({message: "Pending review created", pendingReview});
       }
    } catch (error) {
       console.error("Error creating review:", error);

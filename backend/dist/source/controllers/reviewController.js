@@ -31,12 +31,7 @@ const newBossReview = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     reviewId: review.reviewId
                 }
             });
-            if (pendingReview) {
-                console.log("Pending review created:", pendingReview);
-            }
-            else {
-                console.error("Failed to create pending review");
-            }
+            res.status(200).json({ message: "Pending review created", pendingReview });
         }
     }
     catch (error) {
@@ -80,12 +75,7 @@ const newCompanyReview = (req, res) => __awaiter(void 0, void 0, void 0, functio
                     reviewId: review.reviewId
                 }
             });
-            if (pendingReview) {
-                console.log("Pending review created:", pendingReview);
-            }
-            else {
-                console.error("Failed to create pending review");
-            }
+            res.status(200).json({ message: "Pending review created", pendingReview });
         }
     }
     catch (error) {

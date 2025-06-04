@@ -52,7 +52,6 @@ const SearchComponent = () => {
         locationString,
       }).unwrap();
 
-      console.log("Mapbox data:", result);
       setSearchQuery(companyName);
       setSearchStep("company");
     } catch (error) {

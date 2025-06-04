@@ -59,11 +59,11 @@ export function useMapboxSearch({
   }, [query, proximity, customLocation, searchType, enabled, limit]);
 
   useEffect(() => {
-    if (data?.suggestions) {
-      setResults(data.suggestions);
-      setOpen(true);
-    }
-  }, [data]);
+  if (data?.suggestions) {
+    setResults(data.suggestions as MapboxSuggestion[]);
+    setOpen(true);
+  }
+}, [data]);
 
   return {
     results,

@@ -64,7 +64,6 @@ export function CustomSearchStep({
         throw new Error("Invalid location data received")
       }
 
-      console.log("Mapbox data:", data)
       const feature = data.features[0]
 
       if (feature.properties?.coordinates) {

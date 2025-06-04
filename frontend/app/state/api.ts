@@ -222,6 +222,7 @@ type MapboxSuggestion = {
   metadata?: Record<string, string>;
   language?: string;
   mapbox_id: string;
+  feature_type?: string;
 };
 
 type MapboxSuggestResponse = {

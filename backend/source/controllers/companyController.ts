@@ -43,7 +43,6 @@ export const getCompanyByMapboxId = async (
 ): Promise<void> => {
    const { mapboxId } = req.params;
 
-   console.log("Fetching company with Mapbox ID:", mapboxId);
    try {
       const company = await prisma.company.findFirst({
          where: {
@@ -52,7 +51,6 @@ export const getCompanyByMapboxId = async (
       })
 
       res.status(200).json(company);
-      console.log("Company fetched successfully:", company);
       return 
    } catch (error) {
       console.error("Error fetching company by Mapbox ID:", error);
