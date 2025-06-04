@@ -18,7 +18,6 @@ const CompanyProfile = ({
   averageRating = 0, 
   reviewCount = 0 
 }: CompanyProfileProps) => {
-  const addedYear = new Date(company.timestamp).getFullYear();
   
   return (
     <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/5 dark:to-blue-400/5 rounded-xl shadow-lg p-8 mb-8 border border-primary/10">

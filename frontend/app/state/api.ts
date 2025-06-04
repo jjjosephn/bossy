@@ -219,7 +219,7 @@ type MapboxSuggestion = {
   features: string[];
   place_type: string[];
   external_ids?: Record<string, string>;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string>;
   language?: string;
   mapbox_id: string;
 };
