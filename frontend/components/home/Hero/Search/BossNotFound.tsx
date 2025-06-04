@@ -150,7 +150,7 @@ export function BossNotFoundForm({ company, onClose, isSubmitting = false, onSub
           <form onSubmit={handleSubmit} className="p-4 space-y-4">
             <div className="mb-4">
               <p className="text-sm text-muted-foreground mb-2">
-                Can't find your boss at <span className="font-medium text-foreground">{company.name}</span>? Add
+                Can&apos;t find your boss at <span className="font-medium text-foreground">{company.name}</span>? Add
                 their details below.
               </p>
             </div>

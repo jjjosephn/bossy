@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { MessageSquare, Send, CheckCircle, Bug, Lightbulb, Settings, Star } from 'lucide-react'
 import { useClerk, useUser } from '@clerk/nextjs'
 import { useNewFeedbackMutation } from '../state/api'
@@ -65,7 +65,7 @@ export default function WebsiteFeedbackPage() {
       </div>
    )
 
-   const handleInputChange = (field: string, value: any) => {
+   const handleInputChange = (field: string, value: string | number | boolean | null) => {
       setFormData(prev => ({
          ...prev,
          [field]: value
@@ -128,7 +128,7 @@ export default function WebsiteFeedbackPage() {
                </p>
                {formData.contactBack && userEmail && (
                <p className="text-sm text-gray-500 mt-3">
-                  We'll get back to you at {userEmail} if we need more information.
+                  We&apos;ll get back to you at {userEmail} if we need more information.
                </p>
                )}
             </div>
@@ -244,7 +244,7 @@ export default function WebsiteFeedbackPage() {
                         className="rounded border-gray-300 text-gray-800 focus:ring-gray-500"
                      />
                      <label htmlFor="contactBack" className="text-sm text-gray-700">
-                        I'd like you to contact me about this feedback
+                        I&apos;d like you to contact me about this feedback
                      </label>
                   </div>
                </div>

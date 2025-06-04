@@ -31,7 +31,7 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 const ReviewPendingTab = () => {
   const [currentPage, setCurrentPage] = useState(1)
-  const [processingIds, setProcessingIds] = useState<string[]>([])
+  const [processingIds] = useState<string[]>([])
   const { data: pendingReviews = [], refetch } = useGetPendingBossReviewsQuery()
   const [acceptReview, {isLoading: isApproving}] = useAcceptPendingBossReviewMutation()
   const [declineReview, {isLoading: isDeclining}] = useDeclinePendingBossReviewMutation()

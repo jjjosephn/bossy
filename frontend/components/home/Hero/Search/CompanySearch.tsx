@@ -25,7 +25,6 @@ export function CompanySearchStep({
   onCantFindCompany,
   userLocation,
   customLocation,
-  locationLoading,
 }: CompanySearchStepProps) {
   const [dropdownForceOpen, setDropdownForceOpen] = useState(false)
   const [showCantFindOption, setShowCantFindOption] = useState(false)
@@ -168,7 +167,7 @@ export function CompanySearchStep({
                   className="p-3 text-center text-primary hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-t border-gray-100 dark:border-gray-700"
                   onClick={onCantFindCompany}
                 >
-                  <span className="font-medium">Can't find your company?</span>
+                  <span className="font-medium">Can&apos;t find your company?</span>
                 </div>
               )}
             </>

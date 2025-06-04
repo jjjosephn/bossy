@@ -11,16 +11,6 @@ import { formatDate, getTimeAgo } from "@/utils/date-utils"
 import { calculateAverageRating, calculateRatingDistribution, calculateRatingPercentages } from "@/utils/rating-utils"
 import { useGetBossInfoQuery, useGetBossReviewsQuery } from "@/app/state/api"
 
-type Review = {
-  reviewId: string
-  reviewText: string
-  rating: number
-  term: string
-  userId: string
-  bossId: string
-  timestamp: string
-}
-
 export default function BossReviewPage() {
   const { bossId } = useParams<{ bossId: string }>()
   const { data: boss } = useGetBossInfoQuery(bossId as string)

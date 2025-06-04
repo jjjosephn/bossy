@@ -2,16 +2,10 @@
 
 import { useState } from "react"
 import { useUser } from "@clerk/nextjs"
-import { ShieldAlert, MessageSquare, Filter, Search, Mail, Calendar, ThumbsUp, ThumbsDown, Phone, Star as StarIcon, Eye } from "lucide-react"
+import { ShieldAlert, MessageSquare, Clock, CheckCircle2, Star } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Clock, CheckCircle2, Star } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import PendingTabs from "@/components/admin/PendingTab"
 import HistoryTabs from "@/components/admin/HistoryTab"
 import ReviewPendingTab from "@/components/admin/BossReviewPendingTab"
@@ -52,9 +46,6 @@ const AdminPanel = () => {
    const [mainTab, setMainTab] = useState("submissions")
    const [activeTab, setActiveTab] = useState("pending")
    const [activeReviewTab, setActiveReviewTab] = useState("pending")
-
-   // Mock feedback data - replace with actual API call
-   const mockFeedbacks = []
 
    return (
       <div className="container mx-auto p-6 max-w-6xl">

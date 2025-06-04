@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { useState } from 'react'
-import { MessageSquare, Search, Mail, Calendar, ThumbsUp, ThumbsDown, Phone, Star, Eye, Filter, TrendingUp } from "lucide-react"
+import { MessageSquare, Search, Mail, Calendar, ThumbsUp, ThumbsDown, Phone, Star, Eye, Filter } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -87,17 +87,6 @@ export default function UserFeedback () {
          default: return type.charAt(0).toUpperCase() + type.slice(1)
       }
    }
-
-   const getStats = () => {
-      const feedbacksWithRatings = feedbacks.filter((f: Feedback) => f.rating)
-      const avgRating = feedbacksWithRatings.length > 0 
-         ? feedbacksWithRatings.reduce((sum: number, f: Feedback) => sum + (f.rating ?? 0), 0) / feedbacksWithRatings.length
-         : 0
-      const contactRequests = feedbacks.filter((f: Feedback) => f.contactBack).length
-      return { avgRating: avgRating.toFixed(1), contactRequests }
-   }
-
-   const stats = getStats()
 
    const handleAcknowledgedFeedback = async (feedbackId: string) => {
       try {

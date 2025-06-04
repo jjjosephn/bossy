@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { User, Star, Building, Briefcase, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
 
 type Review = {
@@ -46,7 +45,7 @@ const Reviews = ({reviews}: ReviewsProps) => {
             <div className="flex items-center justify-between">
                <div>
                   <CardTitle className="text-lg">Your Reviews</CardTitle>
-                  <CardDescription className="text-xs">View the reviews you've left</CardDescription>
+                  <CardDescription className="text-xs">View the reviews you&apos;ve left</CardDescription>
                </div>
                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary/20 to-purple-600/20 dark:from-primary/20 dark:to-blue-400/20 flex items-center justify-center">
                   <Star className="h-4 w-4 text-primary" />
@@ -137,7 +136,7 @@ const Reviews = ({reviews}: ReviewsProps) => {
                   </div>
                   <h3 className="text-sm font-medium">No Reviews Yet</h3>
                   <p className="text-xs text-muted-foreground max-w-md">
-                     You haven't written any reviews yet. Your reviews will appear here once you share your experiences.
+                     You haven&apos;t written any reviews yet. Your reviews will appear here once you share your experiences.
                   </p>
                   <Link href="/">
                      <Button className="mt-1 text-xs py-1 h-8 bg-gradient-to-br from-primary/50 to-purple-400/50 dark:from-primary/50 dark:to-blue-300/50 hover:opacity-90">

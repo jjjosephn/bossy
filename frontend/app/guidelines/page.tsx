@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import { ChevronDown, ChevronRight, Shield, Users, MessageSquare, AlertTriangle, Mail, CheckCircle } from 'lucide-react'
+import { ChevronDown, ChevronRight, Shield, Users, MessageSquare, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 
 type GuidelineCardProps = {

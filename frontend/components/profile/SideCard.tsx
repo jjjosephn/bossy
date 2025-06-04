@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
-import { CalendarDays, Mail, Pencil } from 'lucide-react'
+import { CalendarDays, Mail } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useUser } from '@clerk/nextjs'
 import { useGetReviewsByUserIdQuery, useGetCompanyReviewsByUserIdQuery } from '@/app/state/api'

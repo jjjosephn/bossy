@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { User, Users, X, ArrowRight } from "lucide-react"
+import { User, ArrowRight } from "lucide-react"
 import { useGetBossesQuery, useGetBossInfoQuery } from "@/app/state/api"
 import { useEffect, useState, useRef } from "react"
 import { usePathname, useRouter } from "next/navigation"
@@ -17,12 +17,11 @@ const NavbarSearch = () => {
   const bossId = isBossPage ? pathname.split("/")[2] : null
   const { data: bossInfo } = useGetBossInfoQuery(bossId ?? "", { skip: !bossId })
   const [companySearch, setCompanySearch] = useState(false)
-  const [customSearch, setCustomSearch] = useState(false)
   const [open, setOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [companyNameInput, setCompanyNameInput] = useState("")
   const [searchType, setSearchType] = useState("boss")
-  const [customLocation, setCustomLocation] = useState<string | null>(null)
+  const [customLocation] = useState<string | null>(null)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const { data: bosses } = useGetBossesQuery(selectedCompany?.mapboxId ?? bossInfo?.Company.mapboxId ?? "", {
     skip: !selectedCompany?.mapboxId && !bossInfo?.Company.mapboxId,
@@ -44,7 +43,6 @@ const NavbarSearch = () => {
     setSelectedCompany(company)
     setCompanyNameInput(company.name)
     setCompanySearch(false)
-    setCustomSearch(false)
 
     if (searchType === "company") {
       router.push(`/company/${company.mapboxId}`)
@@ -113,7 +111,7 @@ const NavbarSearch = () => {
                       </span>
                     </div>
 
-                    {filteredBosses.length > 0 && (
+                    {filteredBosses.length >= 0 && (
                       <>
                         {filteredBosses.map((boss) => (
                           <Link href={`/boss/${boss.bossId}`} key={boss.bossId} onClick={() => setOpen(false)}>
@@ -131,7 +129,7 @@ const NavbarSearch = () => {
                         ))}
                         <Link href="/">
                           <div className="p-3 text-center text-primary hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-t border-gray-100 dark:border-gray-700">
-                            <span className="font-medium">Can't find your boss?</span>
+                            <span className="font-medium">Can&apos;t find your boss?</span>
                           </div>
                         </Link>
                       </>

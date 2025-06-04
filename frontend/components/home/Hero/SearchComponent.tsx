@@ -17,11 +17,10 @@ const SearchComponent = () => {
   const [companyNameInput, setCompanyNameInput] = useState("")
   const [addressInput, setAddressInput] = useState("")
   const [customLocation, setCustomLocation] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
   const searchComponentRef = useRef<HTMLDivElement>(null)
   const { userLocation, locationLoading } = useLocation()
-  const [encodedSearch, setEncodedSearch] = useState<string>("")
-  const [triggerGetMapboxData, { data, isLoading, isError }] = useLazyGetSearchComponentMapboxDataQuery()
+  const [triggerGetMapboxData] = useLazyGetSearchComponentMapboxDataQuery()
 
   const handleBackToCompany = () => {
     setSearchStep("company")

@@ -9,7 +9,7 @@ import { BossNotFoundForm, type PendingBossData } from "./BossNotFound"
 import { useUser, useClerk } from "@clerk/nextjs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { useGetBossesQuery, useGetBossReviewsQuery } from "@/app/state/api"
+import { useGetBossesQuery } from "@/app/state/api"
 import Link from "next/link"
 
 interface Boss {
@@ -44,7 +44,7 @@ export function ManagerSearchStep({
   const [open, setOpen] = useState(false)
   const [dropdownForceOpen, setDropdownForceOpen] = useState(false)
   const [showBossNotFoundForm, setShowBossNotFoundForm] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting] = useState(false)
   const [pendingBossForm, setPendingBossForm] = useState(false)
   const filteredManagers = (() => {
     if (!bosses || bosses.length === 0) return [];
@@ -72,7 +72,7 @@ export function ManagerSearchStep({
     if (selectedCompany?.mapboxId && bosses.length > 0 && !open) {
       setOpen(true);
     }
-  }, [selectedCompany?.mapboxId, bosses]); // Removed 'open' from dependencies
+  }, [selectedCompany?.mapboxId, bosses, open]); 
 
   useEffect(() => {
     if (isSignedIn && pendingBossForm) {

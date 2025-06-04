@@ -24,20 +24,18 @@ export function CustomSearchStep({
   setCompanyNameInput,
   addressInput,
   setAddressInput,
-  onBackToCompany,
   onCustomSearch,
   userLocation,
 }: CustomSearchStepProps) {
   const [selectedAddress, setSelectedAddress] = useState<MapboxSuggestion | null>(null)
   const [customSearchLoading, setCustomSearchLoading] = useState(false)
-  const [triggerGetMapboxData, { data, isLoading, isError }] = useLazyGetCustomSearchMapboxDataQuery()
+  const [triggerGetMapboxData] = useLazyGetCustomSearchMapboxDataQuery()
   
   const {
     results: addressResults,
     loading: addressLoading,
     open: addressOpen,
     setOpen: setAddressOpen,
-    sessionToken,
   } = useMapboxSearch({
     query: addressInput,
     proximity: userLocation,

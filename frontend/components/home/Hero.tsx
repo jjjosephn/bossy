@@ -25,7 +25,7 @@ const Hero = () => {
               </h1>
 
               <p className="max-w-[600px] text-gray-600 text-lg md:text-xl dark:text-gray-300">
-                Discover what it's really like to work under different managers. Make informed career decisions with
+                Discover what it&apos;s really like to work under different managers. Make informed career decisions with
                 honest reviews from employees like you.
               </p>
 

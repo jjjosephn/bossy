@@ -1,9 +1,8 @@
 "use client"
 import { useUser } from "@clerk/nextjs"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Mail, Pencil, User, LinkIcon, Star, Building2, UserCheck } from "lucide-react"
+import { Mail, User, LinkIcon, Building2, UserCheck } from "lucide-react"
 import { useGetReviewsByUserIdQuery, useGetCompanyReviewsByUserIdQuery } from "@/app/state/api"
 import Reviews from "./Reviews"
 import CompanyReviews from "./CompanyReviews"
@@ -103,7 +102,7 @@ const Content = () => {
                   <UserCheck className="h-5 w-5 text-primary" />
                   Boss Reviews
                 </CardTitle>
-                <CardDescription>Reviews you've written about your bosses and managers.</CardDescription>
+                <CardDescription>Reviews you&apos;ve written about your bosses and managers.</CardDescription>
               </div>
               <div className="mt-2 inline-block rounded-full bg-muted px-4 py-1 text-sm text-muted-foreground shadow-sm">
                 {bossReviews.length} review{bossReviews.length !== 1 ? 's' : ''}
@@ -126,7 +125,7 @@ const Content = () => {
                   <Building2 className="h-5 w-5 text-primary" />
                   Company Reviews
                 </CardTitle>
-                <CardDescription>Reviews you've written about companies you've worked for.</CardDescription>
+                <CardDescription>Reviews you&apos;ve written about companies you&apos;ve worked for.</CardDescription>
               </div>
               <div className="mt-2 inline-block rounded-full bg-muted px-4 py-1 text-sm text-muted-foreground shadow-sm">
                 {companyReviews.length} review{companyReviews.length !== 1 ? 's' : ''}

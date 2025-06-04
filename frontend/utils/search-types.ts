@@ -30,29 +30,29 @@ export interface MapboxSuggestion {
    response_id: string
  }
  
- export interface MapboxRetrieveResponse {
-   features: Array<{
-     id: string
-     type: string
-     place_type: string[]
-     properties: {
-       name: string
-       mapbox_id: string
-       feature_type: string
-       address?: string
-       coordinates?: {
-         latitude: number
-         longitude: number
-       }
-     }
-     geometry: {
-       type: string
-       coordinates: [number, number]
-     }
-     center: [number, number]
-   }>
- }
- 
+export interface MapboxRetrieveResponse {
+  features: Array<{
+    id: string
+    type: string
+    place_type: string[]
+    properties: {
+      name: string
+      mapbox_id: string
+      feature_type: string
+      address?: string
+      coordinates?: {
+        latitude: number
+        longitude: number
+      }
+    }
+    geometry: {
+      type: string
+      coordinates: [number, number]
+    }
+    center: [number, number]
+  }>
+}
+
  export interface Company {
    mapboxId: string
    name: string

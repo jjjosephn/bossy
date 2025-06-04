@@ -21,6 +21,7 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  Persistor,
   WebStorage,
 } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
@@ -97,7 +98,7 @@ export default function StoreProvider({
   children: React.ReactNode;
 }) {
   const storeRef = useRef<AppStore | null>(null);
-  const [persistor, setPersistor] = useState<any>(null);
+  const [persistor, setPersistor] = useState<Persistor | null>(null);
 
   if (!storeRef.current) {
     storeRef.current = makeStore();

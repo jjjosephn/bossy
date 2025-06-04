@@ -1,6 +1,6 @@
 "use client"
 
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import CompanyProfile from '@/components/company/CompanyProfile'
 import CompanyRatingDistribution from '@/components/company/CompanyRatingDistribution'
 import CompanyReviewsList from '@/components/company/CompanyReviewsList'
@@ -15,7 +15,7 @@ import { useGetCompanyByMapboxIdQuery, useGetCompanyReviewsQuery } from '@/app/s
 
 export default function CompanyReviewPage() {
   const { mapboxId } = useParams<{ mapboxId: string }>()
-  const { data: company, isLoading, error } = useGetCompanyByMapboxIdQuery(mapboxId as string)
+  const { data: company } = useGetCompanyByMapboxIdQuery(mapboxId as string)
   const { data: reviews = [] } = useGetCompanyReviewsQuery(mapboxId as string, {
     refetchOnMountOrArgChange: true,
   })

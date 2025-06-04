@@ -15,7 +15,13 @@ import { useState } from "react"
 import { Alert, AlertDescription } from "../ui/alert"
 
 interface BossReviewFormProps {
-  onSubmit?: (data: any) => Promise<void> | void
+  onSubmit?: (data: {
+    reviewText: string;
+    rating: number;
+    term: string;
+    userId?: string;
+    bossId: string;
+  }) => Promise<void> | void
   onCancel?: () => void
 }
 
@@ -169,7 +175,7 @@ export default function BossReviewForm({ onSubmit, onCancel }: BossReviewFormPro
                 <div className="space-y-2">
                   <p className="font-medium">Review Guidelines</p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li>Reviews that don't follow guidelines will be removed</li>
+                    <li>Reviews that don&apos;t follow guidelines will be removed</li>
                     <li>Be honest, but professional in your review</li>
                     <li>Make sure to proofread</li>
                   </ul>

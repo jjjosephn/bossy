@@ -8,7 +8,6 @@ import { Check, X, ChevronLeft, ChevronRight } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { useUser } from "@clerk/nextjs"
-import { Skeleton } from "@/components/ui/skeleton"
 import { useRouter } from "next/navigation"
 import {
   useAcceptPendingBossRequestMutation,

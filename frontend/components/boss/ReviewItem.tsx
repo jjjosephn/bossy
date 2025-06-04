@@ -1,6 +1,5 @@
-import { Star, Calendar, ThumbsUp, ThumbsDown, Share2, Flag, Briefcase } from "lucide-react"
+import { Star, Calendar, Briefcase } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 type ReviewItemProps = {

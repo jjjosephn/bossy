@@ -41,7 +41,7 @@ const Navbar = () => {
          email: user?.primaryEmailAddress?.emailAddress ?? "",
          })
       }
-   }, [isSignedIn, user?.id])
+   }, [isSignedIn, user?.id, firstname, lastname, user?.primaryEmailAddress?.emailAddress, checkUser])
 
    return (
       <header className="px-6 lg:px-8 h-20 flex items-center justify-between sticky top-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
