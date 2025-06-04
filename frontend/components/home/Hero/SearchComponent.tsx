@@ -7,7 +7,6 @@ import { CustomSearchStep } from "./Search/CustomSearch"
 import { ManagerSearchStep } from "./Search/ManagerSearch"
 import { useLocation } from "@/utils/locations-utils"
 import type { Company, SearchStep } from "@/utils/search-types"
-import { useLazyGetSearchComponentMapboxDataQuery } from "@/app/state/api"
 import Link from "next/link"
 
 const SearchComponent = () => {
@@ -20,7 +19,6 @@ const SearchComponent = () => {
   const [loading] = useState(false)
   const searchComponentRef = useRef<HTMLDivElement>(null)
   const { userLocation, locationLoading } = useLocation()
-  const [triggerGetMapboxData] = useLazyGetSearchComponentMapboxDataQuery()
 
   const handleBackToCompany = () => {
     setSearchStep("company")
@@ -47,11 +45,6 @@ const SearchComponent = () => {
     setCustomLocation(locationString)
 
     try {
-      const result = await triggerGetMapboxData({
-        encodedSearch: encodeURIComponent(companyName),
-        locationString,
-      }).unwrap();
-
       setSearchQuery(companyName);
       setSearchStep("company");
     } catch (error) {
