@@ -7,6 +7,7 @@ import Navbar from "@/components/home/Navbar/Navbar";
 import Footer from "@/components/home/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <StoreProvider>
+            <Analytics />
             <div className="flex min-h-screen flex-col">
                 <Navbar />
                 <main className="flex-grow">
